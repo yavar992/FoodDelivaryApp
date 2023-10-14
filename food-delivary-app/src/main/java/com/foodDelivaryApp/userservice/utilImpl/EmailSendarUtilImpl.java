@@ -126,6 +126,7 @@ public class EmailSendarUtilImpl implements EmailSendarUtil {
             helper.setText(String.join("\n", body), true);
             helper.setSubject(subjects);
             javaMailSender.send(mimeMessage);
+            log.info("email send successfully");
         } catch (Exception exception) {
             log.info("cannot send the email due to the " + exception);
         }

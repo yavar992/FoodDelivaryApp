@@ -1,5 +1,7 @@
 package com.foodDelivaryApp.userservice.service;
 
+import com.foodDelivaryApp.userservice.DTO.ChangePasswordDTO;
+import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.DTO.VerifyOTP;
 import com.foodDelivaryApp.userservice.entity.User;
@@ -23,4 +25,12 @@ public interface UserService {
     String verifyUserAccount(VerifyOTP verifyOTP);
 
     String resendOTP(String email);
+
+    UserResponseDTO findByEmail(String email);
+
+    String deleteUser(Long id);
+
+    String forgetPassword(String email);
+
+    String changePassword(ChangePasswordDTO changePasswordDTO);
 }

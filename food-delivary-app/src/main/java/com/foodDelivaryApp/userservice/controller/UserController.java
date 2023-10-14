@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.controller;
 
+import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.service.UserService;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -73,6 +73,30 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot update user details due to internal server error");
     }
 
+    @GetMapping("getUserByEmail/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
+        try {
+            UserResponseDTO user = userService.findByEmail(email);
+            if (user!=null) {
+                return ResponseEntity.status(HttpStatus.OK).body(user);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("cannot get the user due to invalid request");
+    }
 
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable("id") Long id){
+        try {
+            String deletedMessage = userService.deleteUser(id);
+            if (deletedMessage!=null){
+                return ResponseEntity.status(HttpStatus.OK).body(deletedMessage);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot delete user account due to invalid request");
+    }
 
 }

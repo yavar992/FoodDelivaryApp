@@ -1,17 +1,19 @@
 package com.foodDelivaryApp.userservice.convertor;
 
 import com.foodDelivaryApp.userservice.DTO.UserDTO;
+import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import java.time.LocalDateTime;
 
-public class UserConvertor {
+public interface UserConvertor {
 
-    public static User convertUserDtoToUserEntity(UserDTO userDTO){
+     static User convertUserDtoToUserEntity(UserDTO userDTO){
         return User.builder()
                 .username(userDTO.getUsername())
                 .email(userDTO.getEmail())
                 .firstName(userDTO.getFirstName())
+                .password(userDTO.getPassword())
                 .lastName(userDTO.getLastName())
                 .dateOfBirth(userDTO.getDateOfBirth())
                 .countryCode(userDTO.getCountryCode())
@@ -26,7 +28,9 @@ public class UserConvertor {
                 .isActive(true)
                 .build();
     }
-    public static void updateUser(User user, UserUpdateDTO userUpdateDTO) {
+
+
+     static void updateUser(User user, UserUpdateDTO userUpdateDTO) {
         user.setUsername(userUpdateDTO.getUsername());
         user.setEmail(userUpdateDTO.getEmail());
         user.setFirstName(userUpdateDTO.getFirstName());
@@ -34,9 +38,23 @@ public class UserConvertor {
         user.setDateOfBirth(userUpdateDTO.getDateOfBirth());
         user.setPhoneNumber(userUpdateDTO.getPhoneNumber());
         user.setAddress(userUpdateDTO.getAddress());
-
-
+        user.setUpdatedAt(LocalDateTime.now());
     }
 
+    static UserResponseDTO convertUserToUserResponseDTO(User user){
+        return UserResponseDTO.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .dateOfBirth(user.getDateOfBirth())
+                .city(user.getCity())
+                .state(user.getState())
+                .country(user.getCountry())
+                .address(user.getAddress())
+                .postalCode(user.getPostalCode())
+                .build();
+    }
 
 }

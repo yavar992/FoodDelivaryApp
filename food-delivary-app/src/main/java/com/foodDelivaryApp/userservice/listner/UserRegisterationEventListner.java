@@ -51,6 +51,7 @@ public class UserRegisterationEventListner  {
                 "The HappyMeal Team \n"
 
         ), "OTP VERIFICATION");
+        log.info("mail sent successfully ");
     }
 }
 
