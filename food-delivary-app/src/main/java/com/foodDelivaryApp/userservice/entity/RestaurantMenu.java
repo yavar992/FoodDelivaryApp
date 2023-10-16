@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,6 +20,7 @@ public class RestaurantMenu {
     private Long id;
 
     private String name;
+    private String cuisineType;
 
     @OneToOne
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
@@ -27,4 +29,6 @@ public class RestaurantMenu {
 
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY , orphanRemoval = true)
     private List<MenuItem> items;
+
+
 }

@@ -3,6 +3,7 @@ package com.foodDelivaryApp.userservice.service;
 import com.foodDelivaryApp.userservice.DTO.ChangePasswordDTO;
 import com.foodDelivaryApp.userservice.DTO.RestaurantOwnerDTO;
 import com.foodDelivaryApp.userservice.DTO.VerifyOTP;
+import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 
 public interface RestaurantOwnerService {
     String saveRestaurantOwner(RestaurantOwnerDTO restaurantOwnerDTO);
@@ -16,4 +17,6 @@ public interface RestaurantOwnerService {
     String forgetPassword(String email);
 
     String changePassword(ChangePasswordDTO changePasswordDTO);
+
+    RestaurantOwner findById(Long id);
 }

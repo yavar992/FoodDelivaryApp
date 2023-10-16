@@ -5,13 +5,14 @@ import com.foodDelivaryApp.userservice.DTO.RestaurantOwnerDTO;
 import com.foodDelivaryApp.userservice.DTO.VerifyOTP;
 import com.foodDelivaryApp.userservice.convertor.RestaurantOwnerConvertor;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
-import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.entity.Roles;
 import com.foodDelivaryApp.userservice.event.RestaurantOwnerEvent;
 import com.foodDelivaryApp.userservice.exceptionHandling.InvalidOTPException;
 import com.foodDelivaryApp.userservice.exceptionHandling.OTPExpireException;
 import com.foodDelivaryApp.userservice.exceptionHandling.UnverifiedUserException;
 import com.foodDelivaryApp.userservice.exceptionHandling.UserNotFoundException;
 import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
+import com.foodDelivaryApp.userservice.repository.RolesRepository;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
@@ -23,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -39,6 +42,9 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
         @Autowired
         EmailSendarUtil emailSendarUtil;
 
+        @Autowired
+        RolesRepository rolesRepository;
+
 
 
 
@@ -46,6 +52,10 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
         public String saveRestaurantOwner(RestaurantOwnerDTO restaurantOwnerDTO) {
            RestaurantOwner restaurantOwner =
                    RestaurantOwnerConvertor.convertRestaurantOwnerDTOToRestaurantOwner(restaurantOwnerDTO);
+            Set<Roles> roles = new HashSet<>();
+            Roles roles1 = rolesRepository.findByName("RESTAURANTS_OWNER").get();
+            roles.add(roles1);
+            restaurantOwner.setRoles(roles);
             RestaurantOwnerEvent restaurantOwnerEvent = new RestaurantOwnerEvent(restaurantOwner);
             applicationEventPublisher.publishEvent(restaurantOwnerEvent);
            restaurantsOwnerRepo.save(restaurantOwner);
@@ -161,6 +171,18 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
         restaurantOwner.setPassword(changePasswordDTO.getPassword());
         restaurantOwner.setOtp(null);
         restaurantsOwnerRepo.saveAndFlush(restaurantOwner);
-        return "Password change successfully !";    }
+        return "Password change successfully !";    
+        }
+
+    @Override
+    public RestaurantOwner findById(Long id) {
+        RestaurantOwner restaurantOwner = restaurantsOwnerRepo.findById(id).orElseThrow(()->new UserNotFoundException("No restaurant owner found for the id " + id));
+        if (!restaurantOwner.getIsVerified()){
+            throw new UnverifiedUserException("User is not verified please verify your account first");
+        }
+        return restaurantOwner;
+    }
+
+
 }
 

@@ -1,6 +1,8 @@
 package com.foodDelivaryApp.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,28 +20,48 @@ public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Name is required")
+    @Size(max = 50, message = "Name must be at most 100 characters long")
     private String name;
+    @NotBlank(message = "Address is required")
     private String address;
+    private String pinCode;
+    @Pattern(regexp = "\\d{10}", message = "Phone number must be a 10-digit number")
     private String phoneNumber;
+    @Email(message = "Invalid email format")
     private String email;
     private String website;
-    private String cuisineType;
+
+    @Enumerated(EnumType.STRING)
+    @NotEmpty(message = "Cuisine types are required")
+    private List<CuisineType> cuisineType;
+
+    @NotBlank(message = "Description is required")
     private String description;
-    private List<String> photos;
+    @Lob
+    private List<Byte[]> photos;
+    @NotBlank(message = "Unique identifier number is required")
     private String uniqueIdentifierNumber;
     private String hoursOfOperation;
-    private String deliveryZones;
-    private List<String> paymentMethodsAccepted;
+    private List<String> deliveryZones; // or pinCode
+
+    @NotEmpty(message = "Payment methods accepted are required")
+    @Enumerated(EnumType.STRING)
+    private List<PaymentMethodAccepted> paymentMethodsAccepted;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @ManyToOne
+    @JsonIgnore
     private RestaurantOwner restaurantOwner;
 
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY , orphanRemoval = true)
+    @JsonIgnore
     private List<ReviewAndRating> reviewAndRating;
 
     @OneToOne
+    @JsonIgnore
     private RestaurantMenu restaurantMenu;
 
 

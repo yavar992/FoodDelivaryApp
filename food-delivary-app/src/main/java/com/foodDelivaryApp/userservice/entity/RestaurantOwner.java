@@ -7,6 +7,7 @@ import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -64,6 +65,13 @@ public class RestaurantOwner {
 
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY )
     private List<Restaurant> restaurant;
+
+    @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles" ,
+            joinColumns =@JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns =@JoinColumn(name = "role_id",referencedColumnName = "id")
+    )
+    private Set<Roles> roles;
 
 
 }

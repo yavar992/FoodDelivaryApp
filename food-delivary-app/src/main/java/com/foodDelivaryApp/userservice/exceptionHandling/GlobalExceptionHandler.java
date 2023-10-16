@@ -53,4 +53,13 @@ public class GlobalExceptionHandler {
         ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
+
+    @ExceptionHandler(InvalidRestaurantException.class)
+    public ResponseEntity<ErrorMessage> invalidRestaurantException(InvalidRestaurantException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 }
