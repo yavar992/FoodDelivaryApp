@@ -2,6 +2,7 @@ package com.foodDelivaryApp.userservice.serviceImpl;
 
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
 import com.foodDelivaryApp.userservice.convertor.RestaurantConvertor;
+import com.foodDelivaryApp.userservice.entity.CuisineType;
 import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.event.RestaurantEvent;
@@ -90,5 +91,16 @@ public class RestaurantServiceImpl implements RestaurantsService {
         RestaurantConvertor.updateRestaurant(restaurantDTO , restaurant1);
         restaurantRepo.saveAndFlush(restaurant1);
         return "Restaurant Updated SuccessFully !";
+    }
+
+    @Override
+    public List<CuisineType> findAllCuisineTypes(Long ownerId, String uniqueIdentifierNumber) {
+        restaurantOwnerService.findById(ownerId);
+        Optional<Restaurant> restaurant = restaurantRepo.findByUniqueIdentifierNumber(uniqueIdentifierNumber);
+        if (restaurant.isEmpty()){
+            throw new InvalidRestaurantException("No restaurant found for the uniqueIdentifierNumber " + uniqueIdentifierNumber);
+        }
+        Restaurant restaurant1 = restaurant.get();
+        return restaurant1.getCuisineType();
     }
 }

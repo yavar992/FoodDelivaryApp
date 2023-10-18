@@ -1,8 +1,13 @@
 package com.foodDelivaryApp.userservice.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,7 +28,14 @@ public class MenuItem {
     private String description;
     private Double price;
     private String foodCode;
+    @Lob
+    private List<Byte[]> images;
+    private double popularity;
+    private boolean availability;
+    private LocalDateTime addedTime;
+    private LocalDateTime updatedTime;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
     private RestaurantMenu menu;

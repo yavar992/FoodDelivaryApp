@@ -54,15 +54,18 @@ public class Restaurant {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private RestaurantOwner restaurantOwner;
 
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY , orphanRemoval = true)
     @JsonIgnore
+    @ToString.Exclude
     private List<ReviewAndRating> reviewAndRating;
 
-    @OneToOne
+    @OneToMany(mappedBy = "restaurant" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JsonIgnore
-    private RestaurantMenu restaurantMenu;
+    @ToString.Exclude
+    private List<RestaurantMenu> restaurantMenu;
 
 
 }

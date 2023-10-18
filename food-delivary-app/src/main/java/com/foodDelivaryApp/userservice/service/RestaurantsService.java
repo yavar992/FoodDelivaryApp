@@ -3,6 +3,7 @@ package com.foodDelivaryApp.userservice.service;
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
 import com.foodDelivaryApp.userservice.DTO.RestaurantOwnerDTO;
 import com.foodDelivaryApp.userservice.DTO.VerifyOTP;
+import com.foodDelivaryApp.userservice.entity.CuisineType;
 import com.foodDelivaryApp.userservice.entity.Restaurant;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface RestaurantsService {
     RestaurantDTO getRestaurantByUniqueIdentifierNumber(Long ownerId ,String uniqueIdentifierNumber);
 
     String updateRestaurant(Long ownerId, String uniqueIdentifierNumber , RestaurantDTO restaurantDTO);
+
+    List<CuisineType> findAllCuisineTypes(Long ownerId, String uniqueIdentifierNumber);
 }

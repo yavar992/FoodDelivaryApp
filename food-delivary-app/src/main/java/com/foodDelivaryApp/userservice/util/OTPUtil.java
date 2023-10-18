@@ -10,6 +10,8 @@ public interface OTPUtil {
         return (int) ((Math.random() * 9000) + 1111);
     }
 
-
+    static Integer random3Digit(){
+        return (int) (Math.random()*900)+111;
+    }
 
 }

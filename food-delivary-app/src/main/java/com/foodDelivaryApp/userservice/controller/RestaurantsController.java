@@ -91,6 +91,20 @@ public class RestaurantsController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot update the restaurant due to invalid request");
     }
 
+    @GetMapping("/cuisineTypes/{ownerId}")
+    public ResponseEntity<?> findAllCuisineTypes(@PathVariable("ownerId") Long ownerId ,
+                                                 @RequestParam("uniqueIdentifierNumber") String uniqueIdentifierNumber){
+
+        try {
+            List<CuisineType> cuisineTypes = restaurantsService.findAllCuisineTypes(ownerId, uniqueIdentifierNumber);
+            if (!cuisineTypes.isEmpty()){
+                return ResponseEntity.status(HttpStatus.OK).body(cuisineTypes);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the cuisineTypes due to invalid request");
+    }
 
 
 }

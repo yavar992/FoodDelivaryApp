@@ -1,7 +1,10 @@
 package com.foodDelivaryApp.userservice.exceptionHandling;
 
+import com.foodDelivaryApp.userservice.entity.MenuItem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -62,4 +65,43 @@ public class GlobalExceptionHandler {
         ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorMessage> messageNotReadableException(HttpMessageNotReadableException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(RestaurantMenuException.class)
+    public ResponseEntity<ErrorMessage> restaurantMenuException(RestaurantMenuException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(MissingPathVariableException.class)
+    public ResponseEntity<ErrorMessage> missingPathVariableException(MissingPathVariableException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+
+    @ExceptionHandler(MenuItemException.class)
+    public ResponseEntity<ErrorMessage> menuItemException(MenuItemException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+
 }
