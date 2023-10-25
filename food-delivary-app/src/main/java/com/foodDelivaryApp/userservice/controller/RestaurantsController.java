@@ -2,13 +2,12 @@ package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
 import com.foodDelivaryApp.userservice.entity.CuisineType;
-import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.service.RestaurantsService;
+import com.google.gson.Gson;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +15,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/v1/restaurants")
+@RequestMapping("/api/v1/restaurant")
 public class RestaurantsController {
 
     @Autowired
@@ -39,8 +38,10 @@ public class RestaurantsController {
     public ResponseEntity<?> findAllRestaurant(){
         try {
             List<RestaurantDTO> message = restaurantsService.findAllRestaurant();
+            Gson gson = new Gson();
+            String json = gson.toJson(message);
             if (message!=null){
-                return ResponseEntity.status(HttpStatus.OK).body(message);
+                return ResponseEntity.status(HttpStatus.OK).body(json);
             }
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -106,5 +107,19 @@ public class RestaurantsController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the cuisineTypes due to invalid request");
     }
 
+    @PostMapping("/postApi")
+    public String hi(){
+        return "this is post api";
+    }
+
+    @DeleteMapping("/deleteApi")
+    public String jj(){
+        return "this is sample delete api";
+    }
+
+    @GetMapping("/getApi")
+    public String h(){
+        return "this is sample get api";
+    }
 
 }

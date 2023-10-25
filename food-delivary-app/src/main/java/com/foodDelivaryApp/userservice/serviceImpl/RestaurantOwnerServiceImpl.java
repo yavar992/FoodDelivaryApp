@@ -16,6 +16,7 @@ import com.foodDelivaryApp.userservice.repository.RolesRepository;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -45,6 +46,11 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
         @Autowired
         RolesRepository rolesRepository;
 
+        @PostConstruct
+        public void hi(){
+            Roles roles1 = rolesRepository.findByName("ROLE_RESTAURANTS_OWNER").get();
+            log.info("roles {}",roles1);
+        }
 
 
 
@@ -53,7 +59,7 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
            RestaurantOwner restaurantOwner =
                    RestaurantOwnerConvertor.convertRestaurantOwnerDTOToRestaurantOwner(restaurantOwnerDTO);
             Set<Roles> roles = new HashSet<>();
-            Roles roles1 = rolesRepository.findByName("RESTAURANTS_OWNER").get();
+            Roles roles1 = rolesRepository.findByName("ROLE_RESTAURANTS_OWNER").get();
             roles.add(roles1);
             restaurantOwner.setRoles(roles);
             RestaurantOwnerEvent restaurantOwnerEvent = new RestaurantOwnerEvent(restaurantOwner);

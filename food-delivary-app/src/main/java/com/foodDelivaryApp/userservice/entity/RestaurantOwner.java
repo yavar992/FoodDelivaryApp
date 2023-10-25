@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -63,15 +64,15 @@ public class RestaurantOwner {
     private LocalDateTime otpSendingTime;
     private LocalDateTime otpExpireTime;
 
-    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY )
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER )
     private List<Restaurant> restaurant;
 
-    @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles" ,
-            joinColumns =@JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns =@JoinColumn(name = "role_id",referencedColumnName = "id")
-    )
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "restaurant_owner_roles",
+            joinColumns = @JoinColumn(name = "restaurant_owner_id" , referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "id"))
     private Set<Roles> roles;
-
 
 }

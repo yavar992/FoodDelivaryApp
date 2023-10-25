@@ -33,4 +33,6 @@ public interface UserService {
     String forgetPassword(String email);
 
     String changePassword(ChangePasswordDTO changePasswordDTO);
+
+    UserResponseDTO findUserByUserId(Long id);
 }

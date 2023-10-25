@@ -28,4 +28,11 @@ public interface MenuItemConvertor {
                 .foodCode(menuItem.getFoodCode())
                 .build();
     }
+
+    static void updateMenuItem(MenuItemDTO menuItemDTO , MenuItem menuItem){
+       menuItem.setName(menuItemDTO.getName());
+       menuItem.setDescription(menuItemDTO.getDescription());
+       menuItem.setAvailability(menuItemDTO.isAvailability());
+       menuItem.setPrice(menuItemDTO.getPrice());
+    }
 }

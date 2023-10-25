@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import java.lang.reflect.InaccessibleObjectException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
@@ -96,6 +98,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MenuItemException.class)
     public ResponseEntity<ErrorMessage> menuItemException(MenuItemException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(InaccessibleObjectException.class)
+    public ResponseEntity<ErrorMessage> inaccessibleObjectException(InaccessibleObjectException ex , WebRequest web){
         Integer statusCode = HttpStatus.BAD_REQUEST.value();
         String message = ex.getMessage();
         String path = web.getDescription(false);

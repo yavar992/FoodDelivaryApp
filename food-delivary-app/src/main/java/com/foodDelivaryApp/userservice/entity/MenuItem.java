@@ -34,6 +34,8 @@ public class MenuItem {
     private boolean availability;
     private LocalDateTime addedTime;
     private LocalDateTime updatedTime;
+    private int sellCount;
+
 
     @JsonIgnore
     @ManyToOne

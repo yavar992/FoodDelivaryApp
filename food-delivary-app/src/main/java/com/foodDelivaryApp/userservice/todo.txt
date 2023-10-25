@@ -53,3 +53,11 @@ Restaurant owner's restaurant is published on the food delivery platform.
 Customers can now search for the restaurant and place orders.
 Restaurant owner receives orders and processes them.
 Restaurant owner delivers orders to customers.
+
+
+get all menu by food name
+get item by food name and id
+get item by the food category code and name
+get item by popularity
+get all the most selling food
+

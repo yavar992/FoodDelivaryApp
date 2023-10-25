@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String saveUser(User user) {
         Set<Roles> rolesSet = new HashSet<>();
-        Roles roles = rolesRepository.findByName("USER").get();
+        Roles roles = rolesRepository.findByName("ROLE_USER").get();
         rolesSet.add(roles);
         user.setRoles(rolesSet);
         UserRegisterationEvent userRegisterationEvent = new UserRegisterationEvent(user);
@@ -231,6 +231,12 @@ public class UserServiceImpl implements UserService {
         user.setOtp(null);
         userRepo.saveAndFlush(user);
         return "Password change successfully !";
+    }
+
+    @Override
+    public UserResponseDTO findUserByUserId(Long id) {
+        User user = findUserById(id);
+        return UserConvertor.convertUserToUserResponseDTO(user);
     }
 
 }
