@@ -21,8 +21,6 @@ public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String name;
     private String description;
     private Double price;
@@ -41,4 +39,10 @@ public class MenuItem {
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
     private RestaurantMenu menu;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<ReviewAndRating> reviewAndRatings;
+
+
+    
 }

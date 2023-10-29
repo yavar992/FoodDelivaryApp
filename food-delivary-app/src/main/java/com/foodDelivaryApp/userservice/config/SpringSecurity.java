@@ -13,15 +13,15 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@EnableWebMvc
 @EnableMethodSecurity
 public class SpringSecurity {
 
@@ -47,6 +47,7 @@ public class SpringSecurity {
                 .exceptionHandling(exception->exception.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(auth->auth.requestMatchers(PUBLIC_URL).permitAll()
                         .requestMatchers("/api/v1/users/**").hasAnyRole("USER")
+                        .requestMatchers("/api/v1/users/cart/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.GET,"/api/v1/restaurant/**").hasAnyRole("USER","RESTAURANTS_OWNER")
                         .requestMatchers("/api/v1/restaurant/**").hasAnyRole("RESTAURANTS_OWNER")
                         .requestMatchers(HttpMethod.GET,"api/v1/restaurants/menu/Items/**").hasAnyRole("USER","RESTAURANTS_OWNER")
@@ -78,6 +79,8 @@ public class SpringSecurity {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+
+
 
 
 }

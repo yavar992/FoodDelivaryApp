@@ -96,6 +96,8 @@ public class User {
     )
     private Set<Roles> roles;
 
+    @OneToOne
+    private Cart cart;
 
 
 

@@ -185,7 +185,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthDTO authDTO , Principal principal) {
+    public ResponseEntity<?> login(@RequestBody AuthDTO authDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
        if (!authentication.isAuthenticated()){
            throw new UsernameNotFoundException("invalid user request !");

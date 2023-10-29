@@ -7,7 +7,7 @@ public interface MenuItemService {
 
     String addItemToMenuList(Long ownerId, String uniqueIdentifierNumber, String foodCategoryCode, MenuItemDTO menuItemDTO);
 
-    List<MenuItemDTO> findAllMenuItems(Long ownerId, String uniqueIdentifierNumber, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
+    List<MenuItemDTO> findAllMenuItems( Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
 
     List<MenuItemDTO> getAllMenuItems();
 
@@ -15,17 +15,19 @@ public interface MenuItemService {
 
     String deleteMenuItem(Long ownerId, String uniqueIdentifierNumber, String foodCode);
 
-    MenuItemDTO findMenuItemById(Long ownerId, String uniqueIdentifierNumber, Long id);
+    MenuItemDTO findMenuItemById(Long id);
 
-    List<MenuItemDTO> findAllMenuItemsByRestaurantId(Long ownerId, Long id, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
+    List<MenuItemDTO> findAllMenuItemsByRestaurantId( Long id, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
 
-    List<MenuItemDTO> findByCuisineTypes(Long ownerId, String uniqueIdentifierNumber, String cuisineType, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
+    List<MenuItemDTO> findByCuisineTypes(String cuisineType, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
 
-    List<MenuItemDTO> findAllMenuItemBetweenRanges(Long ownerId, String uniqueIdentifierNumber, Double startingPrice, Double endingPrice, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
+    List<MenuItemDTO> findAllMenuItemBetweenRanges( Double startingPrice, Double endingPrice, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
 
-    MenuItemDTO getMenuItemByFoodCode(Long ownerId, String uniqueIdentifierNumber, String foodCode);
+    MenuItemDTO getMenuItemByFoodCode( String foodCode);
 
-    MenuItemDTO getMenuItemByFoodName(Long ownerId, String uniqueIdentifierNumber, String foodName);
+    MenuItemDTO getMenuItemByFoodName( String foodName);
 
-    List<MenuItemDTO> getMenuItemByPopularity(Long ownerId, String uniqueIdentifierNumber, Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
+    List<MenuItemDTO> getMenuItemByPopularity( Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
+
+
 }

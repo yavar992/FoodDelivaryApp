@@ -68,9 +68,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<MenuItemDTO> findAllMenuItems(Long ownerId, String uniqueIdentifierNumber, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
-        restaurantOwnerService.findById(ownerId);
-        happyMealCommon.findRestaurant(uniqueIdentifierNumber);
+    public List<MenuItemDTO> findAllMenuItems( Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
         Sort sort = Sort.by(sortBy);
         if (sortOrder != null && sortOrder.equalsIgnoreCase("desc")) {
             sort = sort.descending();
@@ -111,17 +109,13 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItemDTO findMenuItemById(Long ownerId, String uniqueIdentifierNumber, Long id) {
-        restaurantOwnerService.findById(ownerId);
-        happyMealCommon.findRestaurant(uniqueIdentifierNumber);
+    public MenuItemDTO findMenuItemById( Long id) {
         MenuItem menuItem = menuItemRepo.findById(id).orElseThrow(()->new MenuItemException("Could not find menuItem for the id " + id));
         return MenuItemConvertor.convertMenuItemToMenuItemDTO(menuItem);
     }
 
     @Override
-    public List<MenuItemDTO> findAllMenuItemsByRestaurantId(Long ownerId,
-                                                            Long id, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
-        restaurantOwnerService.findById(ownerId);
+    public List<MenuItemDTO> findAllMenuItemsByRestaurantId(Long id, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
         Restaurant restaurant = restaurantRepo.findById(id)
                 .orElseThrow(()-> new  InvalidRestaurantException("No restaurant found for the id " + id));
         Sort sort = Sort.by(sortBy);
@@ -139,9 +133,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<MenuItemDTO> findByCuisineTypes(Long ownerId, String uniqueIdentifierNumber, String cuisineType, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
-        restaurantOwnerService.findById(ownerId);
-        happyMealCommon.findRestaurant(uniqueIdentifierNumber);
+    public List<MenuItemDTO> findByCuisineTypes( String cuisineType, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
         List<MenuItem> menuItems = restaurantMenuRepo.findByCuisineTypes(cuisineType);
         if (menuItems.isEmpty()){
             throw new MenuItemException("No menu items found for cuisine type " + cuisineType);
@@ -151,9 +143,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<MenuItemDTO> findAllMenuItemBetweenRanges(Long ownerId, String uniqueIdentifierNumber, Double startingPrice, Double endingPrice, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
-        restaurantOwnerService.findById(ownerId);
-        happyMealCommon.findRestaurant(uniqueIdentifierNumber);
+    public List<MenuItemDTO> findAllMenuItemBetweenRanges( Double startingPrice, Double endingPrice, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
         Sort sort = Sort.by(sortBy);
         if (sortOrder!=null && sortOrder.equalsIgnoreCase("desc")){
             sort = sort.descending();
@@ -170,9 +160,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItemDTO getMenuItemByFoodCode(Long ownerId, String uniqueIdentifierNumber, String foodCode) {
-        restaurantOwnerService.findById(ownerId);
-        happyMealCommon.findRestaurant(uniqueIdentifierNumber);
+    public MenuItemDTO getMenuItemByFoodCode( String foodCode) {
         Optional<MenuItem> menuItem = menuItemRepo.findByFoodCode(foodCode);
         if (menuItem.isEmpty()){
             throw new MenuItemException("No menu item found  for food code " + foodCode);
@@ -182,9 +170,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItemDTO getMenuItemByFoodName(Long ownerId, String uniqueIdentifierNumber, String foodName) {
-        restaurantOwnerService.findById(ownerId);
-        happyMealCommon.findRestaurant(uniqueIdentifierNumber);
+    public MenuItemDTO getMenuItemByFoodName( String foodName) {
         Optional<MenuItem> menuItem = menuItemRepo.findByName(foodName);
         if (menuItem.isEmpty()){
             throw new MenuItemException("No menu item found  for food code " + foodName);
@@ -194,9 +180,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<MenuItemDTO> getMenuItemByPopularity(Long ownerId, String uniqueIdentifierNumber, Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
-        restaurantOwnerService.findById(ownerId);
-        happyMealCommon.findRestaurant(uniqueIdentifierNumber);
+    public List<MenuItemDTO> getMenuItemByPopularity( Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
         Sort sort = Sort.by(sortBy);
         if (sortOrder!=null && sortOrder.equalsIgnoreCase("desc")){
             sort = sort.descending();

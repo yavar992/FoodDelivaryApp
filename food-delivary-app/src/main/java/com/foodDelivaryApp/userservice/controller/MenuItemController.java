@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -37,15 +36,14 @@ public class MenuItemController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot add the item to the menu due to invalid request ");
     }
 
-    @GetMapping({"/{ownerId}/allMenuItem/{uniqueIdentifierNumber}","/allMenuItem"})
-    public ResponseEntity<?> getAllMenuItem(@PathVariable("ownerId") Long ownerId ,
-                                            @PathVariable("uniqueIdentifierNumber") String uniqueIdentifierNumber,
+    @GetMapping({"/allMenuItem"})
+    public ResponseEntity<?> getAllMenuItem(
                                             @RequestParam(value = "pageNo", defaultValue = "1", required = false) Integer pageNo,
                                             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
                                             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                             @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder){
         try {
-            List<MenuItemDTO> menuItemDTOS = menuItemService.findAllMenuItems(ownerId,uniqueIdentifierNumber,pageNo,pageSize,sortBy,sortOrder);
+            List<MenuItemDTO> menuItemDTOS = menuItemService.findAllMenuItems(pageNo,pageSize,sortBy,sortOrder);
             if (!menuItemDTOS.isEmpty()){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItemDTOS);
             }
@@ -85,12 +83,10 @@ public class MenuItemController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot delete the menuItem due to invalid request !!");
     }
 
-    @GetMapping({"/{ownerId}/menuItem/{uniqueIdentifierNumber}/{id}","/menuItem"})
-    public ResponseEntity<?> getMenuItemById(@PathVariable("ownerId") Long ownerId,
-                                             @PathVariable("uniqueIdentifierNumber") String uniqueIdentifierNumber,
-                                             @PathVariable("id") Long id){
+    @GetMapping({"/menuItem/{id}"})
+    public ResponseEntity<?> getMenuItemById(@PathVariable("id") Long id){
         try {
-            MenuItemDTO menuItemDTO = menuItemService.findMenuItemById(ownerId,uniqueIdentifierNumber,id);
+            MenuItemDTO menuItemDTO = menuItemService.findMenuItemById(id);
             if (menuItemDTO!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItemDTO);
             }
@@ -101,16 +97,15 @@ public class MenuItemController {
     }
 
 
-    @GetMapping({"/{ownerId}/menuItemByRestaurantId/{id}","/menuItemByRestaurantId"})
-    public ResponseEntity<?> getAllMenuItemByRestaurantId(@PathVariable("ownerId") Long ownerId,
-                                                          @PathVariable("id") Long id,
+    @GetMapping({"/menuItemByRestaurantId/{id}"})
+    public ResponseEntity<?> getAllMenuItemByRestaurantId(@PathVariable("id") Long id,
                                                           @RequestParam(value = "pageNo", defaultValue = "1", required = false) Integer pageNo,
                                                           @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
                                                           @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                           @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder)
      {
         try {
-            List<MenuItemDTO> menuItemDTOS = menuItemService.findAllMenuItemsByRestaurantId(ownerId,id , pageNo , pageSize , sortBy , sortOrder);
+            List<MenuItemDTO> menuItemDTOS = menuItemService.findAllMenuItemsByRestaurantId(id , pageNo , pageSize , sortBy , sortOrder);
             if (!menuItemDTOS.isEmpty()){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItemDTOS);
             }
@@ -120,16 +115,14 @@ public class MenuItemController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the menuItem due to invalid request");
     }
 
-    @PostMapping({"{ownerId}/menuItemByCuisineType/{uniqueIdentifierNumber}/{cuisineType}","/menuItemByCuisineType"})
-    public ResponseEntity<?> getAllMenuItemByCuisineType(@PathVariable("ownerId") Long ownerId,
-                                                         @PathVariable("uniqueIdentifierNumber") String uniqueIdentifierNumber,
-                                                         @PathVariable("cuisineType") String cuisineType,
+    @PostMapping({"/menuItemByCuisineType/{cuisineType}"})
+    public ResponseEntity<?> getAllMenuItemByCuisineType(@PathVariable("cuisineType") String cuisineType,
                                                          @RequestParam(value = "pageNo", defaultValue = "1", required = false) Integer pageNo,
                                                          @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
                                                          @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                          @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder){
         try {
-            List<MenuItemDTO> menuItemDTOS = menuItemService.findByCuisineTypes(ownerId,uniqueIdentifierNumber,cuisineType,pageNo,pageSize,sortBy,sortOrder);
+            List<MenuItemDTO> menuItemDTOS = menuItemService.findByCuisineTypes(cuisineType,pageNo,pageSize,sortBy,sortOrder);
             if (!menuItemDTOS.isEmpty()){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItemDTOS);
             }
@@ -140,17 +133,15 @@ public class MenuItemController {
     }
 
 
-    @GetMapping({"{ownerId}/menuItemInRanges/{uniqueIdentifierNumber}","/menuItemInRanges"})
-    public ResponseEntity<?> findAllMenuItemBetweenPricesRanges(@PathVariable("ownerId") Long ownerId,
-                                                                @PathVariable("uniqueIdentifierNumber") String uniqueIdentifierNumber,
-                                                                @RequestParam(value = "startingPrice") Double startingPrice,
+    @GetMapping({"/menuItemInRanges"})
+    public ResponseEntity<?> findAllMenuItemBetweenPricesRanges(@RequestParam(value = "startingPrice") Double startingPrice,
                                                                 @RequestParam(value = "endingPrice") Double endingPrice ,
                                                                 @RequestParam(value = "pageNo", defaultValue = "1", required = false) Integer pageNo,
                                                                 @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
                                                                 @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                                 @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder){
         try {
-            List<MenuItemDTO> menuItems = menuItemService.findAllMenuItemBetweenRanges(ownerId,uniqueIdentifierNumber,startingPrice,endingPrice,pageNo,pageSize,sortBy,sortOrder);
+            List<MenuItemDTO> menuItems = menuItemService.findAllMenuItemBetweenRanges(startingPrice,endingPrice,pageNo,pageSize,sortBy,sortOrder);
             if (!menuItems.isEmpty()){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItems);
             }
@@ -160,13 +151,10 @@ public class MenuItemController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the menuItem due to invalid request");
     }
 
-    @PreAuthorize("hasAuthority('USER','RESTAURANTS_OWNER')")
-    @GetMapping({"/{ownerId}/menuItemByFoodCode/{uniqueIdentifierNumber}","menuItemByFoodCode"})
-    public ResponseEntity<?> getMenuItemByFoodCode(@PathVariable("ownerId") Long ownerId,
-                                                   @PathVariable("uniqueIdentifierNumber") String uniqueIdentifierNumber,
-                                                   @RequestParam(value = "foodCode") String foodCode){
+    @GetMapping({"/menuItemByFoodCode/{foodCode}"})
+    public ResponseEntity<?> getMenuItemByFoodCode(@PathVariable("foodCode") String foodCode){
         try {
-            MenuItemDTO menuItemDTO = menuItemService.getMenuItemByFoodCode(ownerId,uniqueIdentifierNumber,foodCode);
+            MenuItemDTO menuItemDTO = menuItemService.getMenuItemByFoodCode(foodCode);
             if (menuItemDTO!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItemDTO);
             }
@@ -176,13 +164,10 @@ public class MenuItemController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the menuItem due to invalid request");
     }
 
-    @PreAuthorize("hasAuthority('USER','RESTAURANTS_OWNER')")
-    @GetMapping({"/{ownerId}/menuItemByFoodName/{uniqueIdentifierNumber}","/menuItemByFoodName"})
-    public ResponseEntity<?> getMenuItemByFoodName(@PathVariable("ownerId") Long ownerId,
-                                                   @PathVariable("uniqueIdentifierNumber") String uniqueIdentifierNumber,
-                                                   @RequestParam(value = "foodName") String foodName){
+    @GetMapping({"/menuItemByFoodName/{foodName}"})
+    public ResponseEntity<?> getMenuItemByFoodName(@PathVariable(name = "foodName") String foodName){
         try {
-            MenuItemDTO menuItemDTO = menuItemService.getMenuItemByFoodName(ownerId,uniqueIdentifierNumber,foodName);
+            MenuItemDTO menuItemDTO = menuItemService.getMenuItemByFoodName(foodName);
             if (menuItemDTO!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItemDTO);
             }
@@ -192,16 +177,13 @@ public class MenuItemController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the menuItem due to invalid request");
     }
 
-    @PreAuthorize("hasAuthority('USER','RESTAURANTS_OWNER')")
-    @GetMapping({"/{ownerId}/popularMenuItems/{uniqueIdentifierNumber}","/popularMenuItem"})
-    public ResponseEntity<?> getAllPopularMenuItems(@PathVariable("ownerId") Long ownerId,
-                                                    @PathVariable("uniqueIdentifierNumber") String uniqueIdentifierNumber,
-                                                    @RequestParam(value = "pageNo", defaultValue = "1", required = false) Integer pageNo,
+    @GetMapping({"/popularMenuItems"})
+    public ResponseEntity<?> getAllPopularMenuItems(@RequestParam(value = "pageNo", defaultValue = "1", required = false) Integer pageNo,
                                                     @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
                                                     @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                     @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder){
         try {
-            List<MenuItemDTO> menuItemDTOS = menuItemService.getMenuItemByPopularity(ownerId,uniqueIdentifierNumber,pageNo,pageSize,sortBy,sortOrder);
+            List<MenuItemDTO> menuItemDTOS = menuItemService.getMenuItemByPopularity(pageNo,pageSize,sortBy,sortOrder);
             if (!menuItemDTOS.isEmpty()){
                 return ResponseEntity.status(HttpStatus.OK).body(menuItemDTOS);
             }

@@ -61,3 +61,6 @@ get item by the food category code and name
 get item by popularity
 get all the most selling food
 
+
+add cart to the user profile
+add review and rating to the menuItem
