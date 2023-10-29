@@ -1,7 +1,6 @@
 package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.RestaurantMenuDTO;
-import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.entity.RestaurantMenu;
 import com.foodDelivaryApp.userservice.service.RestaurantMenuServices;
 import org.springframework.beans.factory.annotation.Autowired;

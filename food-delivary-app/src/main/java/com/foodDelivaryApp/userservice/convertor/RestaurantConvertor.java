@@ -1,14 +1,10 @@
 package com.foodDelivaryApp.userservice.convertor;
 
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
-import com.foodDelivaryApp.userservice.entity.CuisineType;
-import com.foodDelivaryApp.userservice.entity.PaymentMethodAccepted;
 import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public interface RestaurantConvertor {
 

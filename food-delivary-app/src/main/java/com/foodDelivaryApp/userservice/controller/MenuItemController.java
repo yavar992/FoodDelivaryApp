@@ -1,7 +1,6 @@
 package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.MenuItemDTO;
-import com.foodDelivaryApp.userservice.entity.MenuItem;
 import com.foodDelivaryApp.userservice.service.MenuItemService;
 import com.foodDelivaryApp.userservice.util.LocalDateTypeAdaptor;
 import com.google.gson.Gson;

@@ -1,6 +1,5 @@
 package com.foodDelivaryApp.userservice.exceptionHandling;
 
-import com.foodDelivaryApp.userservice.entity.MenuItem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -114,5 +113,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
+    
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ErrorMessage> nullPointerException(NullPointerException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 
 }

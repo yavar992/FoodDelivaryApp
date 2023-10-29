@@ -1,7 +1,6 @@
 package com.foodDelivaryApp.userservice.service;
 
 import com.foodDelivaryApp.userservice.DTO.RestaurantMenuDTO;
-import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.entity.RestaurantMenu;
 
 import java.util.List;

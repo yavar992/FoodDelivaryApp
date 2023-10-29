@@ -1,10 +1,8 @@
 package com.foodDelivaryApp.userservice.config;
 
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
-import com.foodDelivaryApp.userservice.entity.Roles;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
-import com.foodDelivaryApp.userservice.repository.RolesRepository;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

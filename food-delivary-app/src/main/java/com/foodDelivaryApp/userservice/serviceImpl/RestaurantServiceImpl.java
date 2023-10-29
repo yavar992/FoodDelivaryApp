@@ -11,7 +11,6 @@ import com.foodDelivaryApp.userservice.exceptionHandling.InvalidRestaurantExcept
 import com.foodDelivaryApp.userservice.repository.RestaurantRepo;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.RestaurantsService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @Transactional
 public class RestaurantServiceImpl implements RestaurantsService {
 
@@ -58,7 +56,7 @@ public class RestaurantServiceImpl implements RestaurantsService {
 
     @Override
     public String deleteRestaurant(Long ownerId, String uniqueIdentifierNumber) {
-        RestaurantOwner restaurantOwner = restaurantOwnerService.findById(ownerId);
+         restaurantOwnerService.findById(ownerId);
         Optional<Restaurant> restaurant = restaurantRepo.findByUniqueIdentifierNumber(uniqueIdentifierNumber);
         if (restaurant.isEmpty()){
             throw new InvalidRestaurantException("No restaurant found for the uniqueIdentifierNumber " + uniqueIdentifierNumber);

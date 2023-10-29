@@ -5,7 +5,6 @@ import com.foodDelivaryApp.userservice.entity.CuisineType;
 import com.foodDelivaryApp.userservice.service.RestaurantsService;
 import com.google.gson.Gson;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Slf4j
 @RequestMapping("/api/v1/restaurant")
 public class RestaurantsController {
 

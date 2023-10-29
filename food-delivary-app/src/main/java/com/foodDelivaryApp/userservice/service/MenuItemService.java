@@ -1,8 +1,6 @@
 package com.foodDelivaryApp.userservice.service;
 
 import com.foodDelivaryApp.userservice.DTO.MenuItemDTO;
-import com.foodDelivaryApp.userservice.entity.MenuItem;
-
 import java.util.List;
 
 public interface MenuItemService {

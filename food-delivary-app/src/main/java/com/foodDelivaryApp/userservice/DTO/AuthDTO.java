@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class ChangePasswordDTO {
+public class AuthDTO {
 
-    private Integer otp;
+    private String username;
     private String password;
 }

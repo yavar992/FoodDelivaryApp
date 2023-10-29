@@ -10,7 +10,6 @@ import com.foodDelivaryApp.userservice.repository.RestaurantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.Optional;
 
 @Service

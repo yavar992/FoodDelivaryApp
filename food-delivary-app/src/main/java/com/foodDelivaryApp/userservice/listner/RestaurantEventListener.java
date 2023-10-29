@@ -3,18 +3,15 @@ package com.foodDelivaryApp.userservice.listner;
 import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.event.RestaurantEvent;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
-@Slf4j
 public class RestaurantEventListener {
 
 //    implements ApplicationListener<RestaurantEvent>

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;

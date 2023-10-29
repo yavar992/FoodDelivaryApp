@@ -7,7 +7,6 @@ import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

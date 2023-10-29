@@ -1,7 +1,6 @@
 package com.foodDelivaryApp.userservice.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.time.LocalDate;

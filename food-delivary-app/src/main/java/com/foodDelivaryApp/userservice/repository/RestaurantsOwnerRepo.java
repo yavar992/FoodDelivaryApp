@@ -1,6 +1,5 @@
 package com.foodDelivaryApp.userservice.repository;
 
-import com.foodDelivaryApp.userservice.DTO.VerifyOTP;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

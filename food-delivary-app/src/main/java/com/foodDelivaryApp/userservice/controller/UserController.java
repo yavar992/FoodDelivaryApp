@@ -1,11 +1,9 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.service.UserService;
-import com.foodDelivaryApp.userservice.util.LocalDateTimeAdaptor;
 import com.foodDelivaryApp.userservice.util.LocalDateTypeAdaptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,12 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @RestController

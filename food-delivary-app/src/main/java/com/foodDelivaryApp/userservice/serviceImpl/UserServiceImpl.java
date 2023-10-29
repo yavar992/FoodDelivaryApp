@@ -15,7 +15,6 @@ import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.ImageUtil;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import java.util.Set;
 
 @Service
 @Transactional
-@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired

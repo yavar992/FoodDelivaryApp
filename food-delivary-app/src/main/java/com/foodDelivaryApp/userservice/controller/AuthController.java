@@ -3,20 +3,26 @@ package com.foodDelivaryApp.userservice.controller;
 import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.jwt.JwtService;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.UserService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 
 
 @RestController
 @RequestMapping("/api/v1/auth/")
-@Slf4j
 public class AuthController {
 
     @Autowired
@@ -24,6 +30,12 @@ public class AuthController {
 
     @Autowired
     RestaurantOwnerService restaurantOwnerService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
 //    @Autowired
 //    PasswordEncoder passwordEncoder;
@@ -170,6 +182,22 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot change password due to interval server error");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthDTO authDTO , Principal principal) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
+       if (!authentication.isAuthenticated()){
+           throw new UsernameNotFoundException("invalid user request !");
+       }
+       String jwtToken = jwtService.generateToken(authDTO.getUsername());
+       return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+
+    }
+
+    @GetMapping("/helloUser")
+    public String helloUser(Principal principal){
+        return "Hello " +  principal.getName();
     }
 
 
