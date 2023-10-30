@@ -46,21 +46,15 @@ Search and Filters: Implement robust search functionality with filters for cuisi
 
 
 // to do first
-Restaurant owner registers for an account.
-Restaurant owner adds their restaurant profile.
-Restaurant owner adds their restaurant's menu.
-Restaurant owner's restaurant is published on the food delivery platform.
-Customers can now search for the restaurant and place orders.
-Restaurant owner receives orders and processes them.
-Restaurant owner delivers orders to customers.
+Restaurant owner registers for an account. --done
+Restaurant owner adds their restaurant profile. --done
+Restaurant owner adds their restaurant's menu. --done
+Restaurant owner's restaurant is published on the food delivery platform. --done
+Customers can now search for the restaurant and place orders. --done
+Restaurant owner receives orders and processes them. --done
+Restaurant owner delivers orders to customers. --done
 
 
-get all menu by food name
-get item by food name and id
-get item by the food category code and name
-get item by popularity
-get all the most selling food
 
-
-add cart to the user profile
-add review and rating to the menuItem
+//BUGS --
+1 -> RatingEnum values is starting from the 0

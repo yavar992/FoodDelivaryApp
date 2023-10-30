@@ -72,7 +72,7 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
         public boolean ownerExistByEmail(String email) {
             Optional<RestaurantOwner> restaurantOwner = restaurantsOwnerRepo.findByEmail(email);
             RestaurantOwner restaurantOwner1 = restaurantOwner.get();
-            return true;
+            return restaurantOwner!=null;
         }
 
         @Override

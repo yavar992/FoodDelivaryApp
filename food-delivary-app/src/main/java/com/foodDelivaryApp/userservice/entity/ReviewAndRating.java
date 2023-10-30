@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -22,8 +21,10 @@ public class ReviewAndRating {
     private String userName;
     private String customerName;
     private String customerEmail;
+    @Column(length = 1000)
     private String review;
-    private Double rating;
+    @Enumerated(EnumType.ORDINAL)
+    private RatingEnum rating;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -34,6 +35,7 @@ public class ReviewAndRating {
     @ManyToOne
     @JoinColumn(name = "menuItem_id")
     private MenuItem menuItem;
+
 
 
 

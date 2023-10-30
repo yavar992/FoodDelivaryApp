@@ -48,7 +48,7 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @GetMapping("/cart/{id}")
+    @GetMapping("cartByUserId/{id}")
     public ResponseEntity<?> getCartByUserId(@PathVariable ("id") Long id){
         try {
             CartDTO cartDTO = cartService.getCartByUserId(id);
@@ -74,7 +74,7 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @GetMapping("/updateCart/{id}")
+    @GetMapping("/deleteCart/{id}")
     public ResponseEntity<?> deleteCart(@PathVariable ("id") Long id){
         try {
             String cartDTO = cartService.deleteCart(id);
@@ -86,6 +86,7 @@ public class CartController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
+
 
 
 

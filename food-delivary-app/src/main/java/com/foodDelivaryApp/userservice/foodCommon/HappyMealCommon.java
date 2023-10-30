@@ -10,6 +10,7 @@ import com.foodDelivaryApp.userservice.repository.RestaurantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +43,10 @@ public class HappyMealCommon {
             throw new MenuItemException("No item found for the foodCode "+ foodCode);
         }
         return menuItem.get();
+    }
+
+    public MenuItem findMealItemById(Long id){
+        return menuItemRepo.findById(id).orElseThrow(()-> new MenuItemException("No item found for the id "+ id));
 
     }
 }

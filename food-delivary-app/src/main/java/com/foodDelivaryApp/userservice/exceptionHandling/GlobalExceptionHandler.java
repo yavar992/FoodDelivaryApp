@@ -133,6 +133,24 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(ReviewAndRatingException.class)
+    public ResponseEntity<ErrorMessage> reviewAndRatingException(ReviewAndRatingException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<ErrorMessage> invalidUserDetailsException(InvalidUserException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
 
 
 
