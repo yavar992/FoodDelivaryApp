@@ -10,6 +10,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -99,6 +101,8 @@ public class User {
     @OneToOne
     private Cart cart;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderDetails> orderDetails = new ArrayList<>();
 
 
 }

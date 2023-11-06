@@ -1,6 +1,8 @@
 package com.foodDelivaryApp.userservice.service;
 
 import com.foodDelivaryApp.userservice.DTO.MenuItemDTO;
+import com.foodDelivaryApp.userservice.entity.MenuItem;
+
 import java.util.List;
 
 public interface MenuItemService {
@@ -30,4 +32,7 @@ public interface MenuItemService {
     List<MenuItemDTO> getMenuItemByPopularity( Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
 
 
+    String checkout(Long itemId);
+
+    MenuItem findById(Long itemId);
 }

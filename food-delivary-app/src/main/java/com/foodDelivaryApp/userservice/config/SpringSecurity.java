@@ -63,7 +63,7 @@ public class SpringSecurity {
     @Bean
     public UserDetailsService userDetailsService(){
         return new CustomerUserDetailsService();
-}
+     }
     
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {

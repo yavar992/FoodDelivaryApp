@@ -1,6 +1,7 @@
 package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.MenuItemDTO;
+import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.service.MenuItemService;
 import com.foodDelivaryApp.userservice.util.LocalDateTypeAdaptor;
 import com.google.gson.Gson;
@@ -200,6 +201,19 @@ public class MenuItemController {
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class , new LocalDateTypeAdaptor()).create();
         String json = gson.toJson(menuItems);
         return ResponseEntity.status(HttpStatus.OK).body(json);
+    }
+
+    @PostMapping("{itemId}/checkout")
+    public ResponseEntity<?> checkout(@PathVariable("itemId") Long itemId ){
+        try {
+            String checkoutMessage = menuItemService.checkout(itemId);
+            if (checkoutMessage!=null){
+                return ResponseEntity.status(HttpStatus.CREATED).body(checkoutMessage);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
 }

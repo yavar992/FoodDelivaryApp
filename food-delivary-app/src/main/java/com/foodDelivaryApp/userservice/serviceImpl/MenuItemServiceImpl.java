@@ -5,6 +5,7 @@ import com.foodDelivaryApp.userservice.convertor.MenuItemConvertor;
 import com.foodDelivaryApp.userservice.entity.MenuItem;
 import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.entity.RestaurantMenu;
+import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.exceptionHandling.InvalidRestaurantException;
 import com.foodDelivaryApp.userservice.exceptionHandling.MenuItemException;
 import com.foodDelivaryApp.userservice.exceptionHandling.RestaurantMenuException;
@@ -12,12 +13,17 @@ import com.foodDelivaryApp.userservice.foodCommon.HappyMealCommon;
 import com.foodDelivaryApp.userservice.repository.MenuItemRepo;
 import com.foodDelivaryApp.userservice.repository.RestaurantMenuRepo;
 import com.foodDelivaryApp.userservice.repository.RestaurantRepo;
+import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.MenuItemService;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
+import org.apache.catalina.authenticator.SpnegoAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -43,6 +49,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Autowired
     private HappyMealCommon happyMealCommon;
+
+    @Autowired
+    private UserRepo userRepo;
 
 
 
@@ -194,6 +203,21 @@ public class MenuItemServiceImpl implements MenuItemService {
             throw new MenuItemException("No menu item found ");
         }
         return menuItemPage.stream().map(MenuItemConvertor::convertMenuItemToMenuItemDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public String checkout(Long itemId) {
+        MenuItem menuItem = menuItemRepo.findById(itemId).orElseThrow(()-> new MenuItemException("No menu item found for the id " + itemId));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepo.findByEmail(userDetails.getUsername());
+        return  null;
+    }
+
+    @Override
+    public MenuItem findById(Long itemId) {
+        return menuItemRepo.findById(itemId).orElseThrow(()-> new MenuItemException("No MenuItem found for item ID " + itemId));
+
     }
 
 

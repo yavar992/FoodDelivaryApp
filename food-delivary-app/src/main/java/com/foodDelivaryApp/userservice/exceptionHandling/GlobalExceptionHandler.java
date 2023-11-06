@@ -151,6 +151,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
+    @ExceptionHandler(DeliveryException.class)
+    public ResponseEntity<ErrorMessage> deliveryException(DeliveryException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 
 
 
