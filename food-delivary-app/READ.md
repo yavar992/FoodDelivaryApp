@@ -70,13 +70,25 @@ Rating and Review: Once the core functionalities are implemented, you can add th
 Analytics and Reporting: Lastly, you can focus on implementing the analytics and reporting module. This allows you to collect and analyze data related to orders, deliveries, user behavior, and generate insights for business decision-making and optimizations.
 
 
-CREATE THE SEPERATE LOGIN AND REGISTERATION PAGES  FOR THE EACH MODULES 
+CREATE THE SEPARATE LOGIN AND REGISTRATION PAGES  FOR EACH MODULES 
 User Module: This module is dedicated to managing functionalities for regular users or customers. It includes features such as user registration, authentication, profile management, order placement, order tracking, and rating/reviewing restaurants and delivery drivers.
 
 Restaurant Owner Module: This module caters to the needs of restaurant owners. It includes functionalities like restaurant registration, menu management, order processing, inventory management, and performance analytics specific to their restaurants.
 
 Delivery Personnel Module: This module is designed for delivery personnel or drivers. It includes functionalities like driver registration, availability management, order assignment, delivery tracking, and communication with users and restaurant owners.
 
+
+ADD ON 
+ADMIN  -- CAN ADD A COUPON OR OFFER ON A PRODUCTS
+USER - EVERY USER WILL HAVE A WALLET ON MY APPLICATION , REFERRAL SYSTEM OR REFERRAL CODE -- A USER CAN SHARE HIS REFERRAL CODE TO A NEW USER AND CAN AVAIL THE 
+SOME MONEY INTO HIS WALLET ON THE FIRST TRANSACTION OF THE USER ( WHO JUST SIGNUP FROM THE REFERRAL CODE OF THE USER )
+READ ABOUT THE BASE-ENTITY CLASS IN THE SPRING BOOT WHY DO WE USE AND WHAT'S THE NEED OF IT 
+
+A USER CAN HAVE MORE THAN ONE ADDRESS AND HE SHOULD HAVE ONE DEFAULT ADDRESS 
+
+WORK FLOW --
+
+todo - 21/11/23 -- admin modules
 
 
 

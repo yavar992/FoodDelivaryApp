@@ -81,8 +81,10 @@ public class User {
     @Lob
     @Column(name="imageData", length = 1000)
     private byte[] profilePicture;
+    private String createdBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String referralCode;
     private boolean isVerified;
     private boolean isActive;
     private String preferredLanguage;
@@ -104,5 +106,15 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetails> orderDetails = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, cascade =CascadeType.ALL)
+    private Wallet wallet;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_referrals",
+            joinColumns = @JoinColumn(name = "referrerUser_id"),
+            inverseJoinColumns = @JoinColumn(name = "guyWhoSignup_id")
+    )
+    private Set<User> referredUsers;
 
 }

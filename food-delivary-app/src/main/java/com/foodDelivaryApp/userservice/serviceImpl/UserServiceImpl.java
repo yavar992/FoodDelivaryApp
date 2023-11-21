@@ -1,16 +1,15 @@
 package com.foodDelivaryApp.userservice.serviceImpl;
 
-import com.foodDelivaryApp.userservice.DTO.ChangePasswordDTO;
-import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
-import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
-import com.foodDelivaryApp.userservice.DTO.VerifyOTP;
+import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
 import com.foodDelivaryApp.userservice.entity.Roles;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.entity.Wallet;
 import com.foodDelivaryApp.userservice.event.UserRegisterationEvent;
 import com.foodDelivaryApp.userservice.exceptionHandling.*;
 import com.foodDelivaryApp.userservice.repository.RolesRepository;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
+import com.foodDelivaryApp.userservice.repository.WalletRepo;
 import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.ImageUtil;
@@ -25,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -42,16 +42,27 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EmailSendarUtil emailSendarUtil;
 
+    @Autowired
+    private WalletRepo walletRepo;
+
 
     @Override
-    public String saveUser(User user) {
+    public String saveUser(User user , String referralCode) {
         Set<Roles> rolesSet = new HashSet<>();
         Roles roles = rolesRepository.findByName("ROLE_USER").get();
         rolesSet.add(roles);
         user.setRoles(rolesSet);
         UserRegisterationEvent userRegisterationEvent = new UserRegisterationEvent(user);
         applicationEventPublisher.publishEvent(userRegisterationEvent);
+
+        if (referralCode!=null){
+            Set<User> users = new HashSet<>();
+            User user1 = userRepo.findUserByReferralCode(referralCode);
+            users.add(user1);
+            user.setReferredUsers(users);
+        }
         userRepo.save(user);
+
         return "User Registered SuccessFully !";
     }
 
@@ -130,6 +141,11 @@ public class UserServiceImpl implements UserService {
         user.setOtpSendingTime(null);
         user.setOtpExpireTime(null);
         userRepo.saveAndFlush(user);
+        Wallet wallet = new Wallet();
+        wallet.setBalance(0);
+        wallet.setUser(user);
+        walletRepo.saveAndFlush(wallet);
+
         return "COOL , Your account has been successfully verified";
     }
 
@@ -235,6 +251,64 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO findUserByUserId(Long id) {
         User user = findUserById(id);
         return UserConvertor.convertUserToUserResponseDTO(user);
+    }
+
+    @Override
+    public String adminUser(UserDTO userDTO) {
+        Set<Roles> rolesSet = new HashSet<>();
+        Roles roles = rolesRepository.findByName("ROLE_USER").get();
+        rolesSet.add(roles);
+        User user = UserConvertor.adminUserRegistration(userDTO);
+        user.setRoles(rolesSet);
+        UserRegisterationEvent userRegisterationEvent = new UserRegisterationEvent(user);
+        applicationEventPublisher.publishEvent(userRegisterationEvent);
+        userRepo.save(user);
+        return "User Registered SuccessFully !";
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        List<User> users = userRepo.findAll();
+        if (users.isEmpty()){
+            throw new UserNotFoundException("No user exist in the db");
+        }
+        return users;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        User user = userRepo.findByEmail(email);
+        if(user==null){
+            throw new UserNotFoundException("user not found for the email " + email);
+        }
+        return user;
+    }
+
+    @Override
+    public String bulkDelete() {
+        List<User> users = userRepo.findAll();
+        if (users.isEmpty()){
+            throw new UserNotFoundException("No user found in the db");
+        }
+        userRepo.deleteAll();
+        return "All user deleted successfully !";
+    }
+
+    @Override
+    public String blockUserAccount(Long id) {
+        User user = userRepo.findById(id).orElseThrow(()-> new UserNotFoundException("No User found for the id " + id));
+        user.setVerified(false);
+        userRepo.save(user);
+        return "User account has  blocked successfully !";
+    }
+
+    @Override
+    public User findUserByReferralCode(String referralCode) {
+        User user = userRepo.findUserByReferralCode(referralCode);
+        if (user==null){
+            throw new UserNotFoundException("Invalid referral code ");
+        }
+        return user;
     }
 
 }

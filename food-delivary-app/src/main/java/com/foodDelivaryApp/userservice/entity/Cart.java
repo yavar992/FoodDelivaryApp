@@ -32,4 +32,13 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "coupon_id")  // Define the appropriate column name
+    private Coupon coupon;
+
+    @ManyToOne
+    @JoinColumn(name = "menuItem_id")
+    private MenuItem menuItem;
+
+
 }

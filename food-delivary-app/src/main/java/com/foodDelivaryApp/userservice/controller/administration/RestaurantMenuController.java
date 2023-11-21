@@ -1,4 +1,4 @@
-package com.foodDelivaryApp.userservice.controller;
+package com.foodDelivaryApp.userservice.controller.administration;
 
 import com.foodDelivaryApp.userservice.DTO.RestaurantMenuDTO;
 import com.foodDelivaryApp.userservice.entity.RestaurantMenu;

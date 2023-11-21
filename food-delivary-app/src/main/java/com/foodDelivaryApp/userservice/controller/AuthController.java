@@ -3,12 +3,16 @@ package com.foodDelivaryApp.userservice.controller;
 import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
+import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.UserService;
 import jakarta.validation.Valid;
 
 import java.security.Principal;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -35,28 +40,31 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
     private JwtService jwtService;
 
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO){
+    @PostMapping({"/register","/signup"})
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,
+                                          @RequestParam(value = "referralCode" , required = false) String referralCode ){
         try {
             if (userService.userAlreadyExistByEmailOrUserName(userDTO.getEmail() , userDTO.getUsername())){
                 return ResponseEntity.status(HttpStatus.OK).body("User is already register with the same email or username");
             }
-
             User user = UserConvertor.convertUserDtoToUserEntity(userDTO);
-//            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            String registrationMessage =  userService.saveUser(user);
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            String registrationMessage =  userService.saveUser(user,referralCode);
             if (registrationMessage!=null){
                 return ResponseEntity.status(HttpStatus.CREATED).body(registrationMessage);
             }
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot Register the User due to Invalid request");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
 

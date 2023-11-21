@@ -1,7 +1,8 @@
-package com.foodDelivaryApp.userservice.controller;
+package com.foodDelivaryApp.userservice.controller.administration;
 
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
 import com.foodDelivaryApp.userservice.entity.CuisineType;
+import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.service.RestaurantsService;
 import com.google.gson.Gson;
 import jakarta.validation.Valid;
@@ -29,7 +30,7 @@ public class RestaurantsController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("cannot added the restaurant due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
     @GetMapping("/allRestaurant")
@@ -44,7 +45,7 @@ public class RestaurantsController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot retrieve the list of the restaurant due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
     @DeleteMapping("/deleteRestaurant/{ownerId}")
@@ -58,7 +59,7 @@ public class RestaurantsController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot delete the restaurant due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
     @GetMapping("/getRestaurant/{ownerId}")
@@ -72,7 +73,7 @@ public class RestaurantsController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the restaurant by the uniqueIdentifierNumber due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
     @PostMapping("/updateRestaurant/{ownerId}")
@@ -87,7 +88,7 @@ public class RestaurantsController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot update the restaurant due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
     @GetMapping("/cuisineTypes/{ownerId}")
@@ -102,7 +103,7 @@ public class RestaurantsController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot get the cuisineTypes due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
     @PostMapping("/postApi")

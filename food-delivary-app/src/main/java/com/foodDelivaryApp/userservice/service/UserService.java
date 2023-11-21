@@ -1,16 +1,14 @@
 package com.foodDelivaryApp.userservice.service;
 
-import com.foodDelivaryApp.userservice.DTO.ChangePasswordDTO;
-import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
-import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
-import com.foodDelivaryApp.userservice.DTO.VerifyOTP;
+import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface UserService {
-    String saveUser(User user);
+    String saveUser(User user , String referralCode);
 
     boolean userAlreadyExistByEmailOrUserName(String email, String username);
 
@@ -35,4 +33,16 @@ public interface UserService {
     String changePassword(ChangePasswordDTO changePasswordDTO);
 
     UserResponseDTO findUserByUserId(Long id);
+
+    String adminUser(UserDTO userDTO);
+
+    List<User> findAllUsers();
+
+    User findUserByEmail(String email);
+
+    String bulkDelete();
+
+    String blockUserAccount(Long id);
+
+    User findUserByReferralCode(String referralCode);
 }

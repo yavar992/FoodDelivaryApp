@@ -3,6 +3,9 @@ package com.foodDelivaryApp.userservice.controller;
 import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.exceptionHandling.UserNotFoundException;
+import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
+import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.util.LocalDateTypeAdaptor;
 import com.google.gson.Gson;
@@ -12,9 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.metadata.HanaCallMetaDataProvider;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.auth.login.LoginException;
 import java.time.LocalDate;
 
 
@@ -25,6 +31,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepo userRepo;
 
     @PostMapping("/uploadImage/{id}")
     public ResponseEntity<?> uploadImage(@PathVariable("id") Long id , @RequestParam("image") MultipartFile file){
@@ -79,6 +87,28 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot update user details due to internal server error");
     }
 
+    @PostMapping("/updateUser")
+    public ResponseEntity<?> updateUser(@Valid  @RequestBody UserUpdateDTO userUpdateDTO , Authentication authentication){
+        try {
+            if (authentication == null){
+                throw new UserNotFoundException("Please login first");
+            }
+            if (authentication.isAuthenticated()){
+                String username = authentication.getName();
+                User user = userService.findUserByEmail(username);
+                Long id = user.getId();
+                User updateUser = userService.updateUser(id , userUpdateDTO);
+                if (updateUser!=null){
+                    return ResponseEntity.status(HttpStatus.OK).body("User Updated Successfully !");
+                }
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot update user details due to internal server error");
+    }
+
     @GetMapping("getUserByEmail/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try {
@@ -92,10 +122,10 @@ public class UserController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("cannot get the user due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
+    @DeleteMapping("/deleteUserById/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable("id") Long id){
         try {
             String deletedMessage = userService.deleteUser(id);
@@ -105,31 +135,52 @@ public class UserController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot delete user account due to invalid request");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @PostMapping("/post")
-    public String hh(){
-        return "post request is working";
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<?> deleteUser(Authentication authentication){
+        try {
+            if (authentication==null){
+                throw new LoginException("please login first to delete your account");
+            }
+            if (authentication.isAuthenticated()){
+                String username = authentication.getName();
+                User user = userService.findUserByEmail(username);
+                userRepo.delete(user);
+                return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully !");
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @DeleteMapping("/delete")
-    public String de(){
-        return "delete request also working";
-    }
 
-    @PostMapping("/pp")
-    public String as(){
-        return "this is second post request";
-    }
+//    @PostMapping("/post")
+//    public String hh(){
+//        return "post request is working";
+//    }
+//
+//    @DeleteMapping("/delete")
+//    public String de(){
+//        return "delete request also working";
+//    }
+//
+//    @PostMapping("/pp")
+//    public String as(){
+//        return "this is second post request";
+//    }
+//
+//    @DeleteMapping("/dd")
+//    public String sd(){
+//        return "this is second delete request";
+//    }
+//
+//    @GetMapping("/ddd")
+//    public String ssd(){
+//        return "this is second delete request";
+//    }
 
-    @DeleteMapping("/dd")
-    public String sd(){
-        return "this is second delete request";
-    }
 
-    @GetMapping("/ddd")
-    public String ssd(){
-        return "this is second delete request";
-    }
 }

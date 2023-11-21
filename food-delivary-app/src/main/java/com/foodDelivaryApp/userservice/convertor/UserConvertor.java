@@ -4,11 +4,14 @@ import com.foodDelivaryApp.userservice.DTO.UserDTO;
 import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.util.GeneratedRandomNumber;
+
 import java.time.LocalDateTime;
 
 public interface UserConvertor {
 
-     static User convertUserDtoToUserEntity(UserDTO userDTO){
+
+    static User convertUserDtoToUserEntity(UserDTO userDTO){
         return User.builder()
                 .username(userDTO.getUsername())
                 .email(userDTO.getEmail())
@@ -24,10 +27,13 @@ public interface UserConvertor {
                 .country(userDTO.getCountry())
                 .postalCode(userDTO.getPostalCode())
                 .createdAt(LocalDateTime.now())
+                .createdBy("SELF_REGISTRATION")
+                .referralCode(GeneratedRandomNumber.generateReferralCode(6))
                 .preferredLanguage("english")
                 .isActive(true)
                 .build();
-    }
+
+     }
 
 
      static void updateUser(User user, UserUpdateDTO userUpdateDTO) {
@@ -56,5 +62,30 @@ public interface UserConvertor {
                 .postalCode(user.getPostalCode())
                 .build();
     }
+
+    static User adminUserRegistration(UserDTO userDTO){
+        return User.builder()
+                .username(userDTO.getUsername())
+                .email(userDTO.getEmail())
+                .firstName(userDTO.getFirstName())
+                .password(userDTO.getPassword())
+                .lastName(userDTO.getLastName())
+                .dateOfBirth(userDTO.getDateOfBirth())
+                .countryCode(userDTO.getCountryCode())
+                .phoneNumber(userDTO.getPhoneNumber())
+                .address(userDTO.getAddress())
+                .city(userDTO.getCity())
+                .state(userDTO.getState())
+                .country(userDTO.getCountry())
+                .postalCode(userDTO.getPostalCode())
+                .createdAt(LocalDateTime.now())
+                .createdBy("ADMIN")
+                .referralCode(GeneratedRandomNumber.generateReferralCode(6))
+                .preferredLanguage("english")
+                .isActive(true)
+                .build();
+
+    }
+
 
 }
