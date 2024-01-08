@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @ToString
 @Builder
 @DynamicUpdate
@@ -19,26 +19,11 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
-    private Double price;
-    private Long quantity;
-    private Long menuItemId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
 
+    @OneToMany(mappedBy = "cart" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<CartItem> cartItems;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "coupon_id")  // Define the appropriate column name
-    private Coupon coupon;
-
-    @ManyToOne
-    @JoinColumn(name = "menuItem_id")
-    private MenuItem menuItem;
-
-
 }

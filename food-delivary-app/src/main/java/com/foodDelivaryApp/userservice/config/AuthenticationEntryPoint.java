@@ -34,5 +34,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
+
+        
     }
 }

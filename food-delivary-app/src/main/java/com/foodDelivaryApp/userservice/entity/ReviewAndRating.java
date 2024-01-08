@@ -17,7 +17,7 @@ public class ReviewAndRating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
+//    private Long userId;
     private String userName;
     private String customerName;
     private String customerEmail;
@@ -36,7 +36,9 @@ public class ReviewAndRating {
     @JoinColumn(name = "menuItem_id")
     private MenuItem menuItem;
 
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id" )
+    private User user;
 
 
 }

@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.exceptionHandling;
 
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -162,6 +163,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidCouponException.class)
     public ResponseEntity<ErrorMessage> invalidCouponException(InvalidCouponException ex , WebRequest web){
+        Integer statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        String path = web.getDescription(false);
+        ErrorMessage errorMessage = new ErrorMessage(statusCode, message ,path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ErrorMessage> invalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex , WebRequest web){
         Integer statusCode = HttpStatus.BAD_REQUEST.value();
         String message = ex.getMessage();
         String path = web.getDescription(false);

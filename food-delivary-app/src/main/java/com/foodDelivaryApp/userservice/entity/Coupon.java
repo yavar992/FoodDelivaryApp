@@ -30,21 +30,15 @@ public class Coupon {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate expirationPeriod;
+
     private int couponStock;
     private int purchaseLimitAmount;
     private LocalDate couponCreatedTime;
     private LocalDate couponModifiedTime;
-    @ManyToOne
-    @JoinColumn(name = "menuItem_id")
-    private MenuItem menuItem;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurantMenu_id")
-    private RestaurantMenu restaurantMenu;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private RestaurantOwner restaurantOwner;
 
     private boolean isDeleted;
     private Boolean active;

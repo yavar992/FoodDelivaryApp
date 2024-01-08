@@ -46,8 +46,8 @@ Search and Filters: Implement robust search functionality with filters for cuisi
 
 
 // to do first
-Restaurant owner registers for an account. --done
-Restaurant owner adds their restaurant profile. --done
+Restaurant owner registers for an account. --  done
+Restaurant owner adds their restaurant profile. --  done
 Restaurant owner adds their restaurant's menu. --done
 Restaurant owner's restaurant is published on the food delivery platform. --done
 Customers can now search for the restaurant and place orders. --done

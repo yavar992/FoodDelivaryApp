@@ -8,6 +8,7 @@ import com.foodDelivaryApp.userservice.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +21,11 @@ public class CouponController {
     private CouponService couponService;
 
     @PostMapping
-    public ResponseEntity<?> createCoupon(@RequestBody CouponDTO couponDTO ){
+    public ResponseEntity<?> createCoupon(@RequestBody CouponDTO couponDTO , Authentication authentication){
+
         try {
-            Coupon coupon1 = couponService.createCoupon(couponDTO);
+            String name = authentication.getName();
+            Coupon coupon1 = couponService.createCoupon(couponDTO , name);
             if (coupon1!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(coupon1);
             }
@@ -46,9 +49,10 @@ public class CouponController {
     }
 
     @PostMapping("/updateCoupon/{id}")
-    public ResponseEntity<?> updateCoupon(@PathVariable("id") Long id , @RequestBody CouponDTO couponDTO){
+    public ResponseEntity<?> updateCoupon(@PathVariable("id") Long id , @RequestBody CouponDTO couponDTO , Authentication authentication){
         try {
-            String updateMessage = couponService.updateCoupon(id,couponDTO);
+            String email = authentication.getName();
+            String updateMessage = couponService.updateCoupon(id,couponDTO , email);
             if (updateMessage!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(updateMessage);
             }
@@ -59,7 +63,7 @@ public class CouponController {
     }
 
 
-    @PostMapping("/deleteCoupon/{id}")
+    @DeleteMapping("/deleteCoupon/{id}")
     public ResponseEntity<?> deleteCoupon(@PathVariable("id") Long id){
         try {
             String updateMessage = couponService.deleteCoupon(id);
@@ -98,7 +102,5 @@ public class CouponController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
-
-
 
 }

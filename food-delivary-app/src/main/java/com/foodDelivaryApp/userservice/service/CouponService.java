@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface CouponService {
 
-    Coupon createCoupon(CouponDTO coupon);
+    Coupon createCoupon(CouponDTO coupon , String name);
 
     String extendCouponDuration(Long id, LocalDate ExpirationPeriod);
 
-    String updateCoupon(Long id, CouponDTO couponDTO);
+    String updateCoupon(Long id, CouponDTO couponDTO , String email) ;
 
     String deleteCoupon(Long id);
 

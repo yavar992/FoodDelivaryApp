@@ -2,28 +2,26 @@ package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
+import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
+import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.UserService;
 import jakarta.validation.Valid;
-
-import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.Optional;
 
 
 @RestController
@@ -47,6 +45,9 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    RestaurantsOwnerRepo restaurantsOwnerRepo;
 
     @PostMapping({"/register","/signup"})
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,
@@ -82,8 +83,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot verify OTP with id  due to internal server error");
     }
 
-    @GetMapping("/resendOtp")
-    public ResponseEntity<?> resendOTP(@RequestParam("email") String email){
+        @GetMapping("/resendOtp")
+       public ResponseEntity<?> resendOTP(@RequestParam("email") String email){
         try {
             String successMessage = userService.resendOTP(email);
             if (successMessage!=null){
@@ -95,11 +96,13 @@ public class AuthController {
     }
 
     @PostMapping("/forget-password")
-    public ResponseEntity<?> forgetPassword(@RequestBody ForgetPasswordDTO forgetPasswordDTO){
+    public ResponseEntity<?> forgetPassword(Authentication authentication){
         try {
-            String forgetPasswordMessage = userService.forgetPassword(forgetPasswordDTO.getEmail());
+            String username = authentication.getName();
+            User user = userRepo.findByEmail(username);
+            String forgetPasswordMessage = userService.forgetPassword(user.getEmail());
             if (forgetPasswordMessage!=null){
-                return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordDTO);
+                return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordMessage);
             }
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -118,6 +121,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot change password due to interval server error");
+
     }
 
 
@@ -193,14 +197,37 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthDTO authDTO) {
+    public ResponseEntity<?> login(@RequestBody AuthDTO authDTO)  {
+
+        Optional<RestaurantOwner> restaurantOwner = restaurantsOwnerRepo.findByEmail(authDTO.getUsername());
+        if (restaurantOwner.isPresent()){
+            RestaurantOwner restaurantOwner1 = restaurantOwner.get();
+            boolean isVerified = restaurantOwner1.getIsVerified();
+            if (!isVerified){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
+            }
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
+            if (!authentication.isAuthenticated()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
+            }
+            String jwtToken = jwtService.generateToken(authDTO.getUsername());
+            return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+        }
+
+        User user = userRepo.findByEmail(authDTO.getUsername());
+        if (user==null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Either Email or Password is Invalid");
+        }
+        boolean isVerified = user.isVerified();
+        if (!isVerified){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
+        }
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
        if (!authentication.isAuthenticated()){
-           throw new UsernameNotFoundException("invalid user request !");
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
        }
        String jwtToken = jwtService.generateToken(authDTO.getUsername());
        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
-
     }
 
     @GetMapping("/helloUser")

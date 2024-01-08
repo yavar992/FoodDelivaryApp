@@ -100,7 +100,7 @@ public class User {
     )
     private Set<Roles> roles;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private Cart cart;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -112,9 +112,10 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_referrals",
-            joinColumns = @JoinColumn(name = "referrerUser_id"),
-            inverseJoinColumns = @JoinColumn(name = "guyWhoSignup_id")
+            joinColumns = @JoinColumn(name = "guyWhoSignup_id"),
+            inverseJoinColumns = @JoinColumn(name = "guyWhoReferrerCode_id")
     )
     private Set<User> referredUsers;
+
 
 }

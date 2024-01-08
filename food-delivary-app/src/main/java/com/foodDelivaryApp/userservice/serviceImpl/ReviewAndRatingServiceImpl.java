@@ -52,7 +52,7 @@ public class ReviewAndRatingServiceImpl implements ReviewAndRatingService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userRepo.findByEmail(userDetails.getUsername());
         reviewAndRating.setMenuItem(menuItem);
-        reviewAndRating.setUserId(user.getId());
+        reviewAndRating.setUser(user);
         reviewAndRating.setUserName(user.getUsername());
         reviewAndRatingRepo.saveAndFlush(reviewAndRating);
         return "Rating added successfully !!";
@@ -81,12 +81,13 @@ public class ReviewAndRatingServiceImpl implements ReviewAndRatingService {
     @Override
     public String updateReviewAndRatings(Long reviewId, UpdateReviewAndRatingDTO updateReviewAndRatingDTO) {
        ReviewAndRating rating = reviewAndRatingRepo.findById(reviewId).orElseThrow(()-> new ReviewAndRatingException("No review found for the reviewId " + reviewId) );
-       Long userId = rating.getUserId();
+       User user = rating.getUser();
+       long userId1= user.getId();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepo.findByEmail(userDetails.getUsername());
-        Long loginUserId = user.getId();
-        if (!loginUserId.equals(userId)){
+        User user1 = userRepo.findByEmail(userDetails.getUsername());
+        Long loginUserId = user1.getId();
+        if (!loginUserId.equals(userId1)){
             throw new InvalidUserException("please login first in order to update your review and rating");
         }
         rating.setRating(updateReviewAndRatingDTO.getRating());
@@ -99,14 +100,15 @@ public class ReviewAndRatingServiceImpl implements ReviewAndRatingService {
 
     @Override
     public String deleteReview(Long reviewId) {
-        ReviewAndRating rating = reviewAndRatingRepo.findById(reviewId).orElseThrow(()-> new ReviewAndRatingException("No review found for the reviewId " + reviewId));
-        Long userId = rating.getUserId();
+        ReviewAndRating rating = reviewAndRatingRepo.findById(reviewId).orElseThrow(()-> new ReviewAndRatingException("No review found for the reviewId " + reviewId) );
+        User user = rating.getUser();
+        long userId1= user.getId();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepo.findByEmail(userDetails.getUsername());
-        Long loginUserId = user.getId();
-        if (!loginUserId.equals(userId)){
-            throw new InvalidUserException("please login first in order to delete your review and rating");
+        User user1 = userRepo.findByEmail(userDetails.getUsername());
+        Long loginUserId = user1.getId();
+        if (!loginUserId.equals(userId1)){
+            throw new InvalidUserException("please login first in order to update your review and rating");
         }
         reviewAndRatingRepo.delete(rating);
         return "Review deleted successfully !";

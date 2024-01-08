@@ -25,4 +25,10 @@ public interface UserRepo extends JpaRepository<User , Long> {
 
     @Query(value = "SELECT * FROM `user` WHERE referralCode = ?1" , nativeQuery = true)
     User findUserByReferralCode(String referralCode);
+
+    @Query(value = "SELECT  ur.guyWhoReferrerCode_id FROM `user` u RIGHT JOIN user_referrals ur ON u.id = ur.guyWhoSignup_id = ?1" , nativeQuery = true)
+    Long findUserWhoSignUp(long userId);
+
+//    @Query(value = "SELECT  ur.guyWhoReferrerCode FROM `user` u RIGHT JOIN user_referrals ur ON u.id = ur.guyWhoSignup_id = ?1" , nativeQuery = true)
+//    Long findUserWhoSignUp(long userId);
 }

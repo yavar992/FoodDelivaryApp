@@ -14,21 +14,21 @@ import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.ImageUtil;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -48,8 +48,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String saveUser(User user , String referralCode) {
+        if (referralCode!=null){
+            User user2 = userRepo.findUserByReferralCode(referralCode);
+            if (user2==null){
+                throw new UserNotFoundException("Invalid referral code , Please enter the correct referral code  " );
+            }
+        }
+
         Set<Roles> rolesSet = new HashSet<>();
         Roles roles = rolesRepository.findByName("ROLE_USER").get();
+        log.info("Roles {}" , roles);
         rolesSet.add(roles);
         user.setRoles(rolesSet);
         UserRegisterationEvent userRegisterationEvent = new UserRegisterationEvent(user);
@@ -140,11 +148,23 @@ public class UserServiceImpl implements UserService {
         user.setOtp(null);
         user.setOtpSendingTime(null);
         user.setOtpExpireTime(null);
-        userRepo.saveAndFlush(user);
         Wallet wallet = new Wallet();
         wallet.setBalance(0);
         wallet.setUser(user);
+        user.setWallet(wallet);
+        userRepo.saveAndFlush(user);
         walletRepo.saveAndFlush(wallet);
+
+        long userId = user.getId();
+        Long userWhoReferCode = userRepo.findUserWhoSignUp(userId);
+        if (userWhoReferCode!=null){
+            User user1 = userRepo.findById(userWhoReferCode).get();
+            Wallet wallet1 = user1.getWallet();
+            double balance = wallet1.getBalance();
+            balance = balance + 50;
+            wallet1.setBalance(balance);
+            walletRepo.saveAndFlush(wallet1);
+        }
 
         return "COOL , Your account has been successfully verified";
     }
@@ -156,7 +176,8 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User not found ");
         }
         String userEmail = user.getEmail();
-        Integer otp = OTPUtil.otp();
+        int otp = OTPUtil.otp();
+        log.info("OTP {}", otp);
         emailSendarUtil.sendEmailWithMultipleBodyLine(userEmail, Arrays.asList("Dear " + user.getFirstName() + " " + user.getLastName() + ",",
                 "",
                 "Thank you for signing up for HappyMeal!",
@@ -209,6 +230,7 @@ public class UserServiceImpl implements UserService {
             throw new UnverifiedUserException("user is not verified , please verify yourself first ");
         }
         int OTP = OTPUtil.otp();
+        log.info("OTP {}" , OTP);
         user.setOtp(OTP);
         emailSendarUtil.sendEmailWithMultipleBodyLine(user.getEmail() ,  Arrays.asList("Dear " + user.getFirstName() + " " + user.getLastName() +
                         "Thank you for signing up for HappyMeal!",

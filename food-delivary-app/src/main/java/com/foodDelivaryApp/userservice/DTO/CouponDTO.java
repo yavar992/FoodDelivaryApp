@@ -12,9 +12,9 @@ import java.time.LocalDate;
 @Data
 public class CouponDTO {
 
-    private int discount;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate expirationPeriod;
-    private int couponStock;
-    private int purchaseLimitAmount;
+        private int discount;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+        private LocalDate expirationPeriod;
+        private int couponStock;
+        private int purchaseLimitAmount;
 }
