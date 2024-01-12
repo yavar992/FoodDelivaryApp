@@ -32,6 +32,11 @@ build/
 ### VS Code ###
 
 
-# Ignore .properties files
-.application.properties
+# .gitignore
+
+# Ignore application properties
+application.properties
+
+
+!**src/main/resources/application.properties
 
