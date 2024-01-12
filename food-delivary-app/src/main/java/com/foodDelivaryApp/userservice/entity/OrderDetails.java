@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,9 +29,12 @@ public class OrderDetails {
     private String intent;
 
 
+    @JsonIgnore
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 
 }
 

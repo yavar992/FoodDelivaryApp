@@ -1,6 +1,7 @@
 package com.foodDelivaryApp.userservice.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -24,6 +25,7 @@ public class Wallet {
 
     private double balance;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -54,7 +54,7 @@ public class AuthController {
                                           @RequestParam(value = "referralCode" , required = false) String referralCode ){
         try {
             if (userService.userAlreadyExistByEmailOrUserName(userDTO.getEmail() , userDTO.getUsername())){
-                return ResponseEntity.status(HttpStatus.OK).body("User is already register with the same email or username");
+                return ResponseEntity.status(HttpStatus.OK).body("User is already register with the same email or username ");
             }
             User user = UserConvertor.convertUserDtoToUserEntity(userDTO);
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -72,28 +72,16 @@ public class AuthController {
 
     @PostMapping("/verifyOtp")
     public  ResponseEntity<?> verifyOtp(@RequestBody VerifyOTP verifyOTP){
-        try {
-            String verifyUser = userService.verifyUserAccount(verifyOTP);
-            if (verifyUser!=null){
-                return ResponseEntity.status(HttpStatus.OK).body(verifyUser);
-            }
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot verify OTP with id  due to internal server error");
+            // String verifyUser = userService.verifyUserAccount(verifyOTP);
+            return ResponseEntity.status(HttpStatus.OK).body(userService.verifyUserAccount(verifyOTP));
     }
 
         @GetMapping("/resendOtp")
        public ResponseEntity<?> resendOTP(@RequestParam("email") String email){
-        try {
-            String successMessage = userService.resendOTP(email);
-            if (successMessage!=null){
-                return ResponseEntity.status(HttpStatus.OK).body(successMessage);          }
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot resend OTP with id due to internal server error");
-    }
+            // String successMessage = userService.resendOTP(email);
+                return ResponseEntity.status(HttpStatus.OK).body(userService.resendOTP(email));        
+            }
+    
 
     @PostMapping("/forget-password")
     public ResponseEntity<?> forgetPassword(Authentication authentication){
@@ -215,6 +203,7 @@ public class AuthController {
         }
 
         User user = userRepo.findByEmail(authDTO.getUsername());
+        System.out.println("user -- > " +user);
         if (user==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Either Email or Password is Invalid");
         }

@@ -1,14 +1,32 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.repository.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/test")
 public class Test {
 
-    @GetMapping("/test2")
+    @Autowired
+    private UserRepo userRepo;
+
+    @GetMapping
     public String test2(){
         return "hello this is test 2";
     }
+
+    @GetMapping("/t2")
+    public User user(){
+        return userRepo.findByEmail("yavaralikhan02@example.com");
+    }
+
+    @GetMapping("/user")
+    public User getUser(@RequestParam("email") String email){
+        return userRepo.findByEmail(email);
+    }
+
+
 
 }

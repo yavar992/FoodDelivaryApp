@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.metadata.HanaCallMetaDataProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -125,7 +124,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @DeleteMapping("/deleteUserById/{id}")
+    @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable("id") Long id){
         try {
             String deletedMessage = userService.deleteUser(id);
@@ -142,7 +141,7 @@ public class UserController {
     public ResponseEntity<?> deleteUser(Authentication authentication){
         try {
             if (authentication==null){
-                throw new LoginException("please login first to delete your account");
+                throw new LoginException("Unauthorized User ");
             }
             if (authentication.isAuthenticated()){
                 String username = authentication.getName();

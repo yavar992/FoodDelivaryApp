@@ -45,4 +45,5 @@ public interface UserService {
     String blockUserAccount(Long id);
 
     User findUserByReferralCode(String referralCode);
+
 }

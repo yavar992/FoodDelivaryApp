@@ -1,7 +1,7 @@
 The food delivery app can be built using a microservices architecture. Here's an overview of the key components:
 
 User Management Microservice: Responsible for user registration,authentication, and authorization.
-It manages user profiles, social media integration, and handles user-related operations.  -- done (except security parts)
+It manages user profiles, social media integration, and handles user-related operations , referral system   -- done 
 
 Restaurant Management : Handles restaurant profiles, menus, orders, and availability. It provides an interface for restaurant owners to manage their offerings and interacts with other microservices for order processing.
 

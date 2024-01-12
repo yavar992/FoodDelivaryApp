@@ -29,7 +29,8 @@ public class SpringSecurity {
     private static final String[] PUBLIC_URL = {
             "/api/v1/auth/**",
             "/swagger-ui/**",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "/test/**"
     };
 
     @Autowired
@@ -44,8 +45,9 @@ public class SpringSecurity {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception->exception.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(auth->auth.requestMatchers(PUBLIC_URL).permitAll()
-                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER")
-                        .requestMatchers("/api/v1/users/cart/**").hasAnyRole("USER")
+                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/v1/users/cart/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/v1/users/address/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/v1/restaurant/**").hasAnyRole("USER","RESTAURANTS_OWNER")
                         .requestMatchers("/api/v1/restaurant/**").hasAnyRole("RESTAURANTS_OWNER")
                         .requestMatchers(HttpMethod.GET,"api/v1/restaurants/menu/Items/**").hasAnyRole("USER","RESTAURANTS_OWNER")
@@ -59,6 +61,8 @@ public class SpringSecurity {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
+
+
 
     @Bean
     public UserDetailsService userDetailsService(){

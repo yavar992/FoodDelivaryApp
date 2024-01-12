@@ -84,10 +84,13 @@ public class CouponServiceImpl implements CouponService {
     public List<CouponResponseDTO> allCoupons() {
         List<Coupon> coupons = couponRepo.findAll();
         if(coupons.isEmpty()){
-            throw new InvalidUserException("NO COUPON FOUND IN THE DB");
+            throw new InvalidUserException("NO COUPON FOUND");
         }
         return coupons.stream().map(CouponConvertor::convertCouponToCouponResponseDTO).collect(Collectors.toList());
     }
-
-
 }
+
+
+
+
+

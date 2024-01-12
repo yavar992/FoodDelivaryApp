@@ -1,4 +1,3 @@
-
 server.port=8082
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.password=
@@ -13,22 +12,23 @@ spring.jpa.show-sql=true
 
 server.servlet.context-path = /happyMeals
 
-VONAGE.API.KEY = 0f397793
-VONAGE.API.SECRET = RgGxduYwc1Fj6UF0
+
+VONAGE.API.KEY = *******
+VONAGE.API.SECRET = *******
 
 
 
-TWILIO.ACCOUNT_SID =ACe28803df20127d99c698e610d6faf05f
-TWILIO.AUTH_TOKEN =66a4d8d0893d13965e38e399cd51ced1
-TWILIO.TRAIL_NUMBER=+18145465712
+TWILIO.ACCOUNT_SID =***************
+TWILIO.AUTH_TOKEN =*******************
+TWILIO.TRAIL_NUMBER=+**************
 
  logging.level.root=DEBUG
 
 
 spring.mail.default-encoding=UTF-8
 spring.mail.host=smtp.gmail.com
-spring.mail.username=yavarkhan892300@gmail.com
-spring.mail.password=ttnuxchviprciefh
+spring.mail.username= *************
+spring.mail.password=****************
 
 spring.mail.port=587
 spring.mail.protocol=smtp
@@ -39,10 +39,10 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 ##PAYAL_CONFIG FOR SANDBOX
 #paypal.mode=sandbox
-#paypal.client.id= AfVtAM4aqMIPiGmXVToBo7rG9IrCf6zgdHHsnLPhN6iwpBvpbr9_s1PdaLV7XQw5fFv2LBTtttKhPgwV
-#paypal.client.secret= EFqKiXdd6bDxTUYC8QjpPCDH5sX4ZOYOLVAW0V6ZNtt9siHk7EKy0Hn7U4LGo8uet-dS_yzEwjMcYk0d
+#paypal.client.id= ***************************
+#paypal.client.secret= **********************-**********
 
 # CONFIGURATION FOR LIVE ENVIRONMENT
 paypal.mode=live
-paypal.client.id= AU4okMD6STzxDyrWhsi2yllnYCuPME52hC_lScw9yDIWWA5WUJSlkVyGxTl3uVUD8LHIFinusJtiwAOI
-paypal.client.secret= EH5p0VzK3DDsH6NqCBxeu5hPy7Pm6IUaC9NCAybMQBlTLQ4DPhpIZBQ-LGkMZTJKamcG91HZOUq8955f
+paypal.client.id= *********************
+paypal.client.secret= **************-******************

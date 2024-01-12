@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -23,6 +24,7 @@ public class Cart {
     @OneToMany(mappedBy = "cart" , cascade = CascadeType.ALL , orphanRemoval = true)
     private List<CartItem> cartItems;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

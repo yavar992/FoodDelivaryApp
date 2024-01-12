@@ -22,6 +22,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 public class User {
 
     @Id
@@ -93,6 +94,7 @@ public class User {
     private LocalDateTime otpExpireTime;
 
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles" ,
             joinColumns =@JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -100,15 +102,20 @@ public class User {
     )
     private Set<Roles> roles;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private Cart cart;
 
+    @JsonIgnore
+    @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetails> orderDetails = new ArrayList<>();
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade =CascadeType.ALL)
     private Wallet wallet;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "user_referrals",
@@ -116,6 +123,17 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "guyWhoReferrerCode_id")
     )
     private Set<User> referredUsers;
+
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany( cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private List<Address> addresses;
+
+
+    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JoinColumn(name = "defaultAddress_id")
+    private Address defaultAddress;
 
 
 }
