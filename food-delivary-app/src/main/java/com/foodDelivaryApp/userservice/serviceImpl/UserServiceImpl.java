@@ -2,13 +2,13 @@ package com.foodDelivaryApp.userservice.serviceImpl;
 
 import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
-import com.foodDelivaryApp.userservice.entity.Roles;
-import com.foodDelivaryApp.userservice.entity.User;
-import com.foodDelivaryApp.userservice.entity.Wallet;
+import com.foodDelivaryApp.userservice.entity.*;
 import com.foodDelivaryApp.userservice.event.UserRegisterationEvent;
+import com.foodDelivaryApp.userservice.event.WalletEvent;
 import com.foodDelivaryApp.userservice.exceptionHandling.*;
 import com.foodDelivaryApp.userservice.repository.RolesRepository;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
+import com.foodDelivaryApp.userservice.repository.WalletHistoryRepo;
 import com.foodDelivaryApp.userservice.repository.WalletRepo;
 import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -44,6 +45,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private WalletRepo walletRepo;
+
+    @Autowired
+    private WalletHistoryRepo walletHistoryRepo;
 
 
     @Override
@@ -164,8 +168,19 @@ public class UserServiceImpl implements UserService {
             balance = balance + 50;
             wallet1.setBalance(balance);
             walletRepo.saveAndFlush(wallet1);
-        }
+            WalletHistory walletHistory = new WalletHistory();
+            walletHistory.setUser(user);
+            walletHistory.setWallet(wallet);
+            walletHistory.setBalance(balance);
+            walletHistory.setWalletMethod(WalletMethodEnum.FROM_REFERRAL);
+            walletHistory.setTransaction(TransactionEnum.CREDIT);
+            walletHistory.setAmount(String.valueOf(50));
+            walletHistory.setTransaction_date(LocalDate.now());
+            walletHistoryRepo.saveAndFlush(walletHistory);
 
+            WalletEvent walletEvent = new WalletEvent(user1);
+            applicationEventPublisher.publishEvent(walletEvent);
+        }
         return "COOL , Your account has been successfully verified";
     }
 

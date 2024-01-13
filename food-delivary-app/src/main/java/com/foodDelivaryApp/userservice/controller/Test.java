@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.controller;
 
+import com.foodDelivaryApp.userservice.DTO.UserLoginDetails;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class Test {
         return userRepo.findByEmail(email);
     }
 
+    @GetMapping("/t3")
+    public UserLoginDetails getUserDetail(@RequestParam("email") String email){
+        Object[] result =   userRepo.findByEmailAndVerifiedDetails(email);
+         return new UserLoginDetails((String) result[0] , (Boolean) result[1]);
 
+    }
 
 }

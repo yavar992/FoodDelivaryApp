@@ -2,9 +2,12 @@ package com.foodDelivaryApp.userservice.service;
 
 import com.foodDelivaryApp.userservice.DTO.CartDTO;
 import com.foodDelivaryApp.userservice.entity.User;
+import org.springframework.security.core.Authentication;
+
+import java.util.List;
 
 public interface CartService {
-    String addToCart(Long itemId , Long quantity);
+    String addToCart(Long itemId , Long quantity , Authentication authentication);
 
     User currentLoginUserDetails();
 
@@ -16,4 +19,6 @@ public interface CartService {
     String updateCartQuantity(Long id, Long quantity);
 
     String deleteCart(Long id);
+
+    List<CartDTO> getAllCartItem(Authentication authentication);
 }

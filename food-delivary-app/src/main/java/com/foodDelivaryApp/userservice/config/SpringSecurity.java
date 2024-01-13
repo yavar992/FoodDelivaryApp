@@ -30,7 +30,9 @@ public class SpringSecurity {
             "/api/v1/auth/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/test/**"
+            "/test/**",
+            "/api/v1/restaurant/login"
+
     };
 
     @Autowired

@@ -34,4 +34,9 @@ public class AddressController {
         User user = userService.findUserByEmail(username);
         return ResponseEntity.status(HttpStatus.CREATED).body( addressService.saveAddress(addressDTO , user));
     }
+
+    @PostMapping("/hello")
+    public String test(){
+        return "helllllo";
+    }
 }

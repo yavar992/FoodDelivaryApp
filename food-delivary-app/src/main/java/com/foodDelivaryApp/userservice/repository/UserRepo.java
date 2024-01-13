@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.repository;
 
+import com.foodDelivaryApp.userservice.DTO.UserLoginDetails;
 import com.foodDelivaryApp.userservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,6 +29,15 @@ public interface UserRepo extends JpaRepository<User , Long> {
 
     @Query(value = "SELECT  ur.guyWhoReferrerCode_id FROM `user` u RIGHT JOIN user_referrals ur ON u.id = ur.guyWhoSignup_id = ?1" , nativeQuery = true)
     Long findUserWhoSignUp(long userId);
+
+    @Query(value = "SELECT email , isVerified FROM `user` WHERE email = ?1" ,  nativeQuery = true)
+    Object[] findByEmailAndVerifiedDetails(String email);
+
+    @Query(value = "SELECT email FROM `user` WHERE email = ?1" , nativeQuery = true)
+    String findUserEmail(String email);
+
+    @Query(value = "SELECT isVerified FROM `user` WHERE email =?" , nativeQuery = true )
+    boolean checkIfVerified(String email);
 
 //    @Query(value = "SELECT  ur.guyWhoReferrerCode FROM `user` u RIGHT JOIN user_referrals ur ON u.id = ur.guyWhoSignup_id = ?1" , nativeQuery = true)
 //    Long findUserWhoSignUp(long userId);

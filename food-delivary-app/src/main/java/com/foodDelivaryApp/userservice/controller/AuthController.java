@@ -186,26 +186,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO authDTO)  {
-
-        Optional<RestaurantOwner> restaurantOwner = restaurantsOwnerRepo.findByEmail(authDTO.getUsername());
-        if (restaurantOwner.isPresent()){
-            RestaurantOwner restaurantOwner1 = restaurantOwner.get();
-            boolean isVerified = restaurantOwner1.getIsVerified();
-            if (!isVerified){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
-            }
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
-            if (!authentication.isAuthenticated()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
-            }
-            String jwtToken = jwtService.generateToken(authDTO.getUsername());
-            return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
-        }
-
         User user = userRepo.findByEmail(authDTO.getUsername());
-        System.out.println("user -- > " +user);
-        if (user==null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Either Email or Password is Invalid");
+        if (user ==null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("email is not register plz register yourself first to login ");
         }
         boolean isVerified = user.isVerified();
         if (!isVerified){

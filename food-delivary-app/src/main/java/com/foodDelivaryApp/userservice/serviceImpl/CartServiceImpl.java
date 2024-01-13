@@ -9,6 +9,7 @@ import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.exceptionHandling.CartException;
 import com.foodDelivaryApp.userservice.exceptionHandling.MenuItemException;
 import com.foodDelivaryApp.userservice.exceptionHandling.UserNotFoundException;
+import com.foodDelivaryApp.userservice.repository.CartItemRepo;
 import com.foodDelivaryApp.userservice.repository.CartRepo;
 import com.foodDelivaryApp.userservice.repository.MenuItemRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
@@ -21,6 +22,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @Slf4j
@@ -30,14 +35,24 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private UserRepo userRepo;
 
+
     @Autowired
-    private CartRepo cartRepo;
+    private CartItemRepo cartItemRepo;
 
     @Autowired
     private MenuItemRepo menuItemRepo;
 
+    @Autowired
+    private CartRepo cartRepo;
+
+
+
+
+
     @Override
-    public String addToCart(Long itemId, Long quantity) {
+    public String addToCart(Long itemId, Long quantity , Authentication authentication) {
+        String email = authentication.getName();
+        User user = userRepo.findByEmail(email);
         MenuItem menuItem = menuItemRepo.findById(itemId).orElseThrow(() -> new MenuItemException("No Menu Item found for id " + itemId));
         log.info("menuItems {}" ,menuItem);
         CartItem cart = CartConvertor.convertMenuItemToCart(menuItem);
@@ -45,15 +60,30 @@ public class CartServiceImpl implements CartService {
             quantity = 1L;
         }
         cart.setQuantity(quantity);
-        cart.setPrice(quantity * cart.getPrice());
+        double price = quantity* cart.getPrice();
+        cart.setPrice(price);
         cart.setMenuItemId(menuItem.getId());
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        User user = userRepo.findByEmail(userDetails.getUsername());
-        cartRepo.saveAndFlush(cart);
-//        userRepo.saveAndFlush(user);
+        cart.setMenuItem(menuItem);
+        cart.setUser(user);
+
+        Cart cart1 = cartRepo.findByUserId(user.getId());
+        if (cart1 != null) {
+            cart1.setQuantityOfCartItem(cart1.getQuantityOfCartItem() + quantity);
+            cart1.setTotalAmount((long) (cart1.getTotalAmount() + price));
+        } else {
+            cart1 = new Cart();
+            cart1.setUser(user);
+            cart1.setQuantityOfCartItem(quantity);
+            cart1.setTotalAmount((long) price);
+        }
+        cart.setCart(cart1);
+        cartRepo.saveAndFlush(cart1);
+        cartItemRepo.saveAndFlush(cart);
+
         return "Item successfully added to cart !!";
     }
+
+
 
 
     @Override
@@ -67,14 +97,14 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDTO getCartById(Long id) {
-        CartItem cart = cartRepo.findById(id).orElseThrow(()-> new CartException("Cart not found for id " + id));
+        CartItem cart = cartItemRepo.findById(id).orElseThrow(()-> new CartException("Cart not found for id " + id));
         return CartConvertor.convertCartToCartDTO(cart);
     }
 
     @Override
     public CartDTO getCartByUserId(Long id) {
          userRepo.findById(id).orElseThrow(()-> new UserNotFoundException("User not found for user id  " + id ));
-        CartItem cart = cartRepo.findByUserId(id);
+        CartItem cart = cartItemRepo.findByUserId(id);
         if (cart==null){
             throw new CartException("No cart found for the userId " + id);
         }
@@ -84,18 +114,26 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public String updateCartQuantity(Long id, Long quantity) {
-        CartItem cart = cartRepo.findById(id).orElseThrow(()-> new CartException(" Cart not found for the id " + id));
+        CartItem cart = cartItemRepo.findById(id).orElseThrow(()-> new CartException(" Cart not found for the id " + id));
         cart.setQuantity(quantity);
         cart.setPrice(cart.getPrice()*quantity);
-        cartRepo.saveAndFlush(cart);
+        cartItemRepo.saveAndFlush(cart);
         return "cart updated successfully !!";
     }
 
     @Override
     public String deleteCart(Long id) {
-        CartItem cart = cartRepo.findById(id).orElseThrow(()-> new CartException(" Cart not found for the id " + id));
-        cartRepo.delete(cart);
+        CartItem cart = cartItemRepo.findById(id).orElseThrow(()-> new CartException(" Cart not found for the id " + id));
+        cartItemRepo.delete(cart);
         return "cart deleted successfully !";
+    }
+
+    @Override
+    public List<CartDTO> getAllCartItem(Authentication authentication) {
+        String email = authentication.getName();
+        User user = userRepo.findByEmail(email);
+        List<CartItem> cartItems = cartItemRepo.findByUserIds(user.getId());
+        return cartItems.stream().map(CartConvertor::convertCartToCartDTO).collect(Collectors.toList());
     }
 
 }

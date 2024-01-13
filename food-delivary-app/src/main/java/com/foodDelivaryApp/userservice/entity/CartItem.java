@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -28,7 +29,6 @@ public class CartItem {
     private LocalDateTime updateAt;
 
 
-
     @ManyToOne
     @JoinColumn(name = "coupon_id")  // Define the appropriate column name
     private Coupon coupon;
@@ -37,9 +37,13 @@ public class CartItem {
     @JoinColumn(name = "menuItem_id")
     private MenuItem menuItem;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Cart cart;
 
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 

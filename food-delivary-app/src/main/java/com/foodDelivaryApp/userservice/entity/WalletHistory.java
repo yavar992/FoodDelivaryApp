@@ -30,6 +30,7 @@ public class WalletHistory {
     @Enumerated(EnumType.STRING)
     private TransactionEnum transaction;
 
+    @Enumerated(EnumType.STRING)
     private WalletMethodEnum walletMethod;
 
     @OneToOne

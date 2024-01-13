@@ -8,6 +8,9 @@ import java.util.Optional;
 
 public interface RestaurantsOwnerRepo extends JpaRepository<RestaurantOwner , Long> {
 
+
+
+
     Optional<RestaurantOwner> findByEmail(String email);
 
 
@@ -17,4 +20,7 @@ public interface RestaurantsOwnerRepo extends JpaRepository<RestaurantOwner , Lo
 
     @Query(value = "SELECT * FROM restaurantowner WHERE email =?1" , nativeQuery = true)
     Optional<RestaurantOwner> findByUsernameOrEmail(String email);
+
+    @Query(value = "SELECT * FROM restaurantowner WHERE email =?1" , nativeQuery = true)
+    RestaurantOwner findByEmails(String email);
 }

@@ -1,17 +1,26 @@
 package com.foodDelivaryApp.userservice.controller.administration;
 
+import com.foodDelivaryApp.userservice.DTO.AuthDTO;
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
 import com.foodDelivaryApp.userservice.entity.CuisineType;
+import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
+import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
+import com.foodDelivaryApp.userservice.jwt.JwtService;
+import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
 import com.foodDelivaryApp.userservice.service.RestaurantsService;
 import com.google.gson.Gson;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/restaurant")
@@ -19,6 +28,15 @@ public class RestaurantsController {
 
     @Autowired
     private RestaurantsService restaurantsService;
+
+    @Autowired
+    private RestaurantsOwnerRepo restaurantsOwnerRepo;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping({"signup/{ownerId}","register/{ownerId}"})
     public ResponseEntity<?> addRestaurant(@PathVariable("ownerId") Long ownerId , @Valid @RequestBody RestaurantDTO restaurantDTO){
@@ -119,6 +137,31 @@ public class RestaurantsController {
     @GetMapping("/getApi")
     public String h(){
         return "this is sample get api";
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthDTO authDTO){
+        RestaurantOwner restaurantOwner = restaurantsOwnerRepo.findByEmails(authDTO.getUsername());
+        System.out.println("restaurantOwner -- > " + restaurantOwner);
+        if (restaurantOwner==null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("you don't have any account plz register yourself first !");
+        }
+        boolean isVerified = restaurantOwner.getIsVerified();
+        if (!isVerified){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
+        }
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
+        if (!authentication.isAuthenticated()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
+        }
+        String jwtToken = jwtService.generateToken(authDTO.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+    }
+
+    @PostMapping("/hello")
+    public String jh(){
+        return "hello";
     }
 
 }

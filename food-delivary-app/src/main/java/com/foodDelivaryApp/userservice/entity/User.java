@@ -46,7 +46,7 @@ public class User {
 
     @NotNull
     @NotBlank
-    @Size(min = 5, max = 30, message = "Invalid firstName [firstName should be 5-30 characters]")
+    @Size(min = 3, max = 30, message = "Invalid firstName [firstName should be 5-30 characters]")
     private String firstName;
 
     @Size(max = 30, message = "Invalid lastName [lastName should be maximum 30 characters]")
@@ -131,6 +131,7 @@ public class User {
     private List<Address> addresses;
 
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     @JoinColumn(name = "defaultAddress_id")
     private Address defaultAddress;
