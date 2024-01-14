@@ -53,6 +53,7 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
+
     @GetMapping("cartByUserId/{id}")
     public ResponseEntity<?> getCartByUserId(@PathVariable ("id") Long id){
         try {
@@ -66,10 +67,11 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @GetMapping("/updateCart/{id}")
-    public ResponseEntity<?> updateCartQuantity(@PathVariable ("id") Long id , @RequestParam("quantity") Long quantity){
+    @PostMapping("/update/{id}")
+    public ResponseEntity<?> updateCartQuantity(@PathVariable("id") Long id , @RequestParam("quantity") Long quantity ,
+                                                Authentication authentication){
         try {
-            String cartDTO = cartService.updateCartQuantity(id,quantity);
+            String cartDTO = cartService.updateCartQuantity(id , quantity , authentication);
             if (cartDTO!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
             }
@@ -79,8 +81,8 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
-    @GetMapping("/deleteCart/{id}")
-    public ResponseEntity<?> deleteCart(@PathVariable ("id") Long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCart(@PathVariable ("id") Long id ){
         try {
             String cartDTO = cartService.deleteCart(id);
             if (cartDTO!=null){
@@ -102,6 +104,7 @@ public class CartController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(cartDTOS);
     }
+
 
 
 

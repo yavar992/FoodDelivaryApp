@@ -16,9 +16,9 @@ public interface CartService {
 
     CartDTO getCartByUserId(Long id);
 
-    String updateCartQuantity(Long id, Long quantity);
+    String updateCartQuantity(Long id , Long quantity , Authentication authentication);
 
-    String deleteCart(Long id);
+    String deleteCart(Long id );
 
     List<CartDTO> getAllCartItem(Authentication authentication);
 }

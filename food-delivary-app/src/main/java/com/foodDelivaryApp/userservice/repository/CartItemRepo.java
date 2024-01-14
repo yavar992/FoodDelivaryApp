@@ -9,10 +9,23 @@ import java.util.List;
 
 public interface CartItemRepo extends JpaRepository<CartItem,Long> {
 
-    @Query(value = "SELECT * FROM `cart` WHERE user_id = ?1" ,nativeQuery = true)
+    @Query(value = "SELECT * FROM `cartitem` WHERE userId = ?1" ,nativeQuery = true)
     CartItem findByUserId(Long id);
 
 
-    @Query(value = "SELECT * FROM `cart` WHERE user_id = ?1" ,nativeQuery = true)
+    @Query(value = "SELECT * FROM `cartitem` WHERE userId = ?1" ,nativeQuery = true)
     List<CartItem> findByUserIds(Long id);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

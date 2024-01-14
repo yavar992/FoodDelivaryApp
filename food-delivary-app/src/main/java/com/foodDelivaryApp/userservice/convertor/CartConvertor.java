@@ -23,6 +23,7 @@ public interface CartConvertor {
                 .name(cart.getName())
                 .price(cart.getPrice())
                 .description(cart.getDescription())
+                .quantity(cart.getQuantity())
                 .build();
     }
 

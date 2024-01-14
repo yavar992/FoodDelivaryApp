@@ -27,23 +27,27 @@ public class CartItem {
     private Long menuItemId;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
+    private long userId;
 
 
+    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "coupon_id")  // Define the appropriate column name
     private Coupon coupon;
 
+    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "menuItem_id")
     private MenuItem menuItem;
 
+    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne(optional = false)
     private Cart cart;
 
-    @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
 
 
 

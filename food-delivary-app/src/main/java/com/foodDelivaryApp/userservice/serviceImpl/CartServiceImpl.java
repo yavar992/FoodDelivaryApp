@@ -64,7 +64,7 @@ public class CartServiceImpl implements CartService {
         cart.setPrice(price);
         cart.setMenuItemId(menuItem.getId());
         cart.setMenuItem(menuItem);
-        cart.setUser(user);
+        cart.setUserId(user.getId());
 
         Cart cart1 = cartRepo.findByUserId(user.getId());
         if (cart1 != null) {
@@ -113,18 +113,38 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public String updateCartQuantity(Long id, Long quantity) {
-        CartItem cart = cartItemRepo.findById(id).orElseThrow(()-> new CartException(" Cart not found for the id " + id));
+    public String updateCartQuantity(Long id , Long quantity , Authentication authentication) {
+        String email = authentication.getName();
+        User user = userRepo.findByEmail(email);
+        CartItem cart = cartItemRepo.findById(id).orElseThrow(()-> new CartException("No card found for id " + id));
         cart.setQuantity(quantity);
         cart.setPrice(cart.getPrice()*quantity);
         cartItemRepo.saveAndFlush(cart);
+
+        List<CartItem> cartItems = cartItemRepo.findByUserIds(user.getId());
+        long quantityy = 0;
+        long amount = 0;
+        Cart cart1 = cartRepo.findByUserId(user.getId());
+        for (CartItem cartItem : cartItems) {
+            quantityy =  quantityy +   cartItem.getQuantity();
+            amount = (long) (amount + cartItem.getPrice());
+        }
+        cart1.setQuantityOfCartItem(quantityy);
+        cart1.setTotalAmount(amount);
+        cartRepo.saveAndFlush(cart1);
+
         return "cart updated successfully !!";
+
     }
 
     @Override
-    public String deleteCart(Long id) {
+    public String deleteCart(Long id ) {
         CartItem cart = cartItemRepo.findById(id).orElseThrow(()-> new CartException(" Cart not found for the id " + id));
+        Cart cart1 = cartRepo.findByUserId(cart.getUserId());
+        cart1.setTotalAmount((long) (cart1.getTotalAmount() - cart.getPrice()));
+        cart1.setQuantityOfCartItem(cart1.getQuantityOfCartItem() - cart.getQuantity());
         cartItemRepo.delete(cart);
+        cartRepo.saveAndFlush(cart1);
         return "cart deleted successfully !";
     }
 
@@ -133,6 +153,7 @@ public class CartServiceImpl implements CartService {
         String email = authentication.getName();
         User user = userRepo.findByEmail(email);
         List<CartItem> cartItems = cartItemRepo.findByUserIds(user.getId());
+        log.info("cartItems: " + cartItems);
         return cartItems.stream().map(CartConvertor::convertCartToCartDTO).collect(Collectors.toList());
     }
 
