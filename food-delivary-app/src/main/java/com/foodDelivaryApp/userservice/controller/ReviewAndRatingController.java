@@ -1,9 +1,9 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.foodDelivaryApp.userservice.DTO.ReviewAndRatingDTO;
-import com.foodDelivaryApp.userservice.DTO.UpdateReviewAndRatingDTO;
+import com.foodDelivaryApp.userservice.dto.ReviewAndRatingDTO;
+import com.foodDelivaryApp.userservice.dto.UpdateReviewAndRatingDTO;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
-import com.foodDelivaryApp.userservice.service.ReviewAndRatingService;
+import com.foodDelivaryApp.userservice.service.IReviewAndRatingService;
 import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ReviewAndRatingController {
 
     @Autowired
-    private ReviewAndRatingService reviewAndRatingService;
+    private IReviewAndRatingService reviewAndRatingService;
 
 
     @PostMapping("/{menuId}")

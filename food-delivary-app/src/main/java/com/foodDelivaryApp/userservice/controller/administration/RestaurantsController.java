@@ -1,36 +1,43 @@
 package com.foodDelivaryApp.userservice.controller.administration;
 
-import com.foodDelivaryApp.userservice.DTO.AuthDTO;
-import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
-import com.foodDelivaryApp.userservice.entity.CuisineType;
-import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
-import com.foodDelivaryApp.userservice.entity.User;
-import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
-import com.foodDelivaryApp.userservice.jwt.JwtService;
-import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
-import com.foodDelivaryApp.userservice.service.RestaurantsService;
-import com.google.gson.Gson;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.foodDelivaryApp.userservice.dto.AuthDTO;
+import com.foodDelivaryApp.userservice.dto.RestaurantDTO;
+import com.foodDelivaryApp.userservice.entity.CuisineType;
+import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
+import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
+import com.foodDelivaryApp.userservice.jwt.JwtService;
+import com.foodDelivaryApp.userservice.service.IRestaurantOwnerService;
+import com.foodDelivaryApp.userservice.service.IRestaurantsService;
+import com.google.gson.Gson;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/restaurant")
 public class RestaurantsController {
 
     @Autowired
-    private RestaurantsService restaurantsService;
+    private IRestaurantsService restaurantsService;
 
     @Autowired
-    private RestaurantsOwnerRepo restaurantsOwnerRepo;
+    private IRestaurantOwnerService restaurantOwnerService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -57,7 +64,7 @@ public class RestaurantsController {
             List<RestaurantDTO> message = restaurantsService.findAllRestaurant();
             Gson gson = new Gson();
             String json = gson.toJson(message);
-            if (message!=null){
+            if (message != null){
                 return ResponseEntity.status(HttpStatus.OK).body(json);
             }
         }catch (Exception e){
@@ -95,11 +102,11 @@ public class RestaurantsController {
     }
 
     @PostMapping("/updateRestaurant/{ownerId}")
-    public ResponseEntity<?> updateRestaurant(@PathVariable("ownerId") Long ownerId ,
-                                             @RequestParam("uniqueIdentifierNumber") String uniqueIdentifierNumber ,
-                                              @RequestBody RestaurantDTO restaurantDTO){
+    public ResponseEntity<?> updateRestaurant(@PathVariable("ownerId") long ownerId ,
+                                             @RequestParam("uniqueIdentifierNumber") String identifier,
+                                              @RequestBody RestaurantDTO restaurant){
         try {
-            String updateMessage = restaurantsService.updateRestaurant(ownerId , uniqueIdentifierNumber , restaurantDTO);
+            String updateMessage = restaurantsService.updateRestaurant(ownerId , identifier , restaurant);
             if (updateMessage!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(updateMessage);
             }
@@ -112,7 +119,6 @@ public class RestaurantsController {
     @GetMapping("/cuisineTypes/{ownerId}")
     public ResponseEntity<?> findAllCuisineTypes(@PathVariable("ownerId") Long ownerId ,
                                                  @RequestParam("uniqueIdentifierNumber") String uniqueIdentifierNumber){
-
         try {
             List<CuisineType> cuisineTypes = restaurantsService.findAllCuisineTypes(ownerId, uniqueIdentifierNumber);
             if (!cuisineTypes.isEmpty()){
@@ -142,19 +148,20 @@ public class RestaurantsController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO authDTO){
-        RestaurantOwner restaurantOwner = restaurantsOwnerRepo.findByEmails(authDTO.getUsername());
-        System.out.println("restaurantOwner -- > " + restaurantOwner);
-        if (restaurantOwner==null){
+        RestaurantOwner restaurantOwner = restaurantOwnerService.findByEmail(authDTO.getUsername());
+        if (restaurantOwner == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("you don't have any account plz register yourself first !");
         }
-        boolean isVerified = restaurantOwner.getIsVerified();
-        if (!isVerified){
+
+        if (!restaurantOwner.getIsVerified()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
         }
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
         if (!authentication.isAuthenticated()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
         }
+
         String jwtToken = jwtService.generateToken(authDTO.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
     }

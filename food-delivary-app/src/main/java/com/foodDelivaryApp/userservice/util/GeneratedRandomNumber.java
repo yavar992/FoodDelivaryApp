@@ -4,7 +4,7 @@ import java.util.Random;
 
 public interface GeneratedRandomNumber {
 
-     String CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+     public static final String CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
      static String generateReferralCode(int  length) {
         StringBuilder sb = new StringBuilder();

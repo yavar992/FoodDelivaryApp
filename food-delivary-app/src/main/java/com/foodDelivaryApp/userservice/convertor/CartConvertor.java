@@ -1,6 +1,6 @@
 package com.foodDelivaryApp.userservice.convertor;
 
-import com.foodDelivaryApp.userservice.DTO.CartDTO;
+import com.foodDelivaryApp.userservice.dto.CartDTO;
 import com.foodDelivaryApp.userservice.entity.Cart;
 import com.foodDelivaryApp.userservice.entity.CartItem;
 import com.foodDelivaryApp.userservice.entity.MenuItem;

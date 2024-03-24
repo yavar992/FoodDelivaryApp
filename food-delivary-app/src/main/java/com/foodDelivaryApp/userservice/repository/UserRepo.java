@@ -1,6 +1,6 @@
 package com.foodDelivaryApp.userservice.repository;
 
-import com.foodDelivaryApp.userservice.DTO.UserLoginDetails;
+import com.foodDelivaryApp.userservice.dto.UserLoginDetails;
 import com.foodDelivaryApp.userservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

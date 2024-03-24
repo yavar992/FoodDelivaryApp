@@ -1,21 +1,22 @@
 package com.foodDelivaryApp.userservice.convertor;
 
-import com.foodDelivaryApp.userservice.DTO.AddressDTO;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
+
+import com.foodDelivaryApp.userservice.dto.AddressDTO;
 import com.foodDelivaryApp.userservice.entity.Address;
 
+@Mapper
 public interface AddressConvertor {
 
-    static Address convertAddressDtoToAddress(AddressDTO addressDTO){
-        return Address.builder()
-                .area(addressDTO.getArea())
-                .pin(addressDTO.getPin())
-                .city(addressDTO.getCity())
-                .defaultAddress(addressDTO.isDefaultAddress())
-                .flat(addressDTO.getFlat())
-                .state(addressDTO.getState())
-                .town(addressDTO.getTown())
-                .landmark(addressDTO.getLandmark())
-                .isDeleted(false)
-                .build();
-    }
+    AddressConvertor MAPPER = Mappers.getMapper(AddressConvertor.class);
+
+    @Mappings({
+        @Mapping(target = "isDeleted", constant = "false")
+    })
+    @BeanMapping(ignoreByDefault = true)
+    Address toAddress(AddressDTO dto);
 }

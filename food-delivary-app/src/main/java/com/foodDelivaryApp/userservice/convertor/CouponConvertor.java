@@ -1,7 +1,7 @@
 package com.foodDelivaryApp.userservice.convertor;
 
-import com.foodDelivaryApp.userservice.DTO.CouponDTO;
-import com.foodDelivaryApp.userservice.DTO.CouponResponseDTO;
+import com.foodDelivaryApp.userservice.dto.CouponDTO;
+import com.foodDelivaryApp.userservice.dto.CouponResponseDTO;
 import com.foodDelivaryApp.userservice.entity.Coupon;
 import com.foodDelivaryApp.userservice.util.GeneratedRandomNumber;
 

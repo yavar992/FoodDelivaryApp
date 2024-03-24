@@ -1,0 +1,20 @@
+Dear ${firstName} ${lastName}
+
+
+Welcome to HappyMeal food delivery services!
+
+
+To complete the registration process, please enter the following OTP (One-Time Password) within the next 15 minutes:
+
+
+OTP: ${otp}
+
+Please note that this OTP will expire at ${otpExpireDate}.
+
+
+If you have any questions or need assistance, please feel free to contact our support team.
+
+
+Best regards,
+
+The Happy Meal  Teams

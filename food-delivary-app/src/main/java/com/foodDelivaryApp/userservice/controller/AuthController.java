@@ -1,15 +1,15 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
+import com.foodDelivaryApp.userservice.dto.*;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
-import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
+import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepository;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
-import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
-import com.foodDelivaryApp.userservice.service.UserService;
+import com.foodDelivaryApp.userservice.service.IRestaurantOwnerService;
+import com.foodDelivaryApp.userservice.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,10 +29,10 @@ import java.util.Optional;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
-    RestaurantOwnerService restaurantOwnerService;
+    IRestaurantOwnerService restaurantOwnerService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -47,7 +47,7 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    RestaurantsOwnerRepo restaurantsOwnerRepo;
+    RestaurantsOwnerRepository restaurantsOwnerRepo;
 
     @PostMapping({"/register","/signup"})
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,

@@ -1,6 +1,6 @@
 package com.foodDelivaryApp.userservice.convertor;
 
-import com.foodDelivaryApp.userservice.DTO.ReviewAndRatingDTO;
+import com.foodDelivaryApp.userservice.dto.ReviewAndRatingDTO;
 import com.foodDelivaryApp.userservice.entity.ReviewAndRating;
 
 import java.time.LocalDateTime;

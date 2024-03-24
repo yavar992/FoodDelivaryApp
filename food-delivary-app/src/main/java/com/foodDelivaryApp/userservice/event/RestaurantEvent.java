@@ -1,9 +1,11 @@
 package com.foodDelivaryApp.userservice.event;
 
-import org.springframework.context.ApplicationEvent;
-
 import java.time.Clock;
 
+import org.springframework.context.ApplicationEvent;
+import org.springframework.stereotype.Component;
+
+@Component
 public class RestaurantEvent extends ApplicationEvent {
 
     public RestaurantEvent(Object source) {

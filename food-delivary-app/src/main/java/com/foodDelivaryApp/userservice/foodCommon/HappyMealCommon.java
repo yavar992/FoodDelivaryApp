@@ -6,7 +6,7 @@ import com.foodDelivaryApp.userservice.exceptionHandling.InvalidRestaurantExcept
 import com.foodDelivaryApp.userservice.exceptionHandling.MenuItemException;
 import com.foodDelivaryApp.userservice.exceptionHandling.UnverifiedUserException;
 import com.foodDelivaryApp.userservice.repository.MenuItemRepo;
-import com.foodDelivaryApp.userservice.repository.RestaurantRepo;
+import com.foodDelivaryApp.userservice.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class HappyMealCommon {
 
     @Autowired
-    private RestaurantRepo restaurantRepo;
+    private RestaurantRepository restaurantRepo;
 
     @Autowired
     private MenuItemRepo menuItemRepo;

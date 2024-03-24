@@ -1,0 +1,16 @@
+Dear ${restaurantName}
+Congratulations on successfully adding your restaurant to HappyMeal!
+We are excited to have you on our platform and look forward to helping you grow your business.
+
+Your restaurant will now be featured on our website and app, where customers will be able to browse your menu, place orders, and leave reviews.
+
+We will also be sending out an email blast to our customers announcing your new addition to HappyMeal.
+
+To get started, please log in to your HappyMeal restaurant portal at happymeal/8282/login. From there, you can update your restaurant information, manage your menu, and process orders.");
+
+If you have any questions or need assistance, please do not hesitate to contact us at happyMeal123@gmail.com
+
+We look forward to working with you to make HappyMeal the best food delivery service for restaurants and customers alike.
+
+Sincerely,
+The HappyMeal Team
