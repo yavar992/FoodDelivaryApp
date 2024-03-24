@@ -1,8 +1,8 @@
 package com.foodDelivaryApp.userservice.controller.administration;
 
-import com.foodDelivaryApp.userservice.DTO.MenuItemDTO;
+import com.foodDelivaryApp.userservice.dto.MenuItemDTO;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
-import com.foodDelivaryApp.userservice.service.MenuItemService;
+import com.foodDelivaryApp.userservice.service.IMenuItemService;
 import com.foodDelivaryApp.userservice.util.LocalDateTypeAdaptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,11 +15,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/restaurants/menu/Items")
+@RequestMapping("/api/v1/restaurants/menu/Items")
 public class MenuItemController {
 
     @Autowired
-    private MenuItemService menuItemService;
+    private IMenuItemService menuItemService;
 
     @PostMapping("/{ownerId}/{uniqueIdentifierNumber}")
     public ResponseEntity<?> addItemToMenu(@PathVariable("ownerId") Long ownerId,
@@ -38,7 +38,7 @@ public class MenuItemController {
     }
 
     @GetMapping({"/allMenuItem"})
-    public ResponseEntity<?> getAllMenuItem(
+    public ResponseEntity<?> getAllMenuItems(
                                             @RequestParam(value = "pageNo", defaultValue = "1", required = false) Integer pageNo,
                                             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
                                             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,

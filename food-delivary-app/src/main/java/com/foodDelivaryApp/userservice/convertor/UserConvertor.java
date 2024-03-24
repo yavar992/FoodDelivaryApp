@@ -1,8 +1,8 @@
 package com.foodDelivaryApp.userservice.convertor;
 
-import com.foodDelivaryApp.userservice.DTO.UserDTO;
-import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
-import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
+import com.foodDelivaryApp.userservice.dto.UserDTO;
+import com.foodDelivaryApp.userservice.dto.UserResponseDTO;
+import com.foodDelivaryApp.userservice.dto.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.util.GeneratedRandomNumber;
 

@@ -1,6 +1,6 @@
 package com.foodDelivaryApp.userservice.convertor;
 
-import com.foodDelivaryApp.userservice.DTO.RestaurantOwnerDTO;
+import com.foodDelivaryApp.userservice.dto.RestaurantOwnerDTO;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 
 import java.time.LocalDateTime;

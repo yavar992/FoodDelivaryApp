@@ -1,13 +1,13 @@
 package com.foodDelivaryApp.userservice.util;
 
-import com.foodDelivaryApp.userservice.DTO.Address;
+import com.foodDelivaryApp.userservice.dto.Address;
 import com.foodDelivaryApp.userservice.entity.MenuItem;
 import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.exceptionHandling.DeliveryException;
 import com.foodDelivaryApp.userservice.repository.MenuItemRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
-import com.foodDelivaryApp.userservice.service.MenuItemService;
+import com.foodDelivaryApp.userservice.service.IMenuItemService;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
@@ -33,7 +33,7 @@ public class PayPalUtil {
     private UserRepo userRepo;
 
     @Autowired
-    private MenuItemService menuItemService;
+    private IMenuItemService menuItemService;
 
     @Autowired
     private MenuItemRepo menuItemRepo;

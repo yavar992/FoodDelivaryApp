@@ -1,11 +1,11 @@
 package com.foodDelivaryApp.userservice.controller.administration;
 
 
-import com.foodDelivaryApp.userservice.DTO.UserDTO;
-import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
+import com.foodDelivaryApp.userservice.dto.UserDTO;
+import com.foodDelivaryApp.userservice.dto.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
-import com.foodDelivaryApp.userservice.service.UserService;
+import com.foodDelivaryApp.userservice.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.List;
 public class UserManagementController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @PostMapping
     public ResponseEntity<?> addUser(@Valid @RequestBody UserDTO userDTO){

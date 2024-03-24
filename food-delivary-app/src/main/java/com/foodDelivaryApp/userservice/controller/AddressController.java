@@ -1,12 +1,12 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.foodDelivaryApp.userservice.DTO.AddressDTO;
 import com.foodDelivaryApp.userservice.convertor.AddressConvertor;
+import com.foodDelivaryApp.userservice.dto.AddressDTO;
 import com.foodDelivaryApp.userservice.entity.Address;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
-import com.foodDelivaryApp.userservice.service.AddressService;
-import com.foodDelivaryApp.userservice.service.UserService;
+import com.foodDelivaryApp.userservice.service.IAddressService;
+import com.foodDelivaryApp.userservice.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AddressController {
 
     @Autowired
-    private AddressService addressService;
+    private IAddressService addressService;
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @PostMapping
     public ResponseEntity<?> addAddress(@Valid @RequestBody AddressDTO addressDTO , Authentication authentication){

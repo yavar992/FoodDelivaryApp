@@ -1,6 +1,6 @@
 package com.foodDelivaryApp.userservice.convertor;
 
-import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
+import com.foodDelivaryApp.userservice.dto.RestaurantDTO;
 import com.foodDelivaryApp.userservice.entity.Restaurant;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
 

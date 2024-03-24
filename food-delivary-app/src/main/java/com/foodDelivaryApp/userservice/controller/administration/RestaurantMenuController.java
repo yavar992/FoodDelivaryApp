@@ -1,8 +1,8 @@
 package com.foodDelivaryApp.userservice.controller.administration;
 
-import com.foodDelivaryApp.userservice.DTO.RestaurantMenuDTO;
+import com.foodDelivaryApp.userservice.dto.RestaurantMenuDTO;
 import com.foodDelivaryApp.userservice.entity.RestaurantMenu;
-import com.foodDelivaryApp.userservice.service.RestaurantMenuServices;
+import com.foodDelivaryApp.userservice.service.IRestaurantMenuServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.List;
 public class RestaurantMenuController {
 
     @Autowired
-    private RestaurantMenuServices restaurantMenuServices;
+    private IRestaurantMenuServices restaurantMenuServices;
 
     @PostMapping("/{ownerId}")
     public ResponseEntity<?> addRestaurantMenuToRestaurant(@PathVariable("ownerId") Long ownerId ,

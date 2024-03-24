@@ -1,10 +1,10 @@
 package com.foodDelivaryApp.userservice.controller.administration;
 
-import com.foodDelivaryApp.userservice.DTO.CouponDTO;
-import com.foodDelivaryApp.userservice.DTO.CouponResponseDTO;
+import com.foodDelivaryApp.userservice.dto.CouponDTO;
+import com.foodDelivaryApp.userservice.dto.CouponResponseDTO;
 import com.foodDelivaryApp.userservice.entity.Coupon;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
-import com.foodDelivaryApp.userservice.service.CouponService;
+import com.foodDelivaryApp.userservice.service.ICouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/admin/coupon")
+@RequestMapping("/api/v1/admin/coupon")
 public class CouponController {
 
     @Autowired
-    private CouponService couponService;
+    private ICouponService couponService;
 
     @PostMapping
     public ResponseEntity<?> createCoupon(@RequestBody CouponDTO couponDTO , Authentication authentication){

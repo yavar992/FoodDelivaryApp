@@ -1,9 +1,9 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.foodDelivaryApp.userservice.DTO.CartDTO;
+import com.foodDelivaryApp.userservice.dto.CartDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
-import com.foodDelivaryApp.userservice.service.CartService;
+import com.foodDelivaryApp.userservice.service.ICartService;
 import org.apache.catalina.authenticator.SpnegoAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 public class CartController {
 
     @Autowired
-    private CartService cartService;
+    private ICartService cartService;
 
     @PostMapping("/{itemId}")
     public ResponseEntity<?> addToCart(@PathVariable("itemId") Long itemId , @RequestParam(value = "quantity") Long quantity ,

@@ -1,6 +1,6 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.foodDelivaryApp.userservice.DTO.UserLoginDetails;
+import com.foodDelivaryApp.userservice.dto.UserLoginDetails;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;

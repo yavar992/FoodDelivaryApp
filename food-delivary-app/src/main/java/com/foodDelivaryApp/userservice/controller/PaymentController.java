@@ -1,12 +1,12 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.foodDelivaryApp.userservice.DTO.Address;
-import com.foodDelivaryApp.userservice.DTO.MenuItemDTO;
+import com.foodDelivaryApp.userservice.dto.Address;
+import com.foodDelivaryApp.userservice.dto.MenuItemDTO;
 import com.foodDelivaryApp.userservice.entity.MenuItem;
 import com.foodDelivaryApp.userservice.entity.OrderDetails;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
-import com.foodDelivaryApp.userservice.service.MenuItemService;
-import com.foodDelivaryApp.userservice.service.PaymentService;
+import com.foodDelivaryApp.userservice.service.IMenuItemService;
+import com.foodDelivaryApp.userservice.service.IPaymentService;
 import com.foodDelivaryApp.userservice.util.PayPalUtil;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
 
     @Autowired
-    private PaymentService paymentService;
+    private IPaymentService paymentService;
 
     @Autowired
     private PayPalUtil payPalUtil;
 
     @Autowired
-    private MenuItemService menuItemService;
+    private IMenuItemService menuItemService;
 
     @PostMapping("{itemId}/checkout")
     public ResponseEntity<?> checkout(@PathVariable("itemId") Long itemId , @RequestBody Address address){

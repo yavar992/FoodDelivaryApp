@@ -1,12 +1,12 @@
 package com.foodDelivaryApp.userservice.controller;
 
-import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
-import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
+import com.foodDelivaryApp.userservice.dto.UserResponseDTO;
+import com.foodDelivaryApp.userservice.dto.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.exceptionHandling.UserNotFoundException;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
-import com.foodDelivaryApp.userservice.service.UserService;
+import com.foodDelivaryApp.userservice.service.IUserService;
 import com.foodDelivaryApp.userservice.util.LocalDateTypeAdaptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,7 +29,7 @@ import java.time.LocalDate;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
     @Autowired
     private UserRepo userRepo;
 

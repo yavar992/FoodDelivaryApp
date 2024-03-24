@@ -1,0 +1,11 @@
+Dear ${username}
+
+We are excited to inform you that your HappyMeals wallet has been credited with ${amount} rupees!
+
+You can now enjoy seamless transactions and explore the exciting features of HappyMeals.
+
+If you have any questions or need assistance, feel free to contact our support team at support@happymeals.com.
+Thank you for choosing HappyMeals!
+
+Best Regards,
+The HappyMeals Team
