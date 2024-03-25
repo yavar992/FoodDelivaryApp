@@ -37,7 +37,7 @@ public class Coupon {
     private LocalDate couponModifiedTime;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "restaurant_Owner")
     private RestaurantOwner restaurantOwner;
 
     private boolean isDeleted;

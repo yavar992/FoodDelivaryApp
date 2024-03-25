@@ -32,7 +32,9 @@ public class MenuItem {
     private LocalDateTime addedTime;
     private LocalDateTime updatedTime;
     private int sellCount;
+    private String sku;
 
+    private String upc;
 
     @JsonIgnore
     @ManyToOne

@@ -53,6 +53,8 @@ Restaurant owner's restaurant is published on the food delivery platform. --done
 Customers can now search for the restaurant and place orders. --done
 Restaurant owner receives orders and processes them. --done
 Restaurant owner delivers orders to customers. --done
+make a seperate coupon for each restaurant if restaurant owner requst for it .
+
 
 
 

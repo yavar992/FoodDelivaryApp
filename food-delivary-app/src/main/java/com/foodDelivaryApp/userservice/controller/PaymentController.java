@@ -10,11 +10,11 @@ import com.foodDelivaryApp.userservice.service.PaymentService;
 import com.foodDelivaryApp.userservice.util.PayPalUtil;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
-import com.twilio.rest.api.v2010.account.call.PaymentUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("api/v1/users/payment")
@@ -50,4 +50,10 @@ public class PaymentController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
+
+    @GetMapping("/hi")
+    public String hello(){
+        return "hello this is a sample page";
+    }
 }
+

@@ -31,7 +31,9 @@ public class SpringSecurity {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/test/**",
-            "/api/v1/restaurant/login"
+            "/api/v1/restaurant/login",
+            "/success.html",
+            "/cancel.html"
 
     };
 
@@ -52,10 +54,12 @@ public class SpringSecurity {
                         .requestMatchers("/api/v1/users/address/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/v1/restaurant/**").hasAnyRole("USER","RESTAURANTS_OWNER")
                         .requestMatchers("/api/v1/restaurant/**").hasAnyRole("RESTAURANTS_OWNER")
+                        .requestMatchers("/api/v1/restaurant/offer").hasAnyRole("RESTAURANTS_OWNER","ADMIN")
                         .requestMatchers(HttpMethod.GET,"api/v1/restaurants/menu/Items/**").hasAnyRole("USER","RESTAURANTS_OWNER")
                         .requestMatchers("api/v1/restaurants/menu/Items/**").hasAnyRole("RESTAURANTS_OWNER")
                         .requestMatchers(HttpMethod.GET,"/api/v1/restaurants/menu/**").hasAnyRole("USER","RESTAURANTS_OWNER")
                         .requestMatchers("/api/v1/restaurants/menu/**").hasAnyRole("RESTAURANTS_OWNER")
+                        .requestMatchers("/api/v1/users/payment/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers("*").hasAnyRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

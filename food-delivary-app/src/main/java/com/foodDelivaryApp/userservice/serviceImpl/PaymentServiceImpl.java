@@ -1,6 +1,7 @@
 package com.foodDelivaryApp.userservice.serviceImpl;
 
 import com.foodDelivaryApp.userservice.entity.OrderDetails;
+import com.foodDelivaryApp.userservice.entity.PaymentIntentEnum;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.OrderDetailsRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
@@ -36,11 +37,10 @@ public class PaymentServiceImpl implements PaymentService {
     public OrderDetails createOrder(String name, Double price, String description, Double shippingCharge, Double tax, Double totalPrice) {
         OrderDetails orderDetails = new OrderDetails();
         orderDetails.setDescription(description);
-        orderDetails.setIntent("SALE");
+        orderDetails.setIntent(PaymentIntentEnum.INITIATE);
         orderDetails.setTax(tax);
         orderDetails.setTotal(totalPrice);
         orderDetails.setPrice(price);
-        orderDetails.setPaymentStatus("CAPTURED");
         orderDetails.setCreatedTime(LocalDateTime.now());
         orderDetails.setProductName(name);
         orderDetails.setShippingCharge(shippingCharge);

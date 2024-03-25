@@ -60,17 +60,25 @@ public class UserServiceImpl implements UserService {
         }
 
         Set<Roles> rolesSet = new HashSet<>();
-        Roles roles = rolesRepository.findByName("ROLE_USER").get();
-        log.info("Roles {}" , roles);
-        rolesSet.add(roles);
+        Optional<Roles> roles = rolesRepository.findByName("ROLE_USER");
+        Roles roles1;
+        if (roles.isPresent()){
+            roles1 = roles.get();
+            rolesSet.add(roles1);
+        }
+        else{
+            throw new UserNotFoundException("Invalid Role !!!");
+        }
+        log.info("Roles {}" , roles1);
+        rolesSet.add(roles1);
         user.setRoles(rolesSet);
         UserRegisterationEvent userRegisterationEvent = new UserRegisterationEvent(user);
         applicationEventPublisher.publishEvent(userRegisterationEvent);
-
         if (referralCode!=null){
             Set<User> users = new HashSet<>();
             User user1 = userRepo.findUserByReferralCode(referralCode);
             users.add(user1);
+
             user.setReferredUsers(users);
         }
         userRepo.save(user);

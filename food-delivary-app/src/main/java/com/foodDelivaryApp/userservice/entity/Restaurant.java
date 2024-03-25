@@ -47,7 +47,7 @@ public class Restaurant {
 
     @NotEmpty(message = "Payment methods accepted are required")
     @Enumerated(EnumType.STRING)
-    private List<PaymentMethodAccepted> paymentMethodsAccepted;
+    private List<PaymentMethodAcceptedEnum> paymentMethodsAccepted;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

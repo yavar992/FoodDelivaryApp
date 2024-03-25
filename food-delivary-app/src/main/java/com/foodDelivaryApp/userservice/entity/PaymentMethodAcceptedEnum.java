@@ -1,6 +1,6 @@
 package com.foodDelivaryApp.userservice.entity;
 
-public enum PaymentMethodAccepted {
+public enum PaymentMethodAcceptedEnum {
 
     CREDIT_CARD,
     DEBIT_CARD,
@@ -14,7 +14,7 @@ public enum PaymentMethodAccepted {
     CASH_ON_DELIVERY,
     DIGITAL_CURRENCIES ;
 
-    public static PaymentMethodAccepted fromString(String value) {
+    public static PaymentMethodAcceptedEnum fromString(String value) {
         try {
             return valueOf(value.toUpperCase());
         } catch (IllegalArgumentException ex) {

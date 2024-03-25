@@ -1,29 +1,21 @@
-package com.foodDelivaryApp.userservice.entity;
+package com.foodDelivaryApp.userservice.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.foodDelivaryApp.userservice.entity.OfferTypeEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Builder
-@DynamicUpdate
-public class Offer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // Use Long or Integer, depending on your needs
-
+public class OfferDTO {
     @Enumerated(EnumType.STRING)
     private OfferTypeEnum offerType;
     @NotNull
@@ -35,14 +27,5 @@ public class Offer {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date expireDate;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
-
-
-//    private boolean isActive;
-
 
 }

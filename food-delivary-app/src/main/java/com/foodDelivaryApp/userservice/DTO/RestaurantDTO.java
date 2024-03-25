@@ -1,7 +1,8 @@
 package com.foodDelivaryApp.userservice.DTO;
 
 import com.foodDelivaryApp.userservice.entity.CuisineType;
-import com.foodDelivaryApp.userservice.entity.PaymentMethodAccepted;
+
+import com.foodDelivaryApp.userservice.entity.PaymentMethodAcceptedEnum;
 import lombok.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class RestaurantDTO {
     private String uniqueIdentifierNumber;
     private String hoursOfOperation;
     private List<String> deliveryZones; // or pinCode
-    private List<PaymentMethodAccepted> paymentMethodsAccepted;
+    private List<PaymentMethodAcceptedEnum> paymentMethodsAccepted;
 
 
 }
