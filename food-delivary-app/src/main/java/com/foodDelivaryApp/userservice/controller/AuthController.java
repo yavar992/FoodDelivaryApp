@@ -2,14 +2,14 @@ package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
-import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
-import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
-import com.foodDelivaryApp.userservice.repository.UserRepo;
+import com.foodDelivaryApp.userservice.jwt.RefreshToken;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.UserService;
+import com.foodDelivaryApp.userservice.serviceImpl.RefreshTokenService;
+import com.foodDelivaryApp.userservice.util.CommonUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Optional;
 
 
 @RestController
@@ -32,22 +31,23 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    RestaurantOwnerService restaurantOwnerService;
+    private RestaurantOwnerService restaurantOwnerService;
 
-    @Autowired
+//    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserRepo userRepo;
 
     @Autowired
     private JwtService jwtService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    RestaurantsOwnerRepo restaurantsOwnerRepo;
+    private CommonUtil commonUtil;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     @PostMapping({"/register","/signup"})
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,
@@ -86,8 +86,7 @@ public class AuthController {
     @PostMapping("/forget-password")
     public ResponseEntity<?> forgetPassword(Authentication authentication){
         try {
-            String username = authentication.getName();
-            User user = userRepo.findByEmail(username);
+           User user = commonUtil.authenticatedUser(authentication);
             String forgetPasswordMessage = userService.forgetPassword(user.getEmail());
             if (forgetPasswordMessage!=null){
                 return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordMessage);
@@ -186,10 +185,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO authDTO)  {
-        User user = userRepo.findByEmail(authDTO.getUsername());
-        if (user ==null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("email is not register plz register yourself first to login ");
-        }
+        User user = userService.findUserByEmail(authDTO.getUsername());
         boolean isVerified = user.isVerified();
         if (!isVerified){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
@@ -198,8 +194,25 @@ public class AuthController {
        if (!authentication.isAuthenticated()){
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
        }
-       String jwtToken = jwtService.generateToken(authDTO.getUsername());
+
+       RefreshToken refreshToken =  refreshTokenService.createRefreshToken(authDTO.getUsername());
+//       String jwtToken = jwtService.generateToken(authDTO.getUsername());
+       JWTResponseTokenDTO jwtToken = JWTResponseTokenDTO.builder().accessToken(jwtService.generateToken(authDTO.getUsername()))
+               .token(refreshToken.getToken()).build();
        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+    }
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
+        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getAccessToken());
+        refreshTokenService.verifyExpiration(refreshToken);
+        User user = refreshToken.getUser();
+        String token = jwtService.generateToken(user.getUsername());
+        JWTResponseTokenDTO jwtResponseTokenDTO = JWTResponseTokenDTO.builder()
+                .accessToken(token)
+                .token(refreshTokenRequestDTO.getAccessToken())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(jwtResponseTokenDTO);
     }
 
     @GetMapping("/helloUser")

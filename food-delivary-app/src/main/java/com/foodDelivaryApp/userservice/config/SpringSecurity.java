@@ -32,6 +32,7 @@ public class SpringSecurity {
             "/v3/api-docs/**",
             "/test/**",
             "/api/v1/restaurant/login",
+            "/api/v1/restaurant/refreshToken",
             "/success.html",
             "/cancel.html"
 

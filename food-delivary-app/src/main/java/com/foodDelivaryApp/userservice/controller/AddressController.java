@@ -7,6 +7,7 @@ import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.AddressService;
 import com.foodDelivaryApp.userservice.service.UserService;
+import com.foodDelivaryApp.userservice.util.CommonUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,12 @@ public class AddressController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommonUtil commonUtil;
+
     @PostMapping
     public ResponseEntity<?> addAddress(@Valid @RequestBody AddressDTO addressDTO , Authentication authentication){
-        String username = authentication.getName();
-        System.out.println("Authenticated user: " + username);
-        User user = userService.findUserByEmail(username);
+      User user = commonUtil.authenticatedUser(authentication);
         return ResponseEntity.status(HttpStatus.CREATED).body( addressService.saveAddress(addressDTO , user));
     }
 

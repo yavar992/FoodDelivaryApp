@@ -14,6 +14,7 @@ import com.foodDelivaryApp.userservice.repository.CartRepo;
 import com.foodDelivaryApp.userservice.repository.MenuItemRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.CartService;
+import com.foodDelivaryApp.userservice.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -45,14 +46,15 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CartRepo cartRepo;
 
+    @Autowired
+    private CommonUtil commonUtil;
 
 
 
 
     @Override
     public String addToCart(Long itemId, Long quantity , Authentication authentication) {
-        String email = authentication.getName();
-        User user = userRepo.findByEmail(email);
+       User user = commonUtil.authenticatedUser(authentication);
         MenuItem menuItem = menuItemRepo.findById(itemId).orElseThrow(() -> new MenuItemException("No Menu Item found for id " + itemId));
         log.info("menuItems {}" ,menuItem);
         CartItem cart = CartConvertor.convertMenuItemToCart(menuItem);

@@ -1,14 +1,18 @@
 package com.foodDelivaryApp.userservice.controller.administration;
 
 import com.foodDelivaryApp.userservice.DTO.AuthDTO;
+import com.foodDelivaryApp.userservice.DTO.JWTResponseTokenDTO;
+import com.foodDelivaryApp.userservice.DTO.RefreshTokenRequestDTO;
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
 import com.foodDelivaryApp.userservice.entity.CuisineType;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
+import com.foodDelivaryApp.userservice.jwt.RefreshToken;
 import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
 import com.foodDelivaryApp.userservice.service.RestaurantsService;
+import com.foodDelivaryApp.userservice.serviceImpl.RefreshTokenService;
 import com.google.gson.Gson;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +41,9 @@ public class RestaurantsController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     @PostMapping({"signup/{ownerId}","register/{ownerId}"})
     public ResponseEntity<?> addRestaurant(@PathVariable("ownerId") Long ownerId , @Valid @RequestBody RestaurantDTO restaurantDTO){
@@ -155,8 +162,23 @@ public class RestaurantsController {
         if (!authentication.isAuthenticated()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
         }
-        String jwtToken = jwtService.generateToken(authDTO.getUsername());
+        RefreshToken refreshToken =  refreshTokenService.createRefreshTokenForRestaurantOwner(authDTO.getUsername());
+        JWTResponseTokenDTO jwtToken = JWTResponseTokenDTO.builder().accessToken(jwtService.generateToken(authDTO.getUsername()))
+                .token(refreshToken.getToken()).build();
         return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+    }
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
+        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getAccessToken());
+        refreshTokenService.verifyExpiration(refreshToken);
+        RestaurantOwner restaurantOwner = refreshToken.getRestaurantOwner();
+        String token = jwtService.generateToken(restaurantOwner.getEmail());
+        JWTResponseTokenDTO jwtResponseTokenDTO = JWTResponseTokenDTO.builder()
+                .accessToken(token)
+                .token(refreshTokenRequestDTO.getAccessToken())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(jwtResponseTokenDTO);
     }
 
     @PostMapping("/hello")
