@@ -8,6 +8,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -92,6 +93,10 @@ public class User {
     private Integer otp;
     private LocalDateTime otpSendingTime;
     private LocalDateTime otpExpireTime;
+    private boolean isBlocked;
+    private int apiHitCount;
+    private Instant firstTimeApiHittingTime;
+    private Instant targetTime;
 
 
     @JsonIgnore

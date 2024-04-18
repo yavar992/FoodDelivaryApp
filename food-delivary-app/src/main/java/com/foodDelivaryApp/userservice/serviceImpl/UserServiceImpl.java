@@ -18,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -355,5 +355,16 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public int getApiHitCount(String email) {
+        return userRepo.getUserApiHitCount(email);
+    }
+
+    @Override
+    public Instant getUserApiHittingTargetTime(String email) {
+        return userRepo.findUserApiHittingTargetTime(email);
+    }
+
 
 }

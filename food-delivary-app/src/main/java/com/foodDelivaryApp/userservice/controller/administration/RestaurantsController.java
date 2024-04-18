@@ -150,7 +150,6 @@ public class RestaurantsController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO authDTO){
         RestaurantOwner restaurantOwner = restaurantsOwnerRepo.findByEmails(authDTO.getUsername());
-        System.out.println("restaurantOwner -- > " + restaurantOwner);
         if (restaurantOwner==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("you don't have any account plz register yourself first !");
         }

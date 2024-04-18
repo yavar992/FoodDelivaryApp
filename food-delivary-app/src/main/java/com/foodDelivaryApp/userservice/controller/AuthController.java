@@ -10,6 +10,7 @@ import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.serviceImpl.RefreshTokenService;
 import com.foodDelivaryApp.userservice.util.CommonUtil;
+import com.foodDelivaryApp.userservice.util.LoginRateLimitApiUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.Instant;
 
 
 @RestController
@@ -33,7 +35,7 @@ public class AuthController {
     @Autowired
     private RestaurantOwnerService restaurantOwnerService;
 
-//    @Autowired
+    @Autowired
     private AuthenticationManager authenticationManager;
 
 
@@ -48,6 +50,9 @@ public class AuthController {
 
     @Autowired
     private RefreshTokenService refreshTokenService;
+
+    @Autowired
+    private LoginRateLimitApiUtil loginRateLimitApiUtil;
 
     @PostMapping({"/register","/signup"})
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,
@@ -87,8 +92,20 @@ public class AuthController {
     public ResponseEntity<?> forgetPassword(Authentication authentication){
         try {
            User user = commonUtil.authenticatedUser(authentication);
+           loginRateLimitApiUtil.handleApiHitCount(user);
+            // Check if the user is blocked
+//            if (user.isBlocked() && user.getTargetTime().isAfter(Instant.now())) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked. Please try again later.");
+//            }
+
+            // Check if the user has exceeded the maximum number of API hits without entering OTP
+            if (user.isBlocked() && user.getTargetTime().isAfter(Instant.now())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked for the next 15 minutes due to multiple unsuccessful attempts.");
+            }
+
             String forgetPasswordMessage = userService.forgetPassword(user.getEmail());
             if (forgetPasswordMessage!=null){
+//                loginRateLimitApiUtil.incrementApiHitCount(user);
                 return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordMessage);
             }
         }catch (Exception e){

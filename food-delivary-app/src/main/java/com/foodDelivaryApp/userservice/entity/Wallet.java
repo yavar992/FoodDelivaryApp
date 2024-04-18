@@ -28,8 +28,10 @@ public class Wallet {
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User user;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private List<WalletHistory> walletHistories = new ArrayList<>();
 

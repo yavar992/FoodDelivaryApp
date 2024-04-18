@@ -5,6 +5,7 @@ import com.foodDelivaryApp.userservice.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 
 public interface UserService {
@@ -46,4 +47,7 @@ public interface UserService {
 
     User findUserByReferralCode(String referralCode);
 
+    int getApiHitCount(String email);
+
+    Instant getUserApiHittingTargetTime(String email);
 }
