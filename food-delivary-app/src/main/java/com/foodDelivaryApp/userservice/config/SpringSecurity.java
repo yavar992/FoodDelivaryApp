@@ -33,8 +33,8 @@ public class SpringSecurity {
             "/test/**",
             "/api/v1/restaurant/login",
             "/api/v1/restaurant/refreshToken",
-            "/success.html",
-            "/cancel.html"
+            "/",
+            "/api/v1/users/payment/**"
 
     };
 
@@ -60,7 +60,7 @@ public class SpringSecurity {
                         .requestMatchers("api/v1/restaurants/menu/Items/**").hasAnyRole("RESTAURANTS_OWNER")
                         .requestMatchers(HttpMethod.GET,"/api/v1/restaurants/menu/**").hasAnyRole("USER","RESTAURANTS_OWNER")
                         .requestMatchers("/api/v1/restaurants/menu/**").hasAnyRole("RESTAURANTS_OWNER")
-                        .requestMatchers("/api/v1/users/payment/**").hasAnyRole("USER","ADMIN")
+//                        .requestMatchers("/api/v1/users/payment/**").hasAnyRole("USER","ADMIN")  // for the testing purpose just make this url public later i'll uncomment this line
                         .requestMatchers("*").hasAnyRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

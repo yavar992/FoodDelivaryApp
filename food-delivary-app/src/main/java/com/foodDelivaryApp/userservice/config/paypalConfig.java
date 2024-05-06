@@ -14,9 +14,9 @@ import java.util.Map;
 @Configuration
 public class paypalConfig {
 
-    @Value("${paypal.client.id}")
+    @Value("${paypal.client-id}")
     private String clientId;
-    @Value("${paypal.client.secret}")
+    @Value("${paypal.client-secret}")
     private String clientSecret;
     @Value("${paypal.mode}")
     private String mode;

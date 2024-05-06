@@ -6,7 +6,10 @@ import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.OrderDetailsRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.PaymentService;
+import com.paypal.api.payments.Payment;
+import com.paypal.api.payments.PaymentExecution;
 import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,4 +56,18 @@ public class PaymentServiceImpl implements PaymentService {
 
         return orderDetailsRepo.saveAndFlush(orderDetails);
     }
+
+    public Payment executePayment(
+            String paymentId,
+            String payerId
+    ) throws PayPalRESTException {
+        Payment payment = new Payment();
+        payment.setId(paymentId);
+
+        PaymentExecution paymentExecution = new PaymentExecution();
+        paymentExecution.setPayerId(payerId);
+
+        return payment.execute(apiContext, paymentExecution);
+    }
+
 }

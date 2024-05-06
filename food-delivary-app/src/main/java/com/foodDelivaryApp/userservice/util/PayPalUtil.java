@@ -57,7 +57,6 @@ public class PayPalUtil {
         if (!deliveryZones.contains(address.getPostalCode())){
             throw new DeliveryException("Sorry ! we are not available in your address");
         }
-
         Amount amount = new Amount();
         amount.setCurrency(currency);
         total = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -89,16 +88,15 @@ public class PayPalUtil {
         address1.setState(address.getState());
 
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepo.findByEmail(userDetails.getUsername());
-        PayerInfo payerInfo = new PayerInfo();
-        payerInfo.setFirstName(user.getFirstName());
-        payerInfo.setLastName(user.getLastName());
-        payerInfo.setEmail(user.getEmail());
-        payerInfo.setPhone(user.getPhoneNumber());
-        payerInfo.setBillingAddress(address1);
-
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//        User user = userRepo.findByEmail(userDetails.getUsername());
+//        PayerInfo payerInfo = new PayerInfo();
+//        payerInfo.setFirstName(user.getFirstName());
+//        payerInfo.setLastName(user.getLastName());
+//        payerInfo.setEmail(user.getEmail());
+//        payerInfo.setPhone(user.getPhoneNumber());
+//        payerInfo.setBillingAddress(address1);
 
 
         Payment payment = new Payment();
@@ -112,7 +110,7 @@ public class PayPalUtil {
         double popularityOnEachOrder = 100.0;
         menuItem.setPopularity(menuItem.getPopularity()+popularityOnEachOrder);
         menuItem.setSellCount(menuItem.getSellCount()+1);
-        menuItemRepo.saveAndFlush(menuItem);
+//        menuItemRepo.saveAndFlush(menuItem);f
         return payment.create(apiContext);
     }
 

@@ -4,19 +4,15 @@ import com.foodDelivaryApp.userservice.DTO.UserLoginDetails;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/test")
+@Controller
 public class Test {
 
     @Autowired
     private UserRepo userRepo;
 
-    @GetMapping
-    public String test2(){
-        return "hello this is test 2";
-    }
 
     @GetMapping("/t2")
     public User user(){
@@ -34,5 +30,11 @@ public class Test {
          return new UserLoginDetails((String) result[0] , (Boolean) result[1]);
 
     }
+
+    @RequestMapping("/")
+    public String homePage(){
+        return "home";
+    }
+
 
 }

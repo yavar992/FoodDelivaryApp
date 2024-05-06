@@ -1,94 +1,169 @@
-modules used in the projects --
-1 - User management  
-Registeration 
-Authentication
-Profile Management: Enables users to update their profile information, such as name, contact details, and preferences.
+
+# TasteWheels
+
+Introducing FlavorDash: Elevate Your Culinary Experience
+
+FlavorDash is not just another food delivery platform - it's a gastronomic adventure waiting to unfold. With FlavorDash, users embark on a journey through a vibrant culinary landscape, where every dish tells a story and every bite ignites the senses.
+
+For Food Enthusiasts:
+Step into a world of flavor exploration with FlavorDash. From mouthwatering street eats to exquisite fine dining, our curated selection of restaurants offers something to tantalize every taste bud. Browse through a kaleidoscope of cuisines, discover hidden gems in your neighborhood, and embark on a culinary adventure like never before. With our intuitive platform, ordering your favorite meals is as easy as a few taps, and our real-time tracking ensures that your food journey is seamless from start to finish.
+
+For Restaurant Visionaries:
+Join the FlavorDash revolution and unleash your culinary creativity to the world. Our platform provides a stage for restaurant owners to showcase their culinary masterpieces and connect with a diverse community of food enthusiasts. Seamlessly manage menus, track orders in real-time, and delight customers with unparalleled service. With FlavorDash, the spotlight is on you, as we celebrate the artistry and passion behind every dish.
+
+For Delivery Mavericks:
+Become a FlavorDash hero and embark on a mission to deliver happiness, one meal at a time. As a part of our dedicated delivery team, you'll navigate the city streets with speed and precision, ensuring that every order reaches its destination fresh and on time. Our integrated chat feature keeps you connected with users and restaurant owners, providing updates and fostering a sense of camaraderie along the way. Join us in shaping the future of food delivery and leave your mark on the FlavorDash legacy.
+
+Experience FlavorDash:
+Prepare to tantalize your taste buds and elevate your dining experience with FlavorDash. Whether you're a food enthusiast seeking new culinary adventures, a visionary restaurant owner ready to shine, or a delivery maverick with a passion for service, FlavorDash invites you to join us on a journey of flavor discovery. Get ready to savor the extraordinary and redefine the way you dine, one delicious moment at a time. FlavorDash - where every bite is a celebration of taste, passion, and community.
+
+## Installation
+
+``Step 1``: Set Up MySQL Database
+
+1. Install MySQL if you haven't already. You can download it from the official MySQL website: MySQL Downloads.
+
+2. Once installed, start the MySQL service and log in to the MySQL command-line client using the root user or a user with administrative privileges:
+
+```bash
+  mysql -u root -p
+```
+3. Create a new database for your Spring Boot project:
+```bash
+CREATE DATABASE userservice;
+```
+4. Create a user and grant necessary privileges to the database:
+```bash
+CREATE USER 'tastewheels'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON userservice.* TO 'tastewheels'@'localhost';
+FLUSH PRIVILEGES;
+```
+``Step 2`` : Set Up Spring Boot Project
+
+1. Create a new Spring Boot project named TasteWheels using your preferred IDE or Spring Initializr: Spring Initializr.
+2. Add the required dependencies for Spring Boot and MySQL to your pom.xml (if using Maven) or build.gradle (if using Gradle).
+3. Configure the database connection in your application.properties or application.yml file:
+
+```bash
+spring.datasource.url=jdbc:mysql://localhost:3306/userservice
+spring.datasource.username=tastewheels
+spring.datasource.password=password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
+```
+``Step 3 `` : Set Up the Spring Boot Application
+1. Build your Spring Boot project using Maven or Gradle.
+2. Run the application using your IDE or command-line interface:
+
+```bash
+java -jar tastewheels.jar
+```
+
+``Step 5 `` : Test the Application
+1. Use tools like Postman or Swagger UI to test your API endpoints.
+2. Perform CRUD operations to ensure that data is correctly persisted and retrieved from the MySQL database## Technologies Used
+
+- Spring Boot
+- MySQL
+- Thymeleaf (for front-end templating)
+- Bootstrap (for styling)
+- etc.
+
+## Documentation
+
+[Documentation](http://localhost:8082/happyMeals/swagger-ui/index.html#/)
 
 
-2- Restaurant Management
-Registration: Allows restaurants to register their business by providing details like name, location, contact information, and menu.
-
-Menu Management: Enables restaurants to create, update, and manage their menu items, including prices, descriptions, and availability.
-
-Order Processing: Handles the processing of incoming orders from customers and communicates them to the kitchen or appropriate staff for preparation.
-
-Inventory Management: Tracks and manages restaurant inventory, including stock levels, ingredient availability, and automated alerts for restocking. 
-
-3-Order Management:
-Order Placement: Allows customers to browse menus, select items, customize orders, and place them for delivery.
-Order Tracking: Provides real-time updates to customers on the status and progress of their orders, from preparation to delivery.
-Order Modification: Allows customers to modify or update their orders, such as adding or removing items or changing delivery details.
-Order Cancellation: Enables customers to cancel orders within a specified time frame, with appropriate refund and cancellation policies.
-
-4-Delivery Management:
-Driver Assignment: Assigns delivery drivers to orders based on factors like proximity, availability, and workload.
-Delivery Tracking: Tracks the location of delivery drivers in real-time and provides estimated arrival times to customers.
-Route Optimization: Optimizes delivery routes to ensure efficient and timely deliveries, considering factors like distance, traffic conditions, and multiple stops.
-Exception Handling: Handles delivery exceptions like failed deliveries, missed deliveries, or customer unavailability, and provides appropriate solutions or alternatives.
-
-5-Payment Gateway:
-Payment Processing: Integrates with a payment gateway service to securely process customer payments using various methods (credit card, digital wallets, etc.).
-Transaction Management: Manages the lifecycle of payment transactions, including authorization, capturing funds, and handling refunds if necessary.
-Security: Implements robust security measures to protect sensitive payment information and ensure secure transactions.
-
-6-Rating and Review:
-Rating System: Allows users to rate restaurants, delivery drivers, and overall service quality based on predefined criteria or user feedback.
-Review System: Enables users to write and submit detailed reviews or comments about their experience with a particular restaurant, delivery driver, or the overall service.
-Aggregate Ratings: Aggregates and displays average ratings and reviews for restaurants and delivery drivers, providing an overall rating for reference.
-
-7-Notifications
-Order Updates: Sends real-time notifications to customers regarding order status updates, such as order confirmation, preparation, dispatch, and delivery.
-Promotional Offers: Sends notifications to users about special promotions, discounts, or new menu items to encourage engagement and repeat business.
-
-8-Analytics and Reporting:
-Data Collection: Collects and stores data related to orders, deliveries, customer preferences, ratings, and other relevant metrics.
-Analysis and Insights: Analyzes collected data to generate insights, trends, and reports that help identify patterns, optimize operations, and make informed business decisions.
-
-9-Admin Dashboard:
-User Management: Allows administrators to manage user accounts, including creating, modifying, or disabling accounts, as well as managing user roles and permissions.
-Restaurant Management: Provides functionality to manage restaurant accounts, including verification, approvals, and account settings.
-Order Tracking: Monitors and tracks the status of orders in real-time, allowing administrators to intervene or troubleshoot if necessary.
-Analytics and Reports: Provides access to comprehensive analytics, reports, and dashboards for administrators to gain insights into various aspects of the system's performance, user behavior, and operational efficiency.
+## Project Structure
 
 
-THE ORDER IN WHICH I HAVE TO DEVELOP THE APPLICATION
-User Management: It's generally a good idea to start with user management modules, including user registration and authentication. This allows you to establish a solid foundation for user accounts and access control before moving on to other modules.
+- src/
+    - main/
+        - java/
+            - com.tastewheels/
+                - controller/
+                - service/
+                - repository/
+                - model/
+        - resources/
+            - application.properties
+            - templates/
+            - static/
+    - test/
+## Contributing
 
-Restaurant Management: Once the user management modules are in place, you can proceed with developing the restaurant management modules. This includes restaurant registration, menu management, and other functionalities specific to restaurant owners. By isolating the registration and authentication processes for users and restaurant owners, you can ensure appropriate access and privileges for each user type.
+Contributions are always welcome!
 
-Order Management: With t
-he user and restaurant management modules functioning, you can focus on implementing the order management modules. This includes order placement, tracking, modification, and cancellation functionalities. Users should be able to browse menus, place orders, and track their progress.
+See `contributing.md` for ways to get started.
 
-Delivery Management: After order management, you can work on the delivery management modules. This involves assigning delivery drivers to orders, optimizing delivery routes, and providing real-time tracking updates to customers. It ensures efficient and timely delivery of orders.
-
-Payment Gateway: Integrating the payment gateway module can be done in parallel with the above modules or as a separate step. It enables users to make secure online payments for their orders.
-
-Rating and Review: Once the core functionalities are implemented, you can add the rating and review module. Users should be able to rate restaurants, delivery drivers, and leave reviews based on their experiences.
-
-Rating and Review: Once the core functionalities are implemented, you can add the rating and review module. Users should be able to rate restaurants, delivery drivers, and leave reviews based on their experiences.
-
-Analytics and Reporting: Lastly, you can focus on implementing the analytics and reporting module. This allows you to collect and analyze data related to orders, deliveries, user behavior, and generate insights for business decision-making and optimizations.
-
-
-CREATE THE SEPARATE LOGIN AND REGISTRATION PAGES  FOR EACH MODULES 
-User Module: This module is dedicated to managing functionalities for regular users or customers. It includes features such as user registration, authentication, profile management, order placement, order tracking, and rating/reviewing restaurants and delivery drivers.
-
-Restaurant Owner Module: This module caters to the needs of restaurant owners. It includes functionalities like restaurant registration, menu management, order processing, inventory management, and performance analytics specific to their restaurants.
-
-Delivery Personnel Module: This module is designed for delivery personnel or drivers. It includes functionalities like driver registration, availability management, order assignment, delivery tracking, and communication with users and restaurant owners.
+Please adhere to this project's `code of conduct`.
 
 
-ADD ON 
-ADMIN  -- CAN ADD A COUPON OR OFFER ON A PRODUCTS
-USER - EVERY USER WILL HAVE A WALLET ON MY APPLICATION , REFERRAL SYSTEM OR REFERRAL CODE -- A USER CAN SHARE HIS REFERRAL CODE TO A NEW USER AND CAN AVAIL THE 
-SOME MONEY INTO HIS WALLET ON THE FIRST TRANSACTION OF THE USER ( WHO JUST SIGNUP FROM THE REFERRAL CODE OF THE USER )
-READ ABOUT THE BASE-ENTITY CLASS IN THE SPRING BOOT WHY DO WE USE AND WHAT'S THE NEED OF IT 
+## Contributing.md
 
-A USER CAN HAVE MORE THAN ONE ADDRESS AND HE SHOULD HAVE ONE DEFAULT ADDRESS 
+# Contributing to TasteWheels
 
-WORK FLOW --
+Thank you for considering contributing to TasteWheels! We appreciate any contributions that help improve the project and make it better for everyone. By contributing, you'll help us build a more robust and feature-rich platform.
 
-todo - 21/11/23 -- admin modules
+Contribution Guidelines
+Before contributing, please take a moment to review the following guidelines:
+
+**Contribution Guidelines**
+
+Before contributing, please take a moment to review the following guidelines:
+
+***1. Fork the Repository:*** Fork the TasteWheels repository to your GitHub account.
+
+***2. Clone the Repository:*** Clone the forked repository to your local machine using the following command:
+```bash
+git clone https://github.com/yavar992/FoodDelivaryApp.git
+```
+***3. Create a New Branch:*** Create a new branch to work on your contribution:
+
+```bash
+git checkout -b feature/new-feature
+```
+***4. Make Changes:*** Implement your changes or additions to the project. Ensure that your code follows the project's coding conventions and style guidelines.  
+***5. Test Your Changes:*** Test your changes thoroughly to ensure that they work as expected and do not introduce any regressions.           
+***6. Commit Your Changes:***   Commit your changes with a descriptive commit message that explains the purpose of your changes:
+```bash
+git commit -m "Add new feature"
+```
+***7. Push Changes:*** Push your changes to your forked repository:
+```bash
+git push origin feature/new-feature
+```
+
+**What You Can Contribute**              
+You can contribute to TasteWheels in various ways, including but not limited to:
+
+1. Adding new features or functionalities
+2. Fixing bugs or issues
+3. Improving documentation
+4. Refactoring code for better performance or readability
+5. Writing tests to increase test coverage
+   Providing feedback and suggestions for improvement
+
+**Code Review Process**   
+All pull requests will be reviewed by the project maintainers. During the review process, feedback may be provided, and changes may be requested before the pull request is merged into the main repository.
+## Feedback
+
+If you have any feedback, please reach out to us at yavarkhan892300@gmail.com
 
 
+## FAQ
+
+#### does this prooject completed ?
+
+NO this project in under development
+
+
+## Authors
+
+- [@yavar992](https://github.com/yavar992)
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
 

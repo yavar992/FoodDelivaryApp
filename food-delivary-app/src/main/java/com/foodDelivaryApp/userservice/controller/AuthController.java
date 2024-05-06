@@ -93,11 +93,6 @@ public class AuthController {
         try {
            User user = commonUtil.authenticatedUser(authentication);
            loginRateLimitApiUtil.handleApiHitCount(user);
-            // Check if the user is blocked
-//            if (user.isBlocked() && user.getTargetTime().isAfter(Instant.now())) {
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked. Please try again later.");
-//            }
-
             // Check if the user has exceeded the maximum number of API hits without entering OTP
             if (user.isBlocked() && user.getTargetTime().isAfter(Instant.now())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked for the next 15 minutes due to multiple unsuccessful attempts.");
@@ -105,7 +100,6 @@ public class AuthController {
 
             String forgetPasswordMessage = userService.forgetPassword(user.getEmail());
             if (forgetPasswordMessage!=null){
-//                loginRateLimitApiUtil.incrementApiHitCount(user);
                 return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordMessage);
             }
         }catch (Exception e){
