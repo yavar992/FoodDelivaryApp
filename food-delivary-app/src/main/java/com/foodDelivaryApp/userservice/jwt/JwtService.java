@@ -10,9 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 
@@ -76,5 +78,16 @@ public class JwtService {
         byte[] keyBytes= Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
+// Other methods (extractUsername, validateToken, etc.) remain unchanged
+
+    private final Map<String, LocalDateTime> blacklist = new ConcurrentHashMap<>();
+
+    public void blacklistToken(String token, LocalDateTime expiryTime) {
+        blacklist.put(token, expiryTime);
+    }
+
+
 
 }

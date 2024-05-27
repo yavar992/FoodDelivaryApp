@@ -45,6 +45,8 @@ public class MenuItem {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ReviewAndRating> reviewAndRatings;
 
-
+    @JsonIgnore
+    @ManyToMany(mappedBy = "items")
+    private List<Wishlist> wishlists;
     
 }

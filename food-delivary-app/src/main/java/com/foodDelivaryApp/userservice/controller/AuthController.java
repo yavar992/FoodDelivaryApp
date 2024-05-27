@@ -4,6 +4,7 @@ import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
+import com.foodDelivaryApp.userservice.jwt.JWTBlacklistService;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
 import com.foodDelivaryApp.userservice.jwt.RefreshToken;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 
 @RestController
@@ -53,6 +56,9 @@ public class AuthController {
 
     @Autowired
     private LoginRateLimitApiUtil loginRateLimitApiUtil;
+
+    @Autowired
+    private JWTBlacklistService jwtBlacklistService;
 
     @PostMapping({"/register","/signup"})
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,
@@ -209,22 +215,38 @@ public class AuthController {
        RefreshToken refreshToken =  refreshTokenService.createRefreshToken(authDTO.getUsername());
 //       String jwtToken = jwtService.generateToken(authDTO.getUsername());
        JWTResponseTokenDTO jwtToken = JWTResponseTokenDTO.builder().accessToken(jwtService.generateToken(authDTO.getUsername()))
-               .token(refreshToken.getToken()).build();
+               .refreshToken(refreshToken.getToken()).build();
        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
     }
 
     @PostMapping("/refreshToken")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
-        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getAccessToken());
+        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getRefreshToken());
         refreshTokenService.verifyExpiration(refreshToken);
         User user = refreshToken.getUser();
         String token = jwtService.generateToken(user.getUsername());
         JWTResponseTokenDTO jwtResponseTokenDTO = JWTResponseTokenDTO.builder()
                 .accessToken(token)
-                .token(refreshTokenRequestDTO.getAccessToken())
+                .refreshToken(refreshTokenRequestDTO.getRefreshToken())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(jwtResponseTokenDTO);
+
     }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody JWTResponseTokenDTO jwtResponseTokenDTO) {
+        // Invalidate the refresh token
+        refreshTokenService.invalidateRefreshToken(jwtResponseTokenDTO.getRefreshToken());
+
+//         Blacklist the access token
+        String accessToken = jwtResponseTokenDTO.getAccessToken();
+        LocalDateTime expiryTime = LocalDateTime.ofInstant(jwtService.extractExpiration(accessToken).toInstant(), ZoneId.systemDefault());
+        jwtBlacklistService.blacklistToken(accessToken, expiryTime);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out");
+    }
+
 
     @GetMapping("/helloUser")
     public String helloUser(Principal principal){

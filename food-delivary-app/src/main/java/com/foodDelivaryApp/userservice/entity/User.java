@@ -141,6 +141,9 @@ public class User {
     @JoinColumn(name = "defaultAddress_id")
     private Address defaultAddress;
 
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Wishlist wishlist;
 
 
 }

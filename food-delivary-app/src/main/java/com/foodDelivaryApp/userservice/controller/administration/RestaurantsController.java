@@ -163,7 +163,7 @@ public class RestaurantsController {
         }
         RefreshToken refreshToken =  refreshTokenService.createRefreshTokenForRestaurantOwner(authDTO.getUsername());
         JWTResponseTokenDTO jwtToken = JWTResponseTokenDTO.builder().accessToken(jwtService.generateToken(authDTO.getUsername()))
-                .token(refreshToken.getToken()).build();
+                .refreshToken(refreshToken.getToken()).build();
         return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
     }
 
@@ -175,7 +175,7 @@ public class RestaurantsController {
         String token = jwtService.generateToken(restaurantOwner.getEmail());
         JWTResponseTokenDTO jwtResponseTokenDTO = JWTResponseTokenDTO.builder()
                 .accessToken(token)
-                .token(refreshTokenRequestDTO.getAccessToken())
+                .refreshToken(refreshTokenRequestDTO.getAccessToken())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(jwtResponseTokenDTO);
     }

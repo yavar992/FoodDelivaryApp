@@ -89,4 +89,13 @@ public class RefreshTokenService {
     }
 
 
+    public void invalidateRefreshToken(String refreshToken) {
+        Optional<RefreshToken> token = refreshTokenRepo.findByToken(refreshToken);
+        if (token.isPresent()) {
+            refreshTokenRepo.delete(token.get());
+        }
+    }
+
+
+
 }
