@@ -48,5 +48,6 @@ public class MenuItem {
     @JsonIgnore
     @ManyToMany(mappedBy = "items")
     private List<Wishlist> wishlists;
-    
+
+
 }

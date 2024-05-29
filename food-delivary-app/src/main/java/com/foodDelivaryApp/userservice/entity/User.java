@@ -141,6 +141,7 @@ public class User {
     @JoinColumn(name = "defaultAddress_id")
     private Address defaultAddress;
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JsonIgnore
     private Wishlist wishlist;

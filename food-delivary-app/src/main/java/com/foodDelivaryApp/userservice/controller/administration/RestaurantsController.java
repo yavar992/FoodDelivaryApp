@@ -169,13 +169,13 @@ public class RestaurantsController {
 
     @PostMapping("/refreshToken")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
-        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getAccessToken());
+        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getRefreshToken());
         refreshTokenService.verifyExpiration(refreshToken);
         RestaurantOwner restaurantOwner = refreshToken.getRestaurantOwner();
         String token = jwtService.generateToken(restaurantOwner.getEmail());
         JWTResponseTokenDTO jwtResponseTokenDTO = JWTResponseTokenDTO.builder()
                 .accessToken(token)
-                .refreshToken(refreshTokenRequestDTO.getAccessToken())
+                .refreshToken(refreshTokenRequestDTO.getRefreshToken())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(jwtResponseTokenDTO);
     }

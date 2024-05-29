@@ -22,17 +22,19 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ToString.Exclude
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinTable(
             name = "wishlist_items",
-            joinColumns = @JoinColumn(name = "wishlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_item_id")
+            joinColumns = @JoinColumn(name = "wishlist_id" , referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "menu_item_id" , referencedColumnName = "id")
     )
     private List<MenuItem> items;
 

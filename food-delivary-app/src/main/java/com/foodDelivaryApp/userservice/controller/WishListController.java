@@ -1,5 +1,7 @@
 package com.foodDelivaryApp.userservice.controller;
 
+import com.foodDelivaryApp.userservice.DTO.WishlistDTO;
+import com.foodDelivaryApp.userservice.DTO.WishlistResponseDTO;
 import com.foodDelivaryApp.userservice.entity.Wishlist;
 import com.foodDelivaryApp.userservice.service.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,13 @@ public class WishListController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addToWishList(Authentication authentication , @RequestParam("foodCode") String foodCode){
-        Wishlist response = wishListService.addToWishList(authentication , foodCode);
+        WishlistResponseDTO response = wishListService.addToWishList(authentication , foodCode);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
     public ResponseEntity<?> viewWishList(Authentication authentication){
-        List<Wishlist> wishlists = wishListService.getllWishlists(authentication);
+        List<WishlistDTO> wishlists = wishListService.getllWishlists(authentication);
         return ResponseEntity.status(HttpStatus.OK).body(wishlists);
     }
 
@@ -38,7 +40,7 @@ public class WishListController {
 
     @GetMapping("/{itemId}")
     public ResponseEntity<?> checkWishListItem(Authentication authentication , @PathVariable("itemId") Long itemId){
-        Wishlist wishlist = wishListService.wishListItem(authentication, itemId);
+        WishlistDTO wishlist = wishListService.wishListItem(authentication, itemId);
         return ResponseEntity.status(HttpStatus.OK).body(wishlist);
     }
 
@@ -53,5 +55,20 @@ public class WishListController {
         String response = wishListService.removeAllItemsFromWishlist(authentication);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+
+    @GetMapping("/item/{foodCode}")
+    public ResponseEntity<WishlistDTO> getWishlistItemByFoodCode(Authentication authentication, @PathVariable String foodCode) {
+        WishlistDTO wishlistItem = wishListService.getWishlistItemByFoodCode(authentication, foodCode);
+        return ResponseEntity.ok(wishlistItem);
+    }
+
+    @PostMapping("/moveToCart")
+    public ResponseEntity<?> moveToCart(Authentication authentication , @RequestParam("foodCode") String foodCode){
+        String response = wishListService.moveItemToCartfFromWishlist(authentication,foodCode);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
 }
 
