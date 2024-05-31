@@ -78,8 +78,7 @@ public class PayController {
             if (payment.getState().equals("approved")) {
                 // Payment is approved, populate item into the database
 //                populateItemIntoDatabase(amount, currency, description);
-                log.info("cartId , {}" , cartId);
-                log.info("foodCode , {}" , foodCode);
+                 paypalService.populateItemIntoDatabase(cartId , foodCode);
                 System.out.println("the payment is being done , now i can populate the item into the database");
                 return "paymentSuccess";
             }

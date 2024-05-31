@@ -32,9 +32,6 @@ public class MenuItem {
     private LocalDateTime addedTime;
     private LocalDateTime updatedTime;
     private int sellCount;
-    private String sku;
-
-    private String upc;
 
     @JsonIgnore
     @ManyToOne
@@ -49,5 +46,8 @@ public class MenuItem {
     @ManyToMany(mappedBy = "items")
     private List<Wishlist> wishlists;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_confirmation_id")
+    private OrderConfirmationDetails orderConfirmationDetails;
 
 }

@@ -1,17 +1,24 @@
 package com.foodDelivaryApp.userservice.serviceImpl;
 
-import com.foodDelivaryApp.userservice.entity.CartItem;
-import com.foodDelivaryApp.userservice.entity.MenuItem;
-import com.foodDelivaryApp.userservice.repository.CartItemRepo;
+import com.foodDelivaryApp.userservice.entity.*;
+import com.foodDelivaryApp.userservice.entity.Address;
+import com.foodDelivaryApp.userservice.event.OrderConfirmationDetailsEvent;
+import com.foodDelivaryApp.userservice.repository.*;
+import com.foodDelivaryApp.userservice.util.GeneratedRandomNumber;
+import com.foodDelivaryApp.userservice.util.OTPUtil;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class PaypalService {
@@ -22,6 +29,20 @@ public class PaypalService {
     @Autowired
     private CartItemRepo cartItemRepo;
 
+    @Autowired
+    private MenuItemRepo menuItemRepo;
+
+    @Autowired
+    private AddressRepo addressRepo;
+
+    @Autowired
+    private OrderConfirmationRepo orderConfirmationRepo;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
+    private UserRepo userRepo;
     public Payment createPayment(
             Double total,
             String currency,
@@ -80,5 +101,45 @@ public class PaypalService {
     }
 
 
+    public String populateItemIntoDatabase(Long cartId, String foodCode) {
+        Optional<CartItem> cartItem = cartItemRepo.findById(cartId);
+        if (cartItem.isEmpty()){
+            return "no cart item found for id " + cartId;
+        }
+        CartItem cartItem1 = cartItem.get();
+        MenuItem menuItem = cartItem1.getMenuItem();
+        menuItem.setSellCount(menuItem.getSellCount() +1);
+        menuItem.setPopularity(menuItem.getPopularity() + 100);
 
+//        menuItemRepo.saveAndFlush(menuItem); // menuItem fields got populated successfully
+
+        //now comes to the orderConfirmationDetails set the data in the orderConfirmationDetails entity and then make a event and a listner that will
+        // listean to this event and send a email o the user with the mandatory details
+        Optional<User> user = userRepo.findById(cartItem1.getUserId());
+        Address address =  addressRepo.findByUserIdWhereDefaultAddressIs(cartItem1.getUserId());
+        OrderConfirmationDetails orderConfirmationDetails = new OrderConfirmationDetails();
+        orderConfirmationDetails.setName(menuItem.getName());
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = localDateTime.toLocalDate();
+        orderConfirmationDetails.setOrderDate(localDate);
+        orderConfirmationDetails.setQuantity(cartItem1.getQuantity());
+        orderConfirmationDetails.setPrice(cartItem1.getPrice());
+        orderConfirmationDetails.setOrderNumber(GeneratedRandomNumber.generateReferralCode(12)+ OTPUtil.random3Digit());
+        orderConfirmationDetails.setTotalAmountPaid(cartItem1.getPrice());
+        orderConfirmationDetails.setDeliveryTimeEstimate("");
+        orderConfirmationDetails.setDefaultDeliveryAddress(address);
+        orderConfirmationDetails.setPaymentMethod("PAYPAL");
+        orderConfirmationDetails.setContactEmail(menuItem.getMenu().getRestaurant().getEmail());
+        orderConfirmationDetails.setContactPhone(menuItem.getMenu().getRestaurant().getPhoneNumber());
+        orderConfirmationDetails.setTrackingUrl("");
+        orderConfirmationDetails.setUser(user.get());
+        // saves the order confirmation details
+        OrderConfirmationDetailsEvent orderConfirmationDetailsEvent = new OrderConfirmationDetailsEvent(orderConfirmationDetails);
+        applicationEventPublisher.publishEvent(orderConfirmationDetailsEvent);
+        orderConfirmationRepo.saveAndFlush(orderConfirmationDetails);
+        menuItem.setOrderConfirmationDetails(orderConfirmationDetails);
+        menuItemRepo.saveAndFlush(menuItem);
+        cartItemRepo.delete(cartItem1);
+        return " order confirmation details populated successfully !!";
+    }
 }

@@ -24,6 +24,8 @@ public class CommonUtil {
     @Autowired
     private CartItemRepo cartItemRepo;
 
+    String CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
     public User authenticatedUser(Authentication authentication){
         String username = authentication.getName();
         return userService.findUserByEmail(username);
@@ -38,6 +40,10 @@ public class CommonUtil {
             cartItems.setQuantity(cartItems.getQuantity()+1);
             cartItems.setUpdateAt(LocalDateTime.now());
         }
+    }
+
+    public void generateOrderNumber(){
+
     }
 }
 

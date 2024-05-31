@@ -37,4 +37,6 @@ public interface MenuItemService {
     MenuItem findById(Long itemId);
 
     String isItemAvailable(String foodCode, String pincode);
+
+
 }
