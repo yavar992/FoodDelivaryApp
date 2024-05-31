@@ -220,9 +220,24 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     }
 
+    @Override
+    public String isItemAvailable(String foodCode, String pincode) {
+        Optional<MenuItem> menuItem = menuItemRepo.findByFoodCode(foodCode);
+        if (menuItem.isEmpty()) {
+            return "Item not found";
+        }
+        MenuItem menuItem1 = menuItem.get();
+        List<String> availableDeliveryZones = menuItem1.getMenu().getRestaurant().getDeliveryZones();
+        if (!availableDeliveryZones.contains(pincode)) {
+            return "Item not available in this area";
+        }
+        return "Item is available";
+    }
+
 
     public boolean isFoodExistByName(String name , Long menuId){
         MenuItem menuItem = menuItemRepo.findByNameAndId(name,menuId);
         return menuItem!=null;
     }
+
 }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MenuItem Form</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMxFTKwzxwjkO+rz/8mB/4E4Jj59Tz0mzYzpsTnDQDxEJ2kGbpCLWg1I593" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container">
+    <h1 class="text-center mt-5">Menu Item Form</h1>
+    <form method="post" action="/menuItem/create" class="mt-5 card p-3">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" class="form-control"
+                   name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" class="form-control" name="description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input id="price" type="number" step="0.01" class="form-control"
+                   name="price" required>
+        </div>
+        <div class="mb-3">
+            <label for="foodCode" class="form-label">Food Code</label>
+            <input id="foodCode" type="text" class="form-control"
+                   name="foodCode" required>
+        </div>
+        <div class="mb-3">
+            <label for="images" class="form-label">Images</label>
+            <input id="images" type="file" class="form-control"
+                   name="images" multiple>
+        </div>
+        <div class="mb-3">
+            <label for="popularity" class="form-label">Popularity</label>
+            <input id="popularity" type="number" step="0.1" class="form-control"
+                   name="popularity">
+        </div>
+        <div class="mb-3">
+            <label for="availability" class="form-label">Availability</label>
+            <select class="form-control" id="availability" name="availability">
+                <option value="true">Available</option>
+                <option value="false">Unavailable</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="sku" class="form-label">SKU</label>
+            <input id="sku" type="text" class="form-control"
+                   name="sku">
+        </div>
+        <div class="mb-3">
+            <label for="upc" class="form-label">UPC</label>
+            <input id="upc" type="text" class="form-control"
+                   name="upc">
+        </div>
+        <div class="d-flex justify-content-center">
+            <button
+                    type="submit"
+                    class="btn btn-primary"
+            >
+                Save MenuItem
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

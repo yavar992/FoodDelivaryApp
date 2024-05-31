@@ -35,4 +35,6 @@ public interface MenuItemService {
     String checkout(Long itemId);
 
     MenuItem findById(Long itemId);
+
+    String isItemAvailable(String foodCode, String pincode);
 }

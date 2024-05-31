@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Controller
-@RequestMapping("api/v1/users/payment")
 public class PaymentController {
 
     @Autowired
@@ -28,7 +27,6 @@ public class PaymentController {
 
     @Autowired
     private MenuItemService menuItemService;
-
 
     @GetMapping("/")
     public String index(){
