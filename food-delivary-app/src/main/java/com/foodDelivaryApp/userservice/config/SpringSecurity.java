@@ -35,6 +35,7 @@ public class SpringSecurity {
             "/api/v1/restaurant/refreshToken",
             "/",
             "/api/v1/payment/**",
+            "api/v1/deliver/**"
     };
 
     @Autowired

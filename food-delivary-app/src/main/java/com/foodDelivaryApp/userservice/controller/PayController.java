@@ -35,12 +35,12 @@ public class PayController {
             @RequestParam("currency") String currency,
             @RequestParam("description") String description,
             @RequestParam("cartId") Long cartId ,
-            @RequestParam(value = "foodCode" , required = false) String foodCode
+            @RequestParam(value = "zipCode" , required = false) String zipCode
 
     ) {
         try {
             String cancelUrl = "http://localhost:8082/happyMeals/api/v1/payment/cancel";
-            String successUrl = "http://localhost:8082/happyMeals/api/v1/payment/success?cartId=" + cartId + "&foodCode=" + foodCode; // Pass item details in the redirect URL
+            String successUrl = "http://localhost:8082/happyMeals/api/v1/payment/success?cartId=" + cartId + "&foodCode=" + zipCode; // Pass item details in the redirect URL
 
             Payment payment = paypalService.createPayment(
                     Double.valueOf(amount),
@@ -71,14 +71,14 @@ public class PayController {
 //            @RequestParam("currency") String currency
 //            @RequestParam("description") String description
             @RequestParam("cartId") Long cartId ,
-            @RequestParam("foodCode") String foodCode
+            @RequestParam("zipCode") String zipCode
     ) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
                 // Payment is approved, populate item into the database
 //                populateItemIntoDatabase(amount, currency, description);
-                 paypalService.populateItemIntoDatabase(cartId , foodCode);
+                 paypalService.populateItemIntoDatabase(cartId , zipCode);
                 System.out.println("the payment is being done , now i can populate the item into the database");
                 return "paymentSuccess";
             }

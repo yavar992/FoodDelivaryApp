@@ -1,10 +1,9 @@
 package com.foodDelivaryApp.userservice.DTO;
 
-import com.foodDelivaryApp.userservice.entity.RatingEnum;
+import com.foodDelivaryApp.userservice.Enums.RatingEnum;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.PrePersist;
 import lombok.*;
 
 @AllArgsConstructor

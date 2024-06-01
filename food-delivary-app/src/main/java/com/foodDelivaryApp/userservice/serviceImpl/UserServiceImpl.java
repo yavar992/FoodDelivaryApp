@@ -1,6 +1,8 @@
 package com.foodDelivaryApp.userservice.serviceImpl;
 
 import com.foodDelivaryApp.userservice.DTO.*;
+import com.foodDelivaryApp.userservice.Enums.TransactionEnum;
+import com.foodDelivaryApp.userservice.Enums.WalletMethodEnum;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
 import com.foodDelivaryApp.userservice.entity.*;
 import com.foodDelivaryApp.userservice.event.UserRegisterationEvent;
@@ -69,6 +71,7 @@ public class UserServiceImpl implements UserService {
         else{
             throw new UserNotFoundException("Invalid Role !!!");
         }
+
         log.info("Roles {}" , roles1);
         rolesSet.add(roles1);
         user.setRoles(rolesSet);

@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.entity;
 
+import com.foodDelivaryApp.userservice.Enums.RatingEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,6 +40,8 @@ public class ReviewAndRating {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id" )
     private User user;
+
+
 
 
 }

@@ -1,30 +1,30 @@
 package com.foodDelivaryApp.userservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.foodDelivaryApp.userservice.Enums.DeliveryGuyStatusEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@DynamicUpdate
-@Entity
+@ToString
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
-public class User {
+@Builder
+@Entity
+public class DeliveryGuy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,16 +89,21 @@ public class User {
     private String referralCode;
     private boolean isVerified;
     private boolean isActive;
-    private String preferredLanguage;
     private Integer otp;
     private LocalDateTime otpSendingTime;
     private LocalDateTime otpExpireTime;
     private boolean isBlocked;
-    private int apiHitCount;
-    private Instant firstTimeApiHittingTime;
-    private Instant targetTime;
 
-
+    @Enumerated(EnumType.STRING)
+    private DeliveryGuyStatusEnum status; // ACTIVE, INACTIVE, ON_DELIVERY
+    private String vehicleType;
+    private String licenseNumber;
+    private Integer totalDeliveries;
+    private Double currentLatitude;
+    private Double currentLongitude;
+    private LocalDateTime shiftStart;
+    private LocalDateTime shiftEnd;
+    private String preferredDeliverZones;
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles" ,
@@ -108,47 +113,30 @@ public class User {
     private Set<Roles> roles;
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    private Cart cart;
-
-    @JsonIgnore
-    @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderDetails> orderDetails = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade =CascadeType.ALL)
-    private Wallet wallet;
-
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "user_referrals",
+            name = "deliver_referrals",
             joinColumns = @JoinColumn(name = "guyWhoSignup_id"),
             inverseJoinColumns = @JoinColumn(name = "guyWhoReferrerCode_id")
     )
-    private Set<User> referredUsers;
+    private Set<DeliveryGuy> referredDeliveryGuy;
 
 
+
+    @OneToMany(mappedBy = "deliveryGuy" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JsonIgnore
-    @ToString.Exclude
-    @OneToMany( cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    private List<Address> addresses;
+    private List<OrderConfirmationDetails> orderConfirmationDetails;
 
-
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    @JoinColumn(name = "defaultAddress_id")
-    private Address defaultAddress;
-
-    @ToString.Exclude
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Wishlist wishlist;
-
-    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY , cascade =CascadeType.ALL)
     private List<DeliveryGuyRating> deliveryGuyRating;
+
+    @ManyToMany(mappedBy = "deliveryGuys")
+    private Set<Restaurant> restaurants = new HashSet<>();
+
+
+
+
+
 
 
 }

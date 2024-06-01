@@ -1,6 +1,8 @@
 package com.foodDelivaryApp.userservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.foodDelivaryApp.userservice.Enums.CheckoutStatusEnum;
+import com.foodDelivaryApp.userservice.Enums.PaymentIntentEnum;
 import jakarta.persistence.*;
 import lombok.*;
 

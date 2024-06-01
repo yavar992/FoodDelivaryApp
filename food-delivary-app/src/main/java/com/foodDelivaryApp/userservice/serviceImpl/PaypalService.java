@@ -101,12 +101,16 @@ public class PaypalService {
     }
 
 
-    public String populateItemIntoDatabase(Long cartId, String foodCode) {
+    public String populateItemIntoDatabase(Long cartId, String zipCode) {
         Optional<CartItem> cartItem = cartItemRepo.findById(cartId);
         if (cartItem.isEmpty()){
             return "no cart item found for id " + cartId;
         }
         CartItem cartItem1 = cartItem.get();
+        List<String> availableDeliveryZone = cartItem1.getMenuItem().getMenu().getRestaurant().getDeliveryZones();
+        if (!availableDeliveryZone.contains(zipCode)){
+            return "deliveryNotAvailable";
+        }
         MenuItem menuItem = cartItem1.getMenuItem();
         menuItem.setSellCount(menuItem.getSellCount() +1);
         menuItem.setPopularity(menuItem.getPopularity() + 100);
@@ -133,6 +137,7 @@ public class PaypalService {
         orderConfirmationDetails.setContactPhone(menuItem.getMenu().getRestaurant().getPhoneNumber());
         orderConfirmationDetails.setTrackingUrl("");
         orderConfirmationDetails.setUser(user.get());
+        orderConfirmationDetails.setRestaurant(menuItem.getOrderConfirmationDetails().getRestaurant());
         // saves the order confirmation details
         OrderConfirmationDetailsEvent orderConfirmationDetailsEvent = new OrderConfirmationDetailsEvent(orderConfirmationDetails);
         applicationEventPublisher.publishEvent(orderConfirmationDetailsEvent);

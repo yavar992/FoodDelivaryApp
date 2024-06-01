@@ -1,12 +1,15 @@
 package com.foodDelivaryApp.userservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.foodDelivaryApp.userservice.Enums.PaymentMethodAcceptedEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -66,6 +69,15 @@ public class Restaurant {
     @JsonIgnore
     @ToString.Exclude
     private List<RestaurantMenu> restaurantMenu;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "restaurant_delivery_guy",
+            joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName="id"),
+            inverseJoinColumns = @JoinColumn(name = "delivery_guy_id", referencedColumnName="id")
+    )
+    private Set<DeliveryGuy> deliveryGuys = new HashSet<>();
 
 
 }

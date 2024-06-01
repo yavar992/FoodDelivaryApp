@@ -1,5 +1,9 @@
 package com.foodDelivaryApp.userservice.entity;
 
+import com.foodDelivaryApp.userservice.Enums.CheckoutStatusEnum;
+import com.foodDelivaryApp.userservice.Enums.DeliveryMethodEnum;
+import com.foodDelivaryApp.userservice.Enums.PaymentIntentEnum;
+import com.foodDelivaryApp.userservice.Enums.PaymentMethodAcceptedEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;

@@ -2,7 +2,7 @@ package com.foodDelivaryApp.userservice.DTO;
 
 import com.foodDelivaryApp.userservice.entity.CuisineType;
 
-import com.foodDelivaryApp.userservice.entity.PaymentMethodAcceptedEnum;
+import com.foodDelivaryApp.userservice.Enums.PaymentMethodAcceptedEnum;
 import lombok.*;
 
 import java.util.List;

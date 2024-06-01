@@ -1,4 +1,4 @@
-package com.foodDelivaryApp.userservice.entity;
+package com.foodDelivaryApp.userservice.Enums;
 
 public enum PaymentMethodAcceptedEnum {
 

@@ -1,7 +1,7 @@
 package com.foodDelivaryApp.userservice.serviceImpl;
 
 import com.foodDelivaryApp.userservice.entity.OrderDetails;
-import com.foodDelivaryApp.userservice.entity.PaymentIntentEnum;
+import com.foodDelivaryApp.userservice.Enums.PaymentIntentEnum;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.repository.OrderDetailsRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {

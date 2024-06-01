@@ -1,6 +1,7 @@
 package com.foodDelivaryApp.userservice.entity;
 
-import com.paypal.api.payments.Transaction;
+import com.foodDelivaryApp.userservice.Enums.TransactionEnum;
+import com.foodDelivaryApp.userservice.Enums.WalletMethodEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;

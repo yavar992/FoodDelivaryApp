@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-@DynamicUpdate
 public class OrderConfirmationDetails {
 
     @Id
@@ -42,5 +41,14 @@ public class OrderConfirmationDetails {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "deliveryGuy_id")
+    private DeliveryGuy deliveryGuy;
+
 
 }

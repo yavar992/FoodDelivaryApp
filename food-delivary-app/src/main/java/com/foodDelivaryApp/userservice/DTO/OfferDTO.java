@@ -1,7 +1,7 @@
 package com.foodDelivaryApp.userservice.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.foodDelivaryApp.userservice.entity.OfferTypeEnum;
+import com.foodDelivaryApp.userservice.Enums.OfferTypeEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotEmpty;

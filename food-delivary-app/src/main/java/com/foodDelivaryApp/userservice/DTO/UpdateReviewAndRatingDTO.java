@@ -1,10 +1,9 @@
 package com.foodDelivaryApp.userservice.DTO;
 
-import com.foodDelivaryApp.userservice.entity.RatingEnum;
+import com.foodDelivaryApp.userservice.Enums.RatingEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @AllArgsConstructor
 @Data
