@@ -1,7 +1,9 @@
 package com.foodDelivaryApp.userservice.util;
 
 import com.foodDelivaryApp.userservice.DTO.AuthDTO;
+import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.repository.DeliveryGuyRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class LoginRateLimitApiUtil {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private DeliveryGuyRepo deliveryGuyRepo;
 
 
     public String restartApiHittingRate(User user) {
@@ -90,5 +95,25 @@ public class LoginRateLimitApiUtil {
 
         // Save the updated user back to the database
         userRepo.save(user);
+    }
+
+    public void handleApiHitCountForDeliveryGuy(DeliveryGuy deliveryGuy) {
+        if (deliveryGuy.getFirstTimeApiHittingTime() == null || deliveryGuy.getFirstTimeApiHittingTime().plusSeconds(2 * 60).isBefore(Instant.now())) {
+            // If the last API hit was more than 15 minutes ago, reset hit count
+            deliveryGuy.setApiHitCount(0);
+            deliveryGuy.setBlocked(false);
+            deliveryGuy.setFirstTimeApiHittingTime(Instant.now());
+        }
+
+        deliveryGuy.setApiHitCount(deliveryGuy.getApiHitCount() + 1); // Increment hit count
+
+        // If hit count exceeds 5, block the user for the next 15 minutes
+        if (deliveryGuy.getApiHitCount() > 5) {
+            deliveryGuy.setBlocked(true);
+            deliveryGuy.setTargetTime(Instant.now().plusSeconds(15 * 60));
+        }
+
+        // Save the updated user back to the database
+        deliveryGuyRepo.save(deliveryGuy);
     }
 }

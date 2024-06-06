@@ -66,5 +66,6 @@ public class Address {
     @ManyToOne
     private User user;
 
-
+    @OneToOne
+    private OrderConfirmationDetails orderConfirmationDetails;
 }

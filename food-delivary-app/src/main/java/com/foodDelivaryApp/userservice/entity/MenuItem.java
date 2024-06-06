@@ -46,7 +46,7 @@ public class MenuItem {
     @ManyToMany(mappedBy = "items")
     private List<Wishlist> wishlists;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "order_confirmation_id")
     private OrderConfirmationDetails orderConfirmationDetails;
 

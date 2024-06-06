@@ -1,9 +1,6 @@
 package com.foodDelivaryApp.userservice.Enums;
 
 public enum OrderStatusEnum {
-    INITIATED,
-    PROCESSING,
-    COMPLETED,
-    SHIPPED,
-    CANCELLED
+    IN_PROGRESS , ON_DELIVERY , DELIVERED , CANCELLED
+
 }

@@ -1,9 +1,15 @@
 package com.foodDelivaryApp.userservice.util;
 
 import com.foodDelivaryApp.userservice.entity.CartItem;
+import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.exceptionHandling.DeliveryGuyException;
 import com.foodDelivaryApp.userservice.exceptionHandling.MenuItemException;
+import com.foodDelivaryApp.userservice.exceptionHandling.UserNotFoundException;
 import com.foodDelivaryApp.userservice.repository.CartItemRepo;
+import com.foodDelivaryApp.userservice.repository.DeliveryGuyRepo;
+import com.foodDelivaryApp.userservice.repository.UserRepo;
+import com.foodDelivaryApp.userservice.service.DeliveryGuyService;
 import com.foodDelivaryApp.userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +25,35 @@ import java.util.Optional;
 public class CommonUtil {
 
     @Autowired
-    private UserService userService;
+    private UserRepo userRepo;
 
     @Autowired
     private CartItemRepo cartItemRepo;
+
+    @Autowired
+    private DeliveryGuyRepo deliveryGuyRepo;
+
 
     String CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public User authenticatedUser(Authentication authentication){
         String username = authentication.getName();
-        return userService.findUserByEmail(username);
+        User user =  userRepo.findUserByEmail(username);
+        if (user==null){
+            throw new UserNotFoundException("No user found  with email " + username);
+        }
+        return user;
     }
 
+    public DeliveryGuy authenticateDeliveryGuy(Authentication authentication){
+        String username = authentication.getName();
+        DeliveryGuy deliveryGuy =  deliveryGuyRepo.findByEmail(username);
+        if (deliveryGuy==null){
+            throw new DeliveryGuyException("No deliveryGuy found for " + username);
+        }
+        return deliveryGuy;
+
+    }
 
     public void checkingIfItemIsAlreadyInCart(Long id , CartItem cartItems) {
         Optional<CartItem> cartItem = cartItemRepo.findByMenuItemId(id);

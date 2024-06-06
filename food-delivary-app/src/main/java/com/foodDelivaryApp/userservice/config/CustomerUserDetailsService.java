@@ -1,7 +1,9 @@
 package com.foodDelivaryApp.userservice.config;
 
+import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.repository.DeliveryGuyRepo;
 import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +29,17 @@ public class CustomerUserDetailsService implements UserDetailsService {
     @Autowired
     private RestaurantsOwnerRepo restaurantsOwnerRepo;
 
+    @Autowired
+    private DeliveryGuyRepo deliveryGuyRepo;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Optional<RestaurantOwner> restaurantOwner = restaurantsOwnerRepo.findByUsernameOrEmail(email);
         log.info("restaurantOwner {}" , restaurantOwner);
         Optional<User> customer = userRepo.findByUsernameOrEmail(email , email);
+
+            Optional<DeliveryGuy> deliveryGuy = deliveryGuyRepo.findByDeliveryBoyEmail(email);
 
         if (restaurantOwner.isPresent()){
             RestaurantOwner restaurantOwner1 = restaurantOwner.get();
@@ -46,6 +53,21 @@ public class CustomerUserDetailsService implements UserDetailsService {
                     restaurantOwner1.getPassword(),
                     authorities
             );
+        }
+
+        if (deliveryGuy.isPresent()){
+            DeliveryGuy deliveryGuy1 = deliveryGuy.get();
+            Set<GrantedAuthority> authorities = deliveryGuy1.getRoles()
+                    .stream()
+                    .map((role)->new SimpleGrantedAuthority(role.getRoles())).collect(Collectors.toSet());
+            log.info("authorities {}" , authorities);
+            log.info("simpleGrantedAuthorities {}", authorities.stream().map((role)->new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toSet()));
+            return new org.springframework.security.core.userdetails.User(
+                    deliveryGuy1.getEmail(),
+                    deliveryGuy1.getPassword(),
+                    authorities
+            );
+
         }
 
        else if (customer.isPresent()){
@@ -63,6 +85,6 @@ public class CustomerUserDetailsService implements UserDetailsService {
         }
 
 
-        throw new UsernameNotFoundException("Customer not found for the username " + email);
+        throw new UsernameNotFoundException("User not found for the username " + email);
     }
 }

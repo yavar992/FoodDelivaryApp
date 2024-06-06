@@ -46,6 +46,9 @@ public interface UserRepo extends JpaRepository<User , Long> {
     @Query(value = "SELECT targetTime FROM `user` WHERE email =?1" , nativeQuery=true)
     Instant findUserApiHittingTargetTime(String email);
 
+    @Query(value = "SELECT * FROM `user` WHERE username =?1" , nativeQuery=true)
+    User findUserByEmail(String username);
+
 //    @Query(value = "SELECT  ur.guyWhoReferrerCode FROM `user` u RIGHT JOIN user_referrals ur ON u.id = ur.guyWhoSignup_id = ?1" , nativeQuery = true)
 //    Long findUserWhoSignUp(long userId);
 }

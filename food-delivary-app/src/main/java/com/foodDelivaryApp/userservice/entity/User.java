@@ -132,7 +132,7 @@ public class User {
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToMany( cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany( cascade = CascadeType.ALL , fetch = FetchType.LAZY , orphanRemoval = true)
     private List<Address> addresses;
 
 
@@ -142,13 +142,17 @@ public class User {
     private Address defaultAddress;
 
     @ToString.Exclude
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL )
     @JsonIgnore
     private Wishlist wishlist;
 
-    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL , orphanRemoval = true)
     @JsonIgnore
     private List<DeliveryGuyRating> deliveryGuyRating;
+
+    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<OrderConfirmationDetails> orderConfirmationDetails;
+
 
 
 }

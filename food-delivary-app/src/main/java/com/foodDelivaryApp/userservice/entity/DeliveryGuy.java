@@ -101,13 +101,17 @@ public class DeliveryGuy {
     private Integer totalDeliveries;
     private Double currentLatitude;
     private Double currentLongitude;
-    private LocalDateTime shiftStart;
-    private LocalDateTime shiftEnd;
+    private String shiftStart;
+    private String shiftEnd;
     private String preferredDeliverZones;
+    private int apiHitCount;
+    private Instant firstTimeApiHittingTime;
+    private Instant targetTime;
+
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles" ,
-            joinColumns =@JoinColumn(name = "user_id", referencedColumnName = "id"),
+    @ManyToMany(fetch = FetchType.EAGER )
+    @JoinTable(name = "deliveryBoy_roles" ,
+            joinColumns =@JoinColumn(name = "deliveryBoy_id", referencedColumnName = "id"),
             inverseJoinColumns =@JoinColumn(name = "role_id",referencedColumnName = "id")
     )
     private Set<Roles> roles;
@@ -123,11 +127,11 @@ public class DeliveryGuy {
 
 
 
-    @OneToMany(mappedBy = "deliveryGuy" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "deliveryGuy" , fetch = FetchType.EAGER , cascade = CascadeType.ALL , orphanRemoval = true)
     @JsonIgnore
     private List<OrderConfirmationDetails> orderConfirmationDetails;
 
-    @OneToMany(fetch = FetchType.LAZY , cascade =CascadeType.ALL)
+    @OneToMany( mappedBy =  "deliveryGuy" ,fetch = FetchType.LAZY , cascade =CascadeType.ALL , orphanRemoval = true)
     private List<DeliveryGuyRating> deliveryGuyRating;
 
     @ManyToMany(mappedBy = "deliveryGuys")

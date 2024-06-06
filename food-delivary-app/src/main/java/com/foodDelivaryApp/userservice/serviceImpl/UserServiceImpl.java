@@ -3,22 +3,23 @@ package com.foodDelivaryApp.userservice.serviceImpl;
 import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.Enums.TransactionEnum;
 import com.foodDelivaryApp.userservice.Enums.WalletMethodEnum;
+import com.foodDelivaryApp.userservice.convertor.DeliveryGuyReviewAndRatingMapper;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
 import com.foodDelivaryApp.userservice.entity.*;
 import com.foodDelivaryApp.userservice.event.UserRegisterationEvent;
 import com.foodDelivaryApp.userservice.event.WalletEvent;
 import com.foodDelivaryApp.userservice.exceptionHandling.*;
-import com.foodDelivaryApp.userservice.repository.RolesRepository;
-import com.foodDelivaryApp.userservice.repository.UserRepo;
-import com.foodDelivaryApp.userservice.repository.WalletHistoryRepo;
-import com.foodDelivaryApp.userservice.repository.WalletRepo;
+import com.foodDelivaryApp.userservice.repository.*;
 import com.foodDelivaryApp.userservice.service.UserService;
+import com.foodDelivaryApp.userservice.util.CommonUtil;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.ImageUtil;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
+import com.paypal.api.payments.Order;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +52,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private WalletHistoryRepo walletHistoryRepo;
 
+    @Autowired
+    private CommonUtil commonUtil;
+
+    @Autowired
+    private DeliveryGuyRatingRepo deliveryGuyRatingRepo;
+
+    @Autowired
+    private OrderConfirmationRepo orderConfirmationRepo;
 
     @Override
     public String saveUser(User user , String referralCode) {
@@ -101,6 +110,7 @@ public class UserServiceImpl implements UserService {
         if (!user.isVerified()){
             throw new UnverifiedUserException("Please verified your account first in order to upload the profile image ");
         }
+
         if(file.getSize()/1024>=15){
             throw new LargeImageSizeException("Image size should not be more than 10 kb");
         }
@@ -367,6 +377,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public Instant getUserApiHittingTargetTime(String email) {
         return userRepo.findUserApiHittingTargetTime(email);
+    }
+
+    @Override
+    public String rateDeliveryGuy(Authentication authentication, DeliveryGuyRatingDTO ratingDTO) {
+        User user = commonUtil.authenticatedUser(authentication);
+        Optional<OrderConfirmationDetails> orderConfirmationDetails = orderConfirmationRepo.findById(ratingDTO.getOrderId());
+        if (orderConfirmationDetails.isEmpty()){
+            throw new DeliveryGuyException("No Order found for the orderId " + ratingDTO.getOrderId());
+        }
+        DeliveryGuy deliveryGuy = orderConfirmationDetails.get().getDeliveryGuy();
+        DeliveryGuyRating deliveryGuyRating = DeliveryGuyReviewAndRatingMapper.INSTANCE.convertDeliveryGuyRatingDTOToDeliveryGuyRating(ratingDTO);
+        deliveryGuyRating.setUser(user);
+        deliveryGuyRating.setDeliveryGuy(deliveryGuy);
+        deliveryGuyRating.setOrderId(orderConfirmationDetails.get().getId());
+        deliveryGuyRatingRepo.save(deliveryGuyRating);
+
+        return "Rating successfully !!";
     }
 
 

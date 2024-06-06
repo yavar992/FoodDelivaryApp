@@ -3,12 +3,15 @@ package com.foodDelivaryApp.userservice.listner;
 import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.DeliveryGuyRating;
 import com.foodDelivaryApp.userservice.entity.User;
+import com.foodDelivaryApp.userservice.event.DeliveryGuyEvent;
 import com.foodDelivaryApp.userservice.event.OrderConfirmationDetailsEvent;
 import com.foodDelivaryApp.userservice.repository.DeliveryGuyRepo;
 import com.foodDelivaryApp.userservice.util.EmailSendarUtil;
 import com.foodDelivaryApp.userservice.util.OTPUtil;
+import io.micrometer.core.instrument.binder.jersey.server.MetricsApplicationEventListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,7 +21,9 @@ import java.util.Arrays;
 
 @Service
 @Slf4j
-public class DeliveryGuyEventListner {
+public class DeliveryGuyEventListner  {
+
+    //implements ApplicationListener<DeliveryGuyEvent>
 
     @Autowired
     private DeliveryGuyRepo deliveryGuyRepo;
@@ -26,10 +31,12 @@ public class DeliveryGuyEventListner {
     @Autowired
     EmailSendarUtil emailSendarUtil;
 
+
     @EventListener
     @Async
-    public void onApplicationEvent(OrderConfirmationDetailsEvent event) {
+    public void onApplicationEvent(DeliveryGuyEvent event) {
         DeliveryGuy deliveryGuy = (DeliveryGuy) event.getSource();
+        log.info("deliveryGuy , {} " , deliveryGuy);
         String email = deliveryGuy.getEmail();
         String userName = deliveryGuy.getFirstName() + " " + deliveryGuy.getLastName();
         int otpSendToUser = OTPUtil.otp();
@@ -62,5 +69,4 @@ public class DeliveryGuyEventListner {
 
     }
 }
-
 

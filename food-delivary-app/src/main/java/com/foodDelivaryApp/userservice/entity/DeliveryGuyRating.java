@@ -18,7 +18,6 @@ public class DeliveryGuyRating {
     private Long id;
 
     private Long orderId;
-    private Long deliveryGuyId;
     @Enumerated(EnumType.ORDINAL)
     private RatingEnum rating;
     private String feedback;
@@ -31,7 +30,6 @@ public class DeliveryGuyRating {
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
-
 
 
 

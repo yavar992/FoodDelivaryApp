@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.jwt;
 
+import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.entity.User;
 import jakarta.persistence.*;
@@ -30,5 +31,9 @@ public class RefreshToken {
     @OneToOne
     @JoinColumn(name = "restaurantOwner_id" , referencedColumnName = "id")
     private RestaurantOwner restaurantOwner;
+
+    @OneToOne
+    @JoinColumn(name = "deliveryGuy_id" , referencedColumnName = "id")
+    private DeliveryGuy deliveryGuy;
 
 }

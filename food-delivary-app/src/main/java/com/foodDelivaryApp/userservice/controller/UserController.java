@@ -1,5 +1,6 @@
 package com.foodDelivaryApp.userservice.controller;
 
+import com.foodDelivaryApp.userservice.DTO.DeliveryGuyRatingDTO;
 import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
 import com.foodDelivaryApp.userservice.entity.User;
@@ -154,6 +155,14 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
+
+    @PostMapping("/rateDeliveryGuy")
+    public ResponseEntity<?> rateDeliveryGuyFromUserDashboard( Authentication authentication ,@RequestBody DeliveryGuyRatingDTO ratingDTO) {
+        String response = userService.rateDeliveryGuy(authentication , ratingDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
 
 
 //    @PostMapping("/post")

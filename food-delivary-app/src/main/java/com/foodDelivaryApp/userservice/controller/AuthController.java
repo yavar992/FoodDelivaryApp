@@ -1,17 +1,22 @@
 package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.*;
+import com.foodDelivaryApp.userservice.convertor.DeliveryGuyConvertor;
 import com.foodDelivaryApp.userservice.convertor.UserConvertor;
+import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JWTBlacklistService;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
 import com.foodDelivaryApp.userservice.jwt.RefreshToken;
+import com.foodDelivaryApp.userservice.service.DeliveryGuyService;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.serviceImpl.RefreshTokenService;
 import com.foodDelivaryApp.userservice.util.CommonUtil;
+import com.foodDelivaryApp.userservice.util.DummyUtil;
 import com.foodDelivaryApp.userservice.util.LoginRateLimitApiUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,6 +65,11 @@ public class AuthController {
     @Autowired
     private JWTBlacklistService jwtBlacklistService;
 
+    @Autowired
+    private DeliveryGuyService deliveryGuyService;
+
+    @Autowired
+    private DummyUtil dummyUtil;
     @PostMapping({"/register","/signup"})
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,
                                           @RequestParam(value = "referralCode" , required = false) String referralCode ){
@@ -254,5 +264,122 @@ public class AuthController {
     }
 
 
+    ///DELIVERY GUY MODULES
+    @PostMapping({"/delivery/register","/delivery/signup"})
+    public ResponseEntity<?> registerUser(@Valid @RequestBody DeliveryGuyDTO deliveryGuyDTO ,
+                                          @RequestParam(value = "referralCode" , required = false) String referralCode ){
+        try {
+            if (deliveryGuyService.userAlreadyExistByEmailOrUserName(deliveryGuyDTO.getEmail() , deliveryGuyDTO.getUsername())){
+                return ResponseEntity.status(HttpStatus.OK).body("User is already register with the same email or username ");
+            }
+            DeliveryGuy deliveryGuy = DeliveryGuyConvertor.convertDeliveryGuyDTOToDeliveryGuy(deliveryGuyDTO);
+            deliveryGuy.setPassword(passwordEncoder.encode(deliveryGuyDTO.getPassword()));
+            String registrationMessage =  deliveryGuyService.saveDeliveryGuy(deliveryGuy,referralCode);
+            if (registrationMessage!=null){
+                return ResponseEntity.status(HttpStatus.CREATED).body(registrationMessage);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HappyMealConstant.SOMETHING_WENT_WRONG);
+    }
 
+    @PostMapping("delivery/verifyOtp")
+    public  ResponseEntity<?> verifyDeliveryBoyOTP(@RequestBody VerifyOTP verifyOTP){
+        return ResponseEntity.status(HttpStatus.OK).body(deliveryGuyService.verifyUserAccount(verifyOTP));
+    }
+
+    @GetMapping("delivery/resendOtp")
+    public ResponseEntity<?> resendOTPToDeliveryGuy(@RequestParam("email") String email){
+        DeliveryGuy deliveryGuy =  deliveryGuyService.findByDeliveryEmail(email);
+        loginRateLimitApiUtil.handleApiHitCountForDeliveryGuy(deliveryGuy);
+        if (deliveryGuy.isBlocked() && deliveryGuy.getTargetTime().isAfter(Instant.now())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked for the next 15 minutes due to multiple unsuccessful attempts.");
+        }
+         String successMessage = deliveryGuyService.resendOTPToDeliveryGuy(deliveryGuy);
+        return ResponseEntity.status(HttpStatus.OK).body(successMessage);
+    }
+
+
+    @PostMapping("delivery/login")
+    public ResponseEntity<?> loginForDeliveryGuy(@RequestBody AuthDTO authDTO)  {
+        DeliveryGuy deliveryGuy = deliveryGuyService.findByDeliveryEmail(authDTO.getUsername());
+        boolean isVerified = deliveryGuy.isVerified();
+        if (!isVerified){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
+        }
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
+        if (!authentication.isAuthenticated()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Credentials");
+        }
+
+        RefreshToken refreshToken =  refreshTokenService.createRefreshTokenForDeliveryBoy(authDTO.getUsername());
+//       String jwtToken = jwtService.generateToken(authDTO.getUsername());
+        JWTResponseTokenDTO jwtToken = JWTResponseTokenDTO.builder().accessToken(jwtService.generateToken(authDTO.getUsername()))
+                .refreshToken(refreshToken.getToken()).build();
+        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+    }
+
+    @PostMapping("delivery/refreshToken")
+    public ResponseEntity<?> refreshTokenForDeliveryGuy(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
+        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenRequestDTO.getRefreshToken());
+        refreshTokenService.verifyExpiration(refreshToken);
+        DeliveryGuy deliveryGuy = refreshToken.getDeliveryGuy();
+        String token = jwtService.generateToken(deliveryGuy.getUsername());
+        JWTResponseTokenDTO jwtResponseTokenDTO = JWTResponseTokenDTO.builder()
+                .accessToken(token)
+                .refreshToken(refreshTokenRequestDTO.getRefreshToken())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(jwtResponseTokenDTO);
+
+    }
+
+    @PostMapping("delivery/forget-password")
+    public ResponseEntity<?> forgetPasswordForDeliveryGuy(Authentication authentication){
+        try {
+            DeliveryGuy deliveryGuy = commonUtil.authenticateDeliveryGuy(authentication);
+            loginRateLimitApiUtil.handleApiHitCountForDeliveryGuy(deliveryGuy);
+            // Check if the user has exceeded the maximum number of API hits without entering OTP
+            if (deliveryGuy.isBlocked() && deliveryGuy.getTargetTime().isAfter(Instant.now())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked for the next 15 minutes due to multiple unsuccessful attempts.");
+            }
+
+            String forgetPasswordMessage = deliveryGuyService.forgetPassword(deliveryGuy.getEmail());
+            if (forgetPasswordMessage!=null){
+                return ResponseEntity.status(HttpStatus.OK).body(forgetPasswordMessage);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot reset the password");
+    }
+
+    @PostMapping("delivery/changesPassword")
+    public ResponseEntity<?> changePasswordForDeliveryBoy(@RequestBody ChangePasswordDTO changePasswordDTO){
+        try {
+            String changePasswordMessage = deliveryGuyService.changePassword(changePasswordDTO);
+            if (changePasswordMessage!=null){
+                return ResponseEntity.status(HttpStatus.OK).body(changePasswordMessage);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot change password due to interval server error");
+
+    }
+
+
+
+    @GetMapping("/delivery/hello")
+    public String he(){
+        return "hello this is 54st api";
+    }
+
+
+    //DUMMY REQUEST TO GET THE IP OF USER
+    @GetMapping("/ip")
+    public String getLocation(HttpServletRequest request){
+        System.out.println("request RESULT ," + dummyUtil.getClientIp(request));
+        return dummyUtil.getClientIp(request);
+    }
 }

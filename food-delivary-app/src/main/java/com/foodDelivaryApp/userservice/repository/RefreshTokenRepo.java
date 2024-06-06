@@ -16,4 +16,7 @@ public interface RefreshTokenRepo extends JpaRepository<RefreshToken, Integer> {
 
     @Query(value = "SELECT * FROM `refreshtoken` WHERE restaurantOwner_id = ?1", nativeQuery = true)
     RefreshToken findByRestaurantOwnerId(Long id);
+
+    @Query(value = "SELECT * FROM `refreshtoken` WHERE deliveryGuy_id = ?1", nativeQuery = true)
+    RefreshToken findByDeliveryBoyId(Long id);
 }

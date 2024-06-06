@@ -28,6 +28,7 @@ public interface DeliveryGuyConvertor {
                 .createdBy("SELF_REGISTRATION")
                 .referralCode(GeneratedRandomNumber.generateReferralCode(6))
                 .isActive(true)
+                .isVerified(false)
                 .build();
 
     }

@@ -1,10 +1,12 @@
 package com.foodDelivaryApp.userservice.serviceImpl;
 
 
+import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.exceptionHandling.RefreshTokenExpirationException;
 import com.foodDelivaryApp.userservice.jwt.RefreshToken;
+import com.foodDelivaryApp.userservice.repository.DeliveryGuyRepo;
 import com.foodDelivaryApp.userservice.repository.RefreshTokenRepo;
 import com.foodDelivaryApp.userservice.repository.RestaurantsOwnerRepo;
 import com.foodDelivaryApp.userservice.repository.UserRepo;
@@ -30,6 +32,9 @@ public class RefreshTokenService {
 
     @Autowired
     private RestaurantsOwnerRepo restaurantsOwnerRepo;
+
+    @Autowired
+    private DeliveryGuyRepo deliveryGuyRepo;
 
     public RefreshToken createRefreshToken(String email){
         User user = userRepo.findByEmail(email);
@@ -62,6 +67,21 @@ public class RefreshTokenService {
         return  refreshTokenRepo.save(refreshToken);
     }
 
+    public RefreshToken createRefreshTokenForDeliveryBoy(String email){
+        DeliveryGuy deliveryGuy = deliveryGuyRepo.findByEmail(email);
+        RefreshToken refreshToken1 = findByDeliveryBoyId(deliveryGuy.getId());
+        if (refreshToken1!=null){
+            refreshTokenRepo.delete(refreshToken1);
+        }
+        log.info("user {} ,"  + deliveryGuy);
+        RefreshToken refreshToken =  RefreshToken.builder()
+                .token(UUID.randomUUID().toString())
+                .expiryDate(Instant.now().plusMillis(1000000))
+                .deliveryGuy(deliveryGuy)
+                .build();
+        return  refreshTokenRepo.save(refreshToken);
+    }
+
 
     public  RefreshToken findByToken(String token){
         Optional<RefreshToken> refreshToken = refreshTokenRepo.findByToken(token);
@@ -88,6 +108,10 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
+    public RefreshToken findByDeliveryBoyId(Long id){
+        RefreshToken refreshToken = refreshTokenRepo.findByDeliveryBoyId(id);
+        return refreshToken;
+    }
 
     public void invalidateRefreshToken(String refreshToken) {
         Optional<RefreshToken> token = refreshTokenRepo.findByToken(refreshToken);

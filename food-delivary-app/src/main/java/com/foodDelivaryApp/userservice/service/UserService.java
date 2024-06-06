@@ -2,6 +2,7 @@ package com.foodDelivaryApp.userservice.service;
 
 import com.foodDelivaryApp.userservice.DTO.*;
 import com.foodDelivaryApp.userservice.entity.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -50,4 +51,6 @@ public interface UserService {
     int getApiHitCount(String email);
 
     Instant getUserApiHittingTargetTime(String email);
+
+    String rateDeliveryGuy(Authentication authentication, DeliveryGuyRatingDTO ratingDTO);
 }

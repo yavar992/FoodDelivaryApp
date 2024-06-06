@@ -35,7 +35,6 @@ public class OrderDetails {
 
     private String upc;
 
-
     @JsonIgnore
     @ToString.Exclude
     @ManyToOne
