@@ -1,10 +1,7 @@
 package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.AddressDTO;
-import com.foodDelivaryApp.userservice.convertor.AddressConvertor;
-import com.foodDelivaryApp.userservice.entity.Address;
 import com.foodDelivaryApp.userservice.entity.User;
-import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.AddressService;
 import com.foodDelivaryApp.userservice.service.UserService;
 import com.foodDelivaryApp.userservice.util.CommonUtil;
@@ -25,8 +22,7 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
-    @Autowired
-    private UserService userService;
+
 
     @Autowired
     private CommonUtil commonUtil;

@@ -4,7 +4,6 @@ import com.foodDelivaryApp.userservice.DTO.CartDTO;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.service.CartService;
-import org.apache.catalina.authenticator.SpnegoAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

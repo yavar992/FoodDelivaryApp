@@ -6,7 +6,6 @@ import com.foodDelivaryApp.userservice.DTO.RefreshTokenRequestDTO;
 import com.foodDelivaryApp.userservice.DTO.RestaurantDTO;
 import com.foodDelivaryApp.userservice.entity.CuisineType;
 import com.foodDelivaryApp.userservice.entity.RestaurantOwner;
-import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
 import com.foodDelivaryApp.userservice.jwt.RefreshToken;
@@ -24,7 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/restaurant")

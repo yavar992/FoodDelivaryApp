@@ -1,26 +1,20 @@
 package com.foodDelivaryApp.userservice.controller;
 
 import com.foodDelivaryApp.userservice.DTO.DeliveryGuyProfileDTO;
-import com.foodDelivaryApp.userservice.DTO.DeliveryGuyRatingDTO;
 import com.foodDelivaryApp.userservice.DTO.ShiftDTO;
 
 import com.foodDelivaryApp.userservice.Enums.DeliveryGuyStatusEnum;
-import com.foodDelivaryApp.userservice.entity.DeliveryGuy;
 import com.foodDelivaryApp.userservice.entity.OrderConfirmationDetails;
 import com.foodDelivaryApp.userservice.service.DeliveryGuyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/deliver")
@@ -28,9 +22,6 @@ public class DeliveryGuyController {
 
     @Autowired
     private DeliveryGuyService deliveryGuyService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
 
 //    @PostMapping({"/register","/signup"})
