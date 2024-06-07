@@ -273,7 +273,7 @@ public class DeliveryGuyServiceImpl implements DeliveryGuyService {
     @Override
     public DeliveryGuyProfileDTO updateDeliveryGuy(Authentication authentication, DeliveryGuyProfileDTO updateDTO) {
         DeliveryGuy deliveryGuy = commonUtil.authenticateDeliveryGuy(authentication);
-        DeliveryGuyMapper.INSTANCE.updateDeliveryGuyFromDTO(updateDTO, deliveryGuy);
+        updateDeliveryGuyFromDTO(updateDTO, deliveryGuy);
         deliveryGuyRepo.save(deliveryGuy);
         return DeliveryGuyMapper.INSTANCE.deliveryGuyToDeliveryGuyProfileDTO(deliveryGuy);
 
@@ -323,6 +323,23 @@ public class DeliveryGuyServiceImpl implements DeliveryGuyService {
         }
         return deliveryGuy;
     }
+
+
+    public void updateDeliveryGuyFromDTO(DeliveryGuyProfileDTO deliveryGuyProfileDTO, DeliveryGuy deliveryGuy) {
+        deliveryGuy.setUsername(deliveryGuyProfileDTO.getUsername());
+        deliveryGuy.setEmail(deliveryGuyProfileDTO.getEmail());
+        deliveryGuy.setDateOfBirth(deliveryGuyProfileDTO.getDateOfBirth());
+        deliveryGuy.setPhoneNumber(deliveryGuyProfileDTO.getPhoneNumber());
+        deliveryGuy.setAddress(deliveryGuyProfileDTO.getAddress());
+        deliveryGuy.setCity(deliveryGuyProfileDTO.getCity());
+        deliveryGuy.setState(deliveryGuyProfileDTO.getState());
+        deliveryGuy.setCountry(deliveryGuyProfileDTO.getCountry());
+        deliveryGuy.setShiftStart(deliveryGuyProfileDTO.getShiftStart());
+        deliveryGuy.setShiftEnd(deliveryGuyProfileDTO.getShiftEnd());
+        deliveryGuy.setPreferredDeliverZones(deliveryGuyProfileDTO.getPreferredDeliverZones());
+    }
+
+
 
 
 
