@@ -1,0 +1,24 @@
+
+server.port=8080
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://prod-db-host:3306/userservice?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+spring.datasource.username=prod-user
+spring.datasource.password=prod-password
+
+spring.jpa.database-platform=org.hibernate.dialect.MySQL57Dialect
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.properties.hibernate.format-sql=false
+spring.jpa.show-sql=false
+
+# Prod-specific mail properties (if any)
+spring.mail.username=prod-email@gmail.com
+spring.mail.password=prod-email-password
+
+# Live environment PayPal configuration
+#PAYAL_CONFIG FOR SANDBOX
+paypal.mode = sandbox
+#merchant account
+paypal.client-id= ****************************************************************************
+paypal.client-secret= **************************************************************************
