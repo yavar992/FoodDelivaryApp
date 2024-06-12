@@ -126,7 +126,6 @@ public class DeliveryGuy {
     private Set<DeliveryGuy> referredDeliveryGuy;
 
 
-
     @OneToMany(mappedBy = "deliveryGuy" , fetch = FetchType.EAGER , cascade = CascadeType.ALL , orphanRemoval = true)
     @JsonIgnore
     private List<OrderConfirmationDetails> orderConfirmationDetails;
@@ -136,10 +135,6 @@ public class DeliveryGuy {
 
     @ManyToMany(mappedBy = "deliveryGuys")
     private Set<Restaurant> restaurants = new HashSet<>();
-
-
-
-
 
 
 

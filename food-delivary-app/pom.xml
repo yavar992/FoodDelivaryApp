@@ -131,24 +131,15 @@
 
 	<build>
 		<plugins>
-    <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-			<mainClass>com.foodDelivaryApp.userservice.UserServiceApplication</mainClass>        
-   			 <layout>JAR</layout>
-        </configuration>
-		<executions>
-    <execution>
-        <goals>
-            <goal>repackage</goal>
-        </goals>
-    </execution>
-</executions>
-
-
-    </plugin>
-</plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.foodDelivaryApp.userservice.UserServiceApplication</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
+
 
 </project>

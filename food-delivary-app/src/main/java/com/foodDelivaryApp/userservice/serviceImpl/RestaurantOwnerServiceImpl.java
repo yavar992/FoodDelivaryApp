@@ -46,11 +46,11 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
         @Autowired
         RolesRepository rolesRepository;
 
-        @PostConstruct
-        public void hi(){
-            Roles roles1 = rolesRepository.findByName("ROLE_RESTAURANTS_OWNER").get();
-            log.info("roles {}",roles1);
-        }
+//        @PostConstruct
+//        public void hi(){
+//            Roles roles1 = rolesRepository.findByName("ROLE_RESTAURANTS_OWNER").get();
+//            log.info("roles {}",roles1);
+//        }
 
 
 

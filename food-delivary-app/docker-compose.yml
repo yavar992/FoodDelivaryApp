@@ -1,0 +1,86 @@
+#version: '3.8'
+#
+#services:
+#  app:
+#    image: yavar992/foodapp:v1.0
+#    ports:
+#      - "8082:8082"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/userservice?createDatabaseIfNotExist=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: ""
+#    depends_on:
+#      - db
+#    networks:
+#      - app-network
+#
+#
+#
+#  db:
+#    image: mysql:5.7
+#    environment:
+#      DATABASE_HOST: docker-mysql
+#      MYSQL_DATABASE: userservice
+#      MYSQL_ROOT_PASSWORD:
+#      MYSQL_USER: admin
+#      MYSQL_PASSWORD: ""
+#      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+#    ports:
+#      - "3306:3306"
+#    networks:
+#      - app-network
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#
+#
+#
+#
+#networks:
+#  app-network:
+#    driver: bridge
+
+
+
+version: '3.8'
+
+services:
+  app:
+    image: yavar992/foodapp:v1.0
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/userservice?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+
+
+
+
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: userservice
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  app-network:
+    driver: bridge
