@@ -40,7 +40,6 @@ public class AddressServiceImpl implements AddressService {
             addressRepo.saveAndFlush(address);
             return "address added successfully with default address !";
         }
-
         addressRepo.saveAndFlush(address);  // case 3 -- this case will just add the address for the user it will not check for the default address for the user
         return "address saved successfully";
 

@@ -1,0 +1,45 @@
+server:
+  port: 9091
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/userservice?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    username:
+    password:
+  jpa:
+    database-platform:
+    hibernate:
+      ddl-auto:
+      naming:
+        physical-strategy:
+    properties:
+      hibernate:
+        dialect:
+        format-sql:
+    show-sql:
+
+  servlet:
+    context-path:
+
+  mail:
+    default-encoding:
+    host:
+    username:
+    password:
+    port:
+    protocol:
+    test-connection:
+    properties:
+      mail:
+        smtp:
+          auth:
+          starttls:
+            enable:
+
+paypal:
+  mode:
+  client-id:
+  client-secret:
+
+

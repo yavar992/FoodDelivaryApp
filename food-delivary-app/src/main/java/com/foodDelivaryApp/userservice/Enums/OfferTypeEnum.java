@@ -9,7 +9,6 @@ public enum OfferTypeEnum {
     REWARD_POINTS,
     SPECIAL_OFFER,
     DIWALI_OFFER,
-    HOLI_OFFER,
     EID_OFFER,
     SUMMER_SALE,
     CLEARANCE_SALE,

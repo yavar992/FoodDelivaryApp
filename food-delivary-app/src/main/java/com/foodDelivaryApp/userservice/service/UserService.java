@@ -53,4 +53,10 @@ public interface UserService {
     Instant getUserApiHittingTargetTime(String email);
 
     String rateDeliveryGuy(Authentication authentication, DeliveryGuyRatingDTO ratingDTO);
+
+//    User findByUsername(String username);
+
+    User findByEmailOrUsername(String email,String username);
+
+    User findUserByUsername(String username);
 }

@@ -337,7 +337,7 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         User user = userRepo.findByEmail(email);
         if(user==null){
-            throw new UserNotFoundException("user not found for the email " + email);
+            throw new UserNotFoundException("User not exist with the email " + email);
         }
         return user;
     }
@@ -394,6 +394,30 @@ public class UserServiceImpl implements UserService {
         deliveryGuyRatingRepo.save(deliveryGuyRating);
 
         return "Rating successfully !!";
+    }
+
+    @Override
+    public User findByEmailOrUsername(String email, String username) {
+
+        Optional<User> user = userRepo.findByUsernameOrEmail(email,username);
+        if (user.isEmpty()){
+            throw new UserNotFoundException("User not found");
+        }
+        return user.get();
+    }
+
+//    @Override
+//    public User findUserByUsername(String username) {
+//        return null;
+//    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        User user = userRepo.findUserByUsername(username);
+        if(user==null){
+            throw new UserNotFoundException("User not exist with the username " + username);
+        }
+        return user;
     }
 
 

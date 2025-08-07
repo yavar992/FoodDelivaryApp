@@ -1,0 +1,13 @@
+in the manytomany relation the child entity is not being deletedd automatically or child entity being deleted alone
+
+prolem1 --
+Cannot delete or update a parent row: a foreign key constraint fails (user_roles.user_id)
+
+solution -- my  foreign key on user_roles.user_id had:
+ON DELETE RESTRICT
+Which means:
+❌ You cannot delete a user if they are referenced in the user_roles join table.
+
+✅ The Solution
+Change the foreign key on user_roles.user_id to:
+ON DELETE CASCADE

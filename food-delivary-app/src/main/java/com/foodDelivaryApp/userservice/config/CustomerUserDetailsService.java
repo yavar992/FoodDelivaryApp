@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class CustomerUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -30,7 +32,8 @@ public class CustomerUserDetailsService implements UserDetailsService {
     private RestaurantsOwnerRepo restaurantsOwnerRepo;
 
     @Autowired
-    private DeliveryGuyRepo deliveryGuyRepo;
+    private DeliveryGuyRepo
+            deliveryGuyRepo;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -38,8 +41,9 @@ public class CustomerUserDetailsService implements UserDetailsService {
         Optional<RestaurantOwner> restaurantOwner = restaurantsOwnerRepo.findByUsernameOrEmail(email);
         log.info("restaurantOwner {}" , restaurantOwner);
         Optional<User> customer = userRepo.findByUsernameOrEmail(email , email);
+        log.info("user {}", customer);
 
-            Optional<DeliveryGuy> deliveryGuy = deliveryGuyRepo.findByDeliveryBoyEmail(email);
+        Optional<DeliveryGuy> deliveryGuy = deliveryGuyRepo.findByDeliveryBoyEmail(email);
 
         if (restaurantOwner.isPresent()){
             RestaurantOwner restaurantOwner1 = restaurantOwner.get();
@@ -60,7 +64,6 @@ public class CustomerUserDetailsService implements UserDetailsService {
             Set<GrantedAuthority> authorities = deliveryGuy1.getRoles()
                     .stream()
                     .map((role)->new SimpleGrantedAuthority(role.getRoles())).collect(Collectors.toSet());
-            log.info("authorities {}" , authorities);
             log.info("simpleGrantedAuthorities {}", authorities.stream().map((role)->new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toSet()));
             return new org.springframework.security.core.userdetails.User(
                     deliveryGuy1.getEmail(),
@@ -70,19 +73,19 @@ public class CustomerUserDetailsService implements UserDetailsService {
 
         }
 
-       else if (customer.isPresent()){
-            User customer1 = customer.get();
+           else if (customer.isPresent()){
+                User customer1 = customer.get();
 
-            Set<GrantedAuthority> authorities = customer1.getRoles()
-                    .stream()
-                    .map((role) -> new SimpleGrantedAuthority(role.getRoles())).collect(Collectors.toSet());
-            log.info("authorities {}" , authorities);
-            return new org.springframework.security.core.userdetails.User(
-                    customer1.getEmail(),
-                    customer1.getPassword(),
-                    authorities
-            );
-        }
+                Set<GrantedAuthority> authorities = customer1.getRoles()
+                        .stream()
+                        .map((role) -> new SimpleGrantedAuthority(role.getRoles())).collect(Collectors.toSet());
+                log.info("authorities {}" , authorities);
+                return new org.springframework.security.core.userdetails.User(
+                        customer1.getEmail(),
+                        customer1.getPassword(),
+                        authorities
+                );
+            }
 
 
         throw new UsernameNotFoundException("User not found for the username " + email);

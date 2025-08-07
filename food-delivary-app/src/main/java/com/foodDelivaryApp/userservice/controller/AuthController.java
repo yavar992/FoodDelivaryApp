@@ -9,6 +9,7 @@ import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
 import com.foodDelivaryApp.userservice.jwt.JWTBlacklistService;
 import com.foodDelivaryApp.userservice.jwt.JwtService;
 import com.foodDelivaryApp.userservice.jwt.RefreshToken;
+import com.foodDelivaryApp.userservice.repository.UserRepo;
 import com.foodDelivaryApp.userservice.service.DeliveryGuyService;
 import com.foodDelivaryApp.userservice.service.RestaurantOwnerService;
 import com.foodDelivaryApp.userservice.service.UserService;
@@ -18,6 +19,7 @@ import com.foodDelivaryApp.userservice.util.DummyUtil;
 import com.foodDelivaryApp.userservice.util.LoginRateLimitApiUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth/")
 public class AuthController {
@@ -45,7 +48,6 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
 
     @Autowired
     private JwtService jwtService;
@@ -70,10 +72,16 @@ public class AuthController {
 
     @Autowired
     private DummyUtil dummyUtil;
+
+
+    @Autowired
+    private UserRepo userRepo;
+
+
     @PostMapping({"/register","/signup"})
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO ,
                                           @RequestParam(value = "referralCode" , required = false) String referralCode ){
-        try {
+
             if (userService.userAlreadyExistByEmailOrUserName(userDTO.getEmail() , userDTO.getUsername())){
                 return ResponseEntity.status(HttpStatus.OK).body("User is already register with the same email or username ");
             }
@@ -83,16 +91,13 @@ public class AuthController {
             if (registrationMessage!=null){
                 return ResponseEntity.status(HttpStatus.CREATED).body(registrationMessage);
             }
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
-        }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
 
 
     @PostMapping("/verifyOtp")
-    public  ResponseEntity<?> verifyOtp(@RequestBody VerifyOTP verifyOTP){
+    public  ResponseEntity<?> verifyOtp(@Valid  @RequestBody VerifyOTP verifyOTP){
             // String verifyUser = userService.verifyUserAccount(verifyOTP);
             return ResponseEntity.status(HttpStatus.OK).body(userService.verifyUserAccount(verifyOTP));
     }
@@ -213,9 +218,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO authDTO)  {
         User user = userService.findUserByEmail(authDTO.getUsername());
+        log.info("userInfo {}" , user );
         boolean isVerified = user.isVerified();
         if (!isVerified){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account first in order to login");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please verify your account for login");
         }
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword()));
        if (!authentication.isAuthenticated()){
@@ -223,6 +229,7 @@ public class AuthController {
        }
 
        RefreshToken refreshToken =  refreshTokenService.createRefreshToken(authDTO.getUsername());
+       log.info("refreshToken {}", refreshToken);
 //       String jwtToken = jwtService.generateToken(authDTO.getUsername());
        JWTResponseTokenDTO jwtToken = JWTResponseTokenDTO.builder().accessToken(jwtService.generateToken(authDTO.getUsername()))
                .refreshToken(refreshToken.getToken()).build();
@@ -381,5 +388,11 @@ public class AuthController {
     public String getLocation(HttpServletRequest request){
         System.out.println("request RESULT ," + dummyUtil.getClientIp(request));
         return dummyUtil.getClientIp(request);
+    }
+
+
+    @GetMapping("/user/{username}")
+    public User getUserByUsername(@PathVariable("/username") String username){
+        return userService.findUserByUsername(username);
     }
 }

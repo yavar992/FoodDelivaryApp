@@ -1,5 +1,8 @@
 package com.foodDelivaryApp.userservice.Enums;
 
+import lombok.Getter;
+
+@Getter
 public enum DeliveryMethodEnum {
 
     STANDARD(50.00),          // Standard delivery with a price of $5.00
@@ -14,10 +17,6 @@ public enum DeliveryMethodEnum {
 
     DeliveryMethodEnum(double price) {
         this.price = price;
-    }
-
-    public double getPrice() {
-        return price;
     }
 
 }

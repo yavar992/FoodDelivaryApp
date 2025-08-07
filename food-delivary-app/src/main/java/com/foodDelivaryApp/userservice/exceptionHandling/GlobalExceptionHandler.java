@@ -4,6 +4,8 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,9 +13,52 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.lang.reflect.InaccessibleObjectException;
 
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
+    // ✅ Handles @Valid validation errors
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> handleValidationErrors(MethodArgumentNotValidException ex, WebRequest web) {
+        String firstError = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(err -> err.getDefaultMessage())
+                .findFirst()
+                .orElse("Invalid input");
+
+        ErrorMessage error = new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                firstError,
+                web.getDescription(false)
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    // ✅ Fallback for all other unhandled exceptions
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessage> handleGenericException(Exception ex, WebRequest web) {
+        ErrorMessage error = new ErrorMessage(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Something went wrong: " + ex.getMessage(),
+                web.getDescription(false)
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorMessage> handleBadCredentials(BadCredentialsException ex, WebRequest web) {
+        ErrorMessage error = new ErrorMessage(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Bad Credentials",
+                web.getDescription(false)
+        );
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorMessage> userNotFoundException(UserNotFoundException ex , WebRequest web){
         Integer statusCode = HttpStatus.BAD_REQUEST.value();

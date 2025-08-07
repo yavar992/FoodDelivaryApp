@@ -1,6 +1,9 @@
 package com.foodDelivaryApp.userservice.Enums;
 
 
+import lombok.Getter;
+
+@Getter
 public enum RatingEnum {
 
     ONE_STAR(1, "Poor"),
@@ -9,20 +12,12 @@ public enum RatingEnum {
     FOUR_STARS(4, "Good"),
     FIVE_STARS(5, "Excellent");
 
-    private int rating;
-    private String message;
+    private final int rating;
+    private final String message;
 
     RatingEnum(int rating, String message) {
         this.rating = rating;
         this.message = message;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
 

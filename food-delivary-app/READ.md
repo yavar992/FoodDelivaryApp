@@ -34,8 +34,8 @@ CREATE DATABASE userservice;
 ```
 4. Create a user and grant necessary privileges to the database:
 ```bash
-CREATE USER 'tastewheels'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON userservice.* TO 'tastewheels'@'localhost';
+CREATE USER 'userservice'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON userservice.* TO 'userservice'@'localhost';
 FLUSH PRIVILEGES;
 ```
 ``Step 2`` : Set Up Spring Boot Project
@@ -61,13 +61,25 @@ java -jar tastewheels.jar
 
 ``Step 5 `` : Test the Application
 1. Use tools like Postman or Swagger UI to test your API endpoints.
-2. Perform CRUD operations to ensure that data is correctly persisted and retrieved from the MySQL database## Technologies Used
+2. Perform CRUD operations to ensure that data is correctly persisted and retrieved from the MySQL database 
 
-- Spring Boot
-- MySQL
-- Thymeleaf (for front-end templating)
-- Bootstrap (for styling)
-- etc.
+
+## Technologies Used
+
+- **Spring Boot (Web, Data JPA, Security, Mail)**
+- **MySQL + Hibernate**
+- **JWT Authentication**
+- **Springdoc OpenAPI (Swagger UI)**
+- **Thymeleaf & Bootstrap**
+- **PayPal SDK**
+- **Twilio & Vonage for SMS**
+- **MapStruct (DTO mapping)**
+- **Lombok**
+- **JUnit, Mockito, Reactor Test**
+- **Maven**
+
+
+
 
 ## Documentation
 
@@ -80,13 +92,30 @@ java -jar tastewheels.jar
 - src/
     - main/
         - java/
-            - com.tastewheels/
+            - com.foodDelivaryApp.userservice/
+                - config
                 - controller/
-                - service/
-                - repository/
-                - model/
+                - convertor
+                - DTO
+                - entity
+                - Enums
+                - event
+                - exceptionHandling
+                - foodCommon
+                - jwt
+                - listner
+                - repository
+                - service
+                - serviceImpl
+                - util
+                - utilImpl
+                - validator
         - resources/
+            - META-INF
             - application.properties
+            - application-dev.properties
+            - application-prod.properties
+            - data.sql
             - templates/
             - static/
     - test/

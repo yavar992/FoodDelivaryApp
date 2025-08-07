@@ -35,7 +35,6 @@ public interface UserConvertor {
 
      }
 
-
      static void updateUser(User user, UserUpdateDTO userUpdateDTO) {
         user.setUsername(userUpdateDTO.getUsername());
         user.setEmail(userUpdateDTO.getEmail());

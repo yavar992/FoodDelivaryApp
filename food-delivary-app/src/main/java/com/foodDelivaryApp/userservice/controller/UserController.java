@@ -3,6 +3,7 @@ package com.foodDelivaryApp.userservice.controller;
 import com.foodDelivaryApp.userservice.DTO.DeliveryGuyRatingDTO;
 import com.foodDelivaryApp.userservice.DTO.UserResponseDTO;
 import com.foodDelivaryApp.userservice.DTO.UserUpdateDTO;
+import com.foodDelivaryApp.userservice.convertor.UserConvertor;
 import com.foodDelivaryApp.userservice.entity.User;
 import com.foodDelivaryApp.userservice.exceptionHandling.UserNotFoundException;
 import com.foodDelivaryApp.userservice.foodCommon.HappyMealConstant;
@@ -25,7 +26,7 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/user")
 @Slf4j
 public class UserController {
 
@@ -109,7 +110,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot update user details due to internal server error");
     }
 
-    @GetMapping("getUserByEmail/{email}")
+    @GetMapping("/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try {
             UserResponseDTO user = userService.findByEmail(email);
@@ -139,8 +140,7 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser")
-    public ResponseEntity<?> deleteUser(Authentication authentication){
-        try {
+    public ResponseEntity<?> deleteUser(Authentication authentication) throws LoginException {
             if (authentication==null){
                 throw new LoginException("Unauthorized User ");
             }
@@ -150,9 +150,7 @@ public class UserController {
                 userRepo.delete(user);
                 return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully !");
             }
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(HappyMealConstant.SOMETHING_WENT_WRONG);
     }
 
@@ -163,6 +161,16 @@ public class UserController {
     }
 
 
+
+    @GetMapping("/")
+    public ResponseEntity<?> userDetails(Authentication authentication) {
+        if (!authentication.isAuthenticated()){
+            throw new UserNotFoundException("Unauthorized User");
+        }
+            String username = authentication.getName();
+            User user = userService.findUserByEmail(username);
+            return ResponseEntity.status(HttpStatus.OK).body(UserConvertor.convertUserToUserResponseDTO(user));
+    }
 
 
 //    @PostMapping("/post")
@@ -185,10 +193,10 @@ public class UserController {
 //        return "this is second delete request";
 //    }
 //
-//    @GetMapping("/ddd")
-//    public String ssd(){
-//        return "this is second delete request";
-//    }
+    @GetMapping("/ddd")
+    public String ssd(){
+        return "this is second delete request";
+    }
 
 
 }

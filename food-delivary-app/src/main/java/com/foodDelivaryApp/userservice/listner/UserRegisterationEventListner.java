@@ -15,12 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Slf4j
 public class UserRegisterationEventListner  {
 
-//    implements ApplicationListener<UserRegisterationEvent>
+//    implements ApplicationListener<UserRegistrationEvent>
 
     @Autowired
     private EmailSendarUtil emailSendarUtil;
@@ -42,7 +43,7 @@ public class UserRegisterationEventListner  {
         user.setOtpExpireTime(LocalDateTime.now().plusMinutes(15));
         userRepo.saveAndFlush(user);
 
-        emailSendarUtil.sendEmailWithMultipleBodyLine(email , Arrays.asList("Dear " + userName + ",\n\n" +
+        emailSendarUtil.sendEmailWithMultipleBodyLine(email , List.of("Dear " + userName + ",\n\n" +
                 "Thank you for signing up for HappyMeal! To complete your registration, please enter the following one-time password (OTP): " + otpSendToUser + ",\n\n" +
                 "This OTP is valid for 15 minutes from the time of this email. If you do not verify your email within this timeframe, you will need to request a new OTP.\n\n" +
                 "Once you have verified your email address, you will be able to log in to your HappyMeal account and start using our services.\n\n" +

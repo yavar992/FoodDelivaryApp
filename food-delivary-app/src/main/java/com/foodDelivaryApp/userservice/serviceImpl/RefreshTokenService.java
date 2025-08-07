@@ -36,13 +36,12 @@ public class RefreshTokenService {
     @Autowired
     private DeliveryGuyRepo deliveryGuyRepo;
 
-    public RefreshToken createRefreshToken(String email){
-        User user = userRepo.findByEmail(email);
-        RefreshToken refreshToken1 = findByUserId(user.getId());
+    public RefreshToken createRefreshToken(String username){
+        User user = userRepo.findUserByEmail(username);
+            RefreshToken refreshToken1 = findByUserId(user.getId());
         if (refreshToken1!=null){
             refreshTokenRepo.delete(refreshToken1);
         }
-        log.info("user {} ,"  + user);
         RefreshToken refreshToken =  RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(1000000))
@@ -53,7 +52,7 @@ public class RefreshTokenService {
 
     public RefreshToken createRefreshTokenForRestaurantOwner(String email){
         RestaurantOwner restaurantOwner = restaurantsOwnerRepo.findByEmail(email).get();
-        log.info("restaurant owner {} ," + restaurantOwner);
+//        log.info("restaurant owner {} " , restaurantOwner);
         RefreshToken refreshToken1 = findByRestaurantOwnerId(restaurantOwner.getId());
         if (refreshToken1!=null){
             refreshTokenRepo.delete(refreshToken1);
@@ -73,7 +72,7 @@ public class RefreshTokenService {
         if (refreshToken1!=null){
             refreshTokenRepo.delete(refreshToken1);
         }
-        log.info("user {} ,"  + deliveryGuy);
+        log.info("user {} ", deliveryGuy);
         RefreshToken refreshToken =  RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(1000000))
@@ -85,7 +84,7 @@ public class RefreshTokenService {
 
     public  RefreshToken findByToken(String token){
         Optional<RefreshToken> refreshToken = refreshTokenRepo.findByToken(token);
-        if (refreshToken.isEmpty() || refreshToken==null){
+        if (refreshToken.isEmpty()){
             throw new RefreshTokenExpirationException(token + " Refresh token was expired. Please make a new signin request");
         }
         return refreshToken.get();
